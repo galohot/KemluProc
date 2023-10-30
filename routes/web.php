@@ -3,6 +3,7 @@
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ProgramController;
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Artisan;
 
 /*
 |--------------------------------------------------------------------------
@@ -19,6 +20,20 @@ Route::get('/', function () {
     return view('welcome');
 });
 
+Route::get('/trigger_sirup', function () {
+    Artisan::call('fetch:data_sirup');
+    return 'Data Sirup fetched successfully!';
+});
+
+Route::get('/trigger_lpse', function () {
+    Artisan::call('fetch:data_lpse');
+    return 'Data LPSE fetched successfully!';
+});
+
+Route::get('/trigger_epurchasing', function () {
+    Artisan::call('fetch:data_epurchasing');
+    return 'Data ePurchasing fetched successfully!';
+});
 
 
 
