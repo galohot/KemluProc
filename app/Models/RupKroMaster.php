@@ -26,4 +26,12 @@ class RupKroMaster extends Model
         'kd_kro_lokal',
         'is_deleted',
     ];
+
+    public function kegiatan() {
+        return $this->belongsTo(KegiatanMaster::class, 'kd_kegiatan', 'kd_kegiatan');
+    }
+    
+    public function rupRos() {
+        return $this->hasMany(RupRoMaster::class, 'kd_kro', 'kd_kro');
+    }
 }

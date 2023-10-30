@@ -24,4 +24,8 @@ class ProgramMaster extends Model
         'kd_program_lokal',
         'is_deleted',
     ];
+
+    public function kegiatans() {
+        return $this->hasMany(KegiatanMaster::class, 'kd_program', 'kd_program');
+    }
 }

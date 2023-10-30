@@ -25,4 +25,12 @@ class KegiatanMaster extends Model
         'kd_kegiatan_lokal',
         'is_deleted',
     ];
+
+    public function program() {
+        return $this->belongsTo(ProgramMaster::class, 'kd_program', 'kd_program');
+    }
+    
+    public function rupKros() {
+        return $this->hasMany(RupKroMaster::class, 'kd_kegiatan', 'kd_kegiatan');
+    }
 }

@@ -29,4 +29,8 @@ class SubkomponenMaster extends Model
         'kd_subkomponen_lokal',
         'is_deleted',
     ];
+
+    public function komponen() {
+        return $this->belongsTo(KomponenMaster::class, 'kd_komponen', 'kd_komponen');
+    }
 }
