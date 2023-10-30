@@ -13,6 +13,7 @@ use App\Models\RupKroMaster;
 use App\Models\PaketPenyediaTerumumkan;
 use App\Models\PaketSwakelolaLokasi;
 use App\Models\PaketSwakelolaTerumumkan;
+use App\Models\ProgramMaster;
 use App\Models\RupRoMaster;
 use App\Models\SubkomponenMaster;
 use Exception;
@@ -58,6 +59,7 @@ class FetchSiRUPisb extends Command
             $this->fetchDataFromApi('https://dce.lkpp.go.id/isb-2/api/9a6d41c3-6e4e-4fdf-9642-bef6f43c14a3/json/5295/RUP-PaketAnggaranSwakelola/tipe/4:12/parameter/2023:K17', PaketAnggaranSwakelola::class);
             $this->fetchDataFromApi('https://dce.lkpp.go.id/isb-2/api/3e71eeb0-c01e-4e6f-85dc-df363e6b9b7b/json/5294/RUP-SubKomponenMaster/tipe/4:12/parameter/2023:K17', SubkomponenMaster::class);
             $this->fetchDataFromApi('https://dce.lkpp.go.id/isb-2/api/f666de37-1894-40e6-8cd5-ddd17705da35/json/5266/RUP-KegiatanMaster/tipe/4:12/parameter/2023:K17', KegiatanMaster::class);
+            $this->fetchDataFromApi('https://dce.lkpp.go.id/isb-2/api/9a89c31f-e6d3-4769-ae76-e3fe660ef780/json/5276/RUP-ProgramMaster/tipe/4:12/parameter/2023:K17', ProgramMaster::class);
         } catch (Exception $e) {
             $this->error('Error occurred: ' . $e->getMessage());
         }
