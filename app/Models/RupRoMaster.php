@@ -25,4 +25,12 @@ class RupRoMaster extends Model
         'kd_ro_lokal',
         'is_deleted',
     ];
+
+    public function rupKro() {
+        return $this->belongsTo(RupKroMaster::class, 'kd_kro', 'kd_kro');
+    }
+    
+    public function komponens() {
+        return $this->hasMany(KomponenMaster::class, 'kd_ro', 'kd_ro');
+    }
 }

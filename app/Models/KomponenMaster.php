@@ -28,4 +28,12 @@ class KomponenMaster extends Model
         'kd_komponen_lokal',
         'is_deleted',
     ];
+
+    public function rupRo() {
+        return $this->belongsTo(RupRoMaster::class, 'kd_ro', 'kd_ro');
+    }
+    
+    public function subkomponens() {
+        return $this->hasMany(SubkomponenMaster::class, 'kd_komponen', 'kd_komponen');
+    }
 }
