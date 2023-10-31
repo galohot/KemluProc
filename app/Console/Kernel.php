@@ -15,6 +15,7 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule) {
         $schedule->command('fetch:data_sirup')->dailyAt('00:00');
+        $schedule->command('fetch:data_lpse')->dailyAt('00:10');
     }
     
 
