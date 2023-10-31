@@ -2,14 +2,17 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\ProgramMaster;
+use App\Models\RupMasterSatker;
 use Illuminate\Http\Request;
 
 class ISBsirupController extends Controller
 {
-    public function show($id) {
-        $sirup = ProgramMaster::with('kegiatans.rupKros.rupRos.komponens.subkomponens')->find($id);
-    
-        return view('sirup.index', compact('sirup'));
+    public function show($kd_satker) {
+        $rupMasterSatker = RupMasterSatker::with('programMasters.kegiatans.rupKros.rupRos.komponens.subkomponens')->where('kd_satker', $kd_satker)->first();
+        
+        // Calculate the total sum of 'pagu_program'
+        $totalPaguProgram = $rupMasterSatker->programMasters->sum('pagu_program');
+
+        return view('sirup.index', compact('rupMasterSatker', 'totalPaguProgram'));
     }
 }

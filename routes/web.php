@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\ISBsirupController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ProgramController;
 use Illuminate\Support\Facades\Route;
@@ -35,7 +36,7 @@ Route::get('/trigger_epurchasing', function () {
     return 'Data ePurchasing fetched successfully!';
 });
 
-
+Route::get('/sirup/{kd_satker}', [ISBsirupController::class, 'show']);
 
 Route::get('/dashboard', function () {
     return view('dashboard-layout');
