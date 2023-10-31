@@ -25,6 +25,11 @@ class ProgramMaster extends Model
         'is_deleted',
     ];
 
+    public function rupMasterSatker()
+    {
+        return $this->belongsTo(RupMasterSatker::class, 'kd_satker', 'kd_satker');
+    }
+
     public function kegiatans() {
         return $this->hasMany(KegiatanMaster::class, 'kd_program', 'kd_program');
     }

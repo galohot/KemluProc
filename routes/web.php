@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\ISBsirupController;
 use App\Http\Controllers\DataFetchController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ProgramController;
@@ -26,6 +27,7 @@ Route::get('/fetch-data-epurchasing', [DataFetchController::class, 'fetchDataEpu
 Route::get('/fetch-data-lpse', [DataFetchController::class, 'fetchDataLpse']);
 Route::get('/fetch-data-sirup', [DataFetchController::class, 'fetchDataSirup']);
 
+Route::get('/sirup/{kd_satker}', [ISBsirupController::class, 'show']);
 
 Route::get('/dashboard', function () {
     return view('dashboard-layout');
