@@ -25,4 +25,34 @@ class SpseJadwalTahapanNontender extends Model
         'tgl_awal',
         'tgl_akhir',
     ];
+
+    public function pengumuman()
+    {
+        return $this->hasOne(SpseNontenderPengumuman::class, 'kd_nontender');
+    }
+
+    public function pencatatanNontender()
+    {
+        return $this->hasOne(SpsePencatatanNonTender::class, 'kd_nontender_pct');
+    }
+
+    public function pencatatanNontenderRealisasi()
+    {
+        return $this->hasOne(SpsePencatatanNonTenderRealisasi::class, 'kd_nontender_pct');
+    }
+
+    public function nontenderEkontrakSppbj()
+    {
+        return $this->hasOne(SpseNontenderEkontrakSppbj::class, 'kd_nontender');
+    }
+
+    public function nontenderSelesai()
+    {
+        return $this->hasOne(SpseNontenderSelesai::class, 'kd_nontender');
+    }
+
+    public function rupMasterSatker()
+    {
+        return $this->belongsTo(RupMasterSatker::class, 'kd_satker', 'kd_satker');
+    }
 }

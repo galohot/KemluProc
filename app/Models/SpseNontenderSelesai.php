@@ -50,4 +50,9 @@ class SpseNontenderSelesai extends Model
         'npwp_penyedia',
         'url_lpse',
     ];
+
+    public function jadwalTahapanNontender()
+    {
+        return $this->belongsTo(SpseJadwalTahapanNontender::class, 'kd_nontender');
+    }
 }

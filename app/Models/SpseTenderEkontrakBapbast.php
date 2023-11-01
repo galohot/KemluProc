@@ -51,4 +51,9 @@ class SpseTenderEkontrakBapbast extends Model
         'versi_addendum',
         'alasan_addendum',
     ];
+
+    public function jadwalTahapanTender()
+    {
+        return $this->belongsTo(SpseJadwalTahapanTender::class, 'kd_tender');
+    }
 }

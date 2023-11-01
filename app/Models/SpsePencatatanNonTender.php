@@ -43,4 +43,9 @@ class SpsePencatatanNonTender extends Model
         'tgl_mulai_paket',
         'tgl_selesai_paket',
     ];
+
+    public function jadwalTahapanNontender()
+    {
+        return $this->belongsTo(SpseJadwalTahapanNontender::class, 'kd_nontender_pct');
+    }
 }

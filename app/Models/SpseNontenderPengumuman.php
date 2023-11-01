@@ -46,4 +46,9 @@ class SpseNontenderPengumuman extends Model
         'lokasi_pekerjaan',
         'url_lpse',
     ];
+
+    public function jadwalTahapanNontender()
+    {
+        return $this->belongsTo(SpseJadwalTahapanNontender::class, 'kd_nontender');
+    }
 }

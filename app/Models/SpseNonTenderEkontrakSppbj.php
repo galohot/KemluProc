@@ -43,4 +43,9 @@ class SpseNonTenderEkontrakSppbj extends Model
         'versi_addendum',
         'alasan_addendum',
     ];
+
+    public function jadwalTahapanNontender()
+    {
+        return $this->belongsTo(SpseJadwalTahapanNontender::class, 'kd_nontender');
+    }
 }

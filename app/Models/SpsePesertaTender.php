@@ -29,4 +29,9 @@ class SpsePesertaTender extends Model
         'pemenang_terverifikasi',
         'alasan',
     ];
+
+    public function jadwalTahapanTender()
+    {
+        return $this->belongsTo(SpseJadwalTahapanTender::class, 'kd_tender');
+    }
 }

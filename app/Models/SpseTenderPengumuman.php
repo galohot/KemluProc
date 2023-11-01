@@ -49,4 +49,9 @@ class SpseTenderPengumuman extends Model
         'lokasi_pekerjaan',
         'url_lpse',
     ];
+
+    public function jadwalTahapanTender()
+    {
+        return $this->belongsTo(SpseJadwalTahapanTender::class, 'kd_tender');
+    }
 }

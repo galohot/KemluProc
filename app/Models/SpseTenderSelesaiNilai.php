@@ -36,4 +36,9 @@ class SpseTenderSelesaiNilai extends Model
         'nilai_pdn_kontrak',
         'nilai_umk_kontrak',
     ];
+
+    public function jadwalTahapanTender()
+    {
+        return $this->belongsTo(SpseJadwalTahapanTender::class, 'kd_tender');
+    }
 }
