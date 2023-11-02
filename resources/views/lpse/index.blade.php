@@ -1,3 +1,12 @@
+@foreach($tenderSelesai as $item)
+<h1>{{ $item->nama_satker }}</h1>
+@endforeach
+
+@if($rupMasterSatker)
+    <h1>Data for kd_satker: {{ $rupMasterSatker->kd_satker }}</h1>
+    <h2>Nama Satker: {{ $rupMasterSatker->nama_satker }}</h2>
+    <!-- ... (rest of your view) -->
+@endif
 
 @if(count($jadwalTahapanTender) > 0)
     <h2>Jadwal Tahapan Tender</h2>
@@ -152,7 +161,42 @@
             @foreach($pengumuman as $item)
                 <tr>
                     <td>{{ $item->tahun_anggaran }}</td>
+                    <td>{{ $item->kd_klpd }}</td>
+                    <td>{{ $item->nama_klpd }}</td>
+                    <td>{{ $item->jenis_klpd }}</td>
+                    <td>{{ $item->kd_satker }}</td>
+                    <td>{{ $item->kd_satker_str }}</td>
+                    <td>{{ $item->nama_satker }}</td>
+                    <td>{{ $item->kd_lpse }}</td>
+                    <td>{{ $item->nama_lpse }}</td>
+                    <td>{{ $item->kd_tender }}</td>
+                    <td>{{ $item->kd_pkt_dce }}</td>
+                    <td>{{ $item->kd_rup }}</td>
                     <td>{{ $item->nama_paket }}</td>
+                    <td>{{ $item->pagu }}</td>
+                    <td>{{ $item->hps }}</td>
+                    <td>{{ $item->sumber_dana }}</td>
+                    <td>{{ $item->kualifikasi_paket }}</td>
+                    <td>{{ $item->jenis_pengadaan }}</td>
+                    <td>{{ $item->mtd_pemilihan }}</td>
+                    <td>{{ $item->mtd_evaluasi }}</td>
+                    <td>{{ $item->mtd_kualifikasi }}</td>
+                    <td>{{ $item->kontrak_pembayaran }}</td>
+                    <td>{{ $item->status_tender }}</td>
+                    <td>{{ $item->tanggal_status }}</td>
+                    <td>{{ $item->versi_tender }}</td>
+                    <td>{{ $item->ket_ditutup }}</td>
+                    <td>{{ $item->ket_diulang }}</td>
+                    <td>{{ $item->tgl_buat_paket }}</td>
+                    <td>{{ $item->tgl_kolektif_kolegial }}</td>
+                    <td>{{ $item->tgl_pengumuman_tender }}</td>
+                    <td>{{ $item->nip_ppk }}</td>
+                    <td>{{ $item->nama_ppk }}</td>
+                    <td>{{ $item->nip_pokja }}</td>
+                    <td>{{ $item->nama_pokja }}</td>
+                    <td>{{ $item->lokasi_pekerjaan }}</td>
+                    <td>{{ $item->url_lpse }}</td>
+                    
                     <!-- Add other columns as needed -->
                 </tr>
             @endforeach
@@ -167,6 +211,7 @@
             <tr>
                 <th>Tahun Anggaran</th>
                 <th>Nama Paket</th>
+                <th>Nama Satker</th>
                 <!-- Add other columns as needed -->
             </tr>
         </thead>
@@ -175,6 +220,7 @@
                 <tr>
                     <td>{{ $item->tahun_anggaran }}</td>
                     <td>{{ $item->nama_paket }}</td>
+                    <td>{{ $item->nama_satker }}</td>
                     <!-- Add other columns as needed -->
                 </tr>
             @endforeach
