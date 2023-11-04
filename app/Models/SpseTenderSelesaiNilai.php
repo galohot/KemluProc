@@ -37,8 +37,8 @@ class SpseTenderSelesaiNilai extends Model
         'nilai_umk_kontrak',
     ];
 
-    public function jadwalTahapanTender()
+    public function tenderSelesai()
     {
-        return $this->belongsTo(SpseJadwalTahapanTender::class, 'kd_tender');
+        return $this->belongsTo(SpseTenderSelesai::class, 'kd_tender');
     }
 }

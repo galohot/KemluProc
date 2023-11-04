@@ -50,8 +50,39 @@ class SpseTenderPengumuman extends Model
         'url_lpse',
     ];
 
-    public function jadwalTahapanTender()
+
+    public function jadwalTahapan()
     {
-        return $this->belongsTo(SpseJadwalTahapanTender::class, 'kd_tender');
+        return $this->hasMany(SpseJadwalTahapanTender::class, 'kd_tender');
+    }
+
+    public function tenderSelesai()
+    {
+        return $this->hasOne(SpseTenderSelesai::class, 'kd_tender');
+    }
+
+    public function tenderSelesaiNilai()
+    {
+        return $this->hasOne(SpseTenderSelesaiNilai::class, 'kd_tender');
+    }
+
+    public function tenderEkontrakKontrak()
+    {
+        return $this->hasOne(SpseTenderEkontrakKontrak::class, 'kd_tender');
+    }
+
+    public function tenderEkontrakSppbj()
+    {
+        return $this->hasOne(SpseTenderEkontrakSppbj::class, 'kd_tender');
+    }
+
+    public function pesertaTender()
+    {
+        return $this->hasMany(SpsePesertaTender::class, 'kd_tender');
+    }
+
+        public function rupMasterSatker()
+    {
+        return $this->belongsTo(RupMasterSatker::class, 'kd_satker', 'kd_satker');
     }
 }

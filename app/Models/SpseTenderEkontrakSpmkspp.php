@@ -42,8 +42,8 @@ class SpseTenderEkontrakSpmkspp extends Model
         'jabatan_wakil_penyedia',
     ];
 
-    public function jadwalTahapanTender()
+    public function tenderPengumuman()
     {
-        return $this->belongsTo(SpseJadwalTahapanTender::class, 'kd_tender');
+        return $this->belongsTo(SpseTenderPengumuman::class, 'kd_tender');
     }
 }

@@ -31,8 +31,8 @@ class SpsePencatatanNonTenderRealisasi extends Model
         'nama_ppk',
     ];
 
-    public function jadwalTahapanNontender()
+    public function pencatatanNonTender()
     {
-        return $this->belongsTo(SpseJadwalTahapanNontender::class, 'kd_nontender_pct');
+        return $this->belongsTo(SpsePencatatanNonTender::class, 'kd_nontender_pct');
     }
 }

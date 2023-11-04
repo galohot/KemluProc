@@ -44,8 +44,13 @@ class SpsePencatatanNonTender extends Model
         'tgl_selesai_paket',
     ];
 
-    public function jadwalTahapanNontender()
+    public function nontenderPengumuman()
     {
-        return $this->belongsTo(SpseJadwalTahapanNontender::class, 'kd_nontender_pct');
+        return $this->belongsTo(SpseNontenderPengumuman::class, 'kd_nontender_pct');
+    }
+
+    public function realisasiNonTender()
+    {
+        return $this->hasMany(SpsePencatatanNonTenderRealisasi::class, 'kd_nontender_pct');
     }
 }

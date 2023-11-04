@@ -26,48 +26,8 @@ class SpseJadwalTahapanTender extends Model
         'tgl_akhir',
     ];
 
-    public function pengumuman()
+    public function tenderPengumuman()
     {
-        return $this->hasOne(SpseTenderPengumuman::class, 'kd_tender');
-    }
-
-    public function pesertaTender()
-    {
-        return $this->hasMany(SpsePesertaTender::class, 'kd_tender');
-    }
-
-    public function tenderSelesai()
-    {
-        return $this->hasOne(SpseTenderSelesai::class, 'kd_tender');
-    }
-
-    public function tenderSelesaiNilai()
-    {
-        return $this->hasOne(SpseTenderSelesaiNilai::class, 'kd_tender');
-    }
-
-    public function kontrak()
-    {
-        return $this->hasOne(SpseTenderEkontrakKontrak::class, 'kd_tender');
-    }
-
-    public function spmkspp()
-    {
-        return $this->hasOne(SpseTenderEkontrakSpmkspp::class, 'kd_tender');
-    }
-
-    public function sppbj()
-    {
-        return $this->hasOne(SpseTenderEkontrakSppbj::class, 'kd_tender');
-    }
-
-    public function bapbast()
-    {
-        return $this->hasOne(SpseTenderEkontrakBapbast::class, 'kd_tender');
-    }
-
-    public function rupMasterSatker()
-    {
-        return $this->belongsTo(RupMasterSatker::class, 'kd_satker', 'kd_satker');
+        return $this->belongsTo(SpseTenderPengumuman::class, 'kd_tender');
     }
 }

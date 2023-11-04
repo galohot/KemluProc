@@ -47,8 +47,33 @@ class SpseNontenderPengumuman extends Model
         'url_lpse',
     ];
 
-    public function jadwalTahapanNontender()
+    public function jadwalTahapan()
     {
-        return $this->belongsTo(SpseJadwalTahapanNontender::class, 'kd_nontender');
+        return $this->hasMany(SpseJadwalTahapanNontender::class, 'kd_nontender');
+    }
+
+    public function nontenderSelesai()
+    {
+        return $this->hasOne(SpseNontenderSelesai::class, 'kd_nontender');
+    }
+
+    // public function nontenderEkontrakSpmkspp()
+    // {
+    //     return $this->hasOne(SpseNontenderEkontrakSpmkspp::class, 'kd_nontender');
+    // }
+
+    public function nontenderEkontrakSppbj()
+    {
+        return $this->hasOne(SpseNontenderEkontrakSppbj::class, 'kd_nontender');
+    }
+
+    public function pencatatanNonTender()
+    {
+        return $this->hasOne(SpsePencatatanNonTender::class, 'kd_nontender_pct');
+    }
+
+    public function rupMasterSatker()
+    {
+        return $this->belongsTo(RupMasterSatker::class, 'kd_satker', 'kd_satker');
     }
 }
