@@ -23,6 +23,12 @@ Route::get('/', function () {
     return view('welcome');
 });
 
+Route::get('/clear-cache', function() {
+    $exitCode = Artisan::call('cache:clear');
+    $exitCode = Artisan::call('config:cache');
+    return 'DONE'; //Return anything
+});
+
 Route::get('/fetch-all-data', [DataFetchController::class, 'fetchAllData']);
 Route::get('/fetch-data-epurchasing', [DataFetchController::class, 'fetchDataEpurchasing']);
 Route::get('/fetch-data-lpse', [DataFetchController::class, 'fetchDataLpse']);
