@@ -34,4 +34,9 @@ class PaketAnggaranSwakelola extends Model
         'status_delete_rup',
         'status_umumkan_rup',
     ];
+
+    public function rupMasterSatker()
+    {
+        return $this->belongsTo(RupMasterSatker::class, 'kd_satker', 'kd_satker');
+    }
 }

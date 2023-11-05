@@ -24,4 +24,9 @@ class PaketSwakelolaLokasi extends Model
         'kd_provinsi',
         'provinsi',
     ];
+
+    public function swakelolaTerumumkan()
+    {
+        return $this->belongsTo(PaketSwakelolaTerumumkan::class, 'kd_satker', 'kd_satker');
+    }
 }

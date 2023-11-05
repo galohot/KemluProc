@@ -38,4 +38,14 @@ class PaketSwakelolaTerumumkan extends Model
         'status_delete_rup',
         'status_umumkan_rup',
     ];
+
+    public function rupMasterSatker()
+    {
+        return $this->belongsTo(RupMasterSatker::class, 'kd_satker', 'kd_satker');
+    }
+
+    
+    public function swakelolaLokasis() {
+        return $this->hasMany(PaketSwakelolaLokasi::class, 'kd_rup', 'kd_rup');
+    }
 }

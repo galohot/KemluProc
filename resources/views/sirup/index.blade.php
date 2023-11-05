@@ -39,3 +39,42 @@
         </tbody>
     </table>
 @endif
+
+@if($rupMasterSatker)
+    <h1>Data for kd_satker: {{ $rupMasterSatker->kd_satker }}</h1>
+    <h2>Nama Satker: {{ $rupMasterSatker->nama_satker }}</h2>
+    <h3>Total Pagu Program: Rp. {{ number_format($totalPaguProgram) }}</h3>
+
+    <!-- Display data from PaketPenyediaTerumumkan relationship -->
+    @foreach($rupMasterSatker->paketPenyediaTerumumkans as $paket)
+        <h4>Paket Penyedia Terumumkan</h4>
+        <p>Nama Paket: {{ $paket->nama_paket }}</p>
+        <p>Pagu: {{ $paket->pagu }}</p>
+        <!-- Add more fields as needed -->
+    @endforeach
+
+    <!-- Display data from PaketSwakelolaTerumumkan relationship -->
+    @foreach($rupMasterSatker->paketSwakelolaTerumumkans as $paket)
+        <h4>Paket Swakelola Terumumkan</h4>
+        <p>Nama Paket: {{ $paket->nama_paket }}</p>
+        <p>Pagu: {{ $paket->pagu }}</p>
+        <!-- Add more fields as needed -->
+    @endforeach
+
+    <table>
+        <thead>
+            <tr>
+                <th>Program</th>
+                <th>Kegiatan</th>
+                <th>Rup Kro</th>
+                <th>Rup Ro</th>
+                <th>Komponen</th>
+                <th>Subkomponen</th>
+            </tr>
+        </thead>
+        <tbody>
+            <!-- Your existing code for programMasters, kegiatans, etc. -->
+        </tbody>
+    </table>
+@endif
+

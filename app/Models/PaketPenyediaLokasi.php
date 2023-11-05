@@ -24,4 +24,9 @@ class PaketPenyediaLokasi extends Model
         'kd_provinsi',
         'provinsi',
     ];
+
+    public function penyediaTerumumkan()
+    {
+        return $this->belongsTo(PaketPenyediaTerumumkan::class, 'kd_satker', 'kd_satker');
+    }
 }

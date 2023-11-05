@@ -47,4 +47,13 @@ class RupMasterSatker extends Model
         return $this->hasMany(SpseNontenderPengumuman::class, 'kd_satker', 'kd_satker');
     }
 
+    public function paketPenyediaTerumumkans()
+    {
+        return $this->hasMany(PaketPenyediaTerumumkan::class, 'kd_satker', 'kd_satker');
+    }
+    public function paketSwakelolaTerumumkans()
+    {
+        return $this->hasMany(PaketSwakelolaTerumumkan::class, 'kd_satker', 'kd_satker');
+    }
+
 }
