@@ -32,6 +32,6 @@ class SpsePesertaTender extends Model
 
     public function tenderPengumuman()
     {
-        return $this->belongsTo(SpseTenderPengumuman::class, 'kd_tender');
+        return $this->belongsTo(SpseTenderPengumuman::class, 'kd_tender','kd_tender');
     }
 }

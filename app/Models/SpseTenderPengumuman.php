@@ -78,11 +78,16 @@ class SpseTenderPengumuman extends Model
 
     public function pesertaTender()
     {
-        return $this->hasMany(SpsePesertaTender::class, 'kd_tender');
+        return $this->hasMany(SpsePesertaTender::class, 'kd_tender','kd_tender');
     }
 
-        public function rupMasterSatker()
+    public function rupMasterSatker()
     {
         return $this->belongsTo(RupMasterSatker::class, 'kd_satker', 'kd_satker');
+    }
+
+    public function penyediaTerumumkan()
+    {
+        return $this->belongsTo(PaketPenyediaTerumumkan::class, 'kd_rup', 'kd_rup');
     }
 }

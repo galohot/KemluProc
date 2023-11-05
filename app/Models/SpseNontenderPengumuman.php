@@ -76,4 +76,9 @@ class SpseNontenderPengumuman extends Model
     {
         return $this->belongsTo(RupMasterSatker::class, 'kd_satker', 'kd_satker');
     }
+
+    public function penyediaTerumumkan()
+    {
+        return $this->belongsTo(PaketPenyediaTerumumkan::class, 'kd_rup', 'kd_rup');
+    }
 }

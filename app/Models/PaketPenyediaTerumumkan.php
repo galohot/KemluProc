@@ -60,4 +60,13 @@ class PaketPenyediaTerumumkan extends Model
     public function penyediaLokasis() {
         return $this->hasMany(PaketPenyediaLokasi::class, 'kd_rup', 'kd_rup');
     }
+    public function tenderPengumumans()
+    {
+        return $this->hasMany(SpseTenderPengumuman::class, 'kd_rup', 'kd_rup');
+    }
+
+    public function nonTenderPengumumans()
+    {
+        return $this->hasMany(SpseNontenderPengumuman::class, 'kd_rup', 'kd_rup');
+    }
 }

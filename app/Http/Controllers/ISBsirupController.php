@@ -12,7 +12,8 @@ class ISBsirupController extends Controller
     public function show($kd_satker) {
         $rupMasterSatker = RupMasterSatker::with([
             'programMasters.kegiatans.rupKros.rupRos.komponens.subkomponens',
-            'paketPenyediaTerumumkans',
+            'paketPenyediaTerumumkans.tenderPengumumans.pesertaTender',
+            'paketPenyediaTerumumkans.nonTenderPengumumans.pencatatanNonTender',
             'paketSwakelolaTerumumkans'
         ])->where('kd_satker', $kd_satker)->first();
         

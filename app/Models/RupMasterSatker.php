@@ -37,12 +37,12 @@ class RupMasterSatker extends Model
         return $this->hasMany(ProgramMaster::class, 'kd_satker', 'kd_satker');
     }
 
-    public function tenderPengumuman()
+    public function tenderPengumumans()
     {
         return $this->hasMany(SpseTenderPengumuman::class, 'kd_satker', 'kd_satker');
     }
 
-    public function nonTenderPengumuman()
+    public function nonTenderPengumumans()
     {
         return $this->hasMany(SpseNontenderPengumuman::class, 'kd_satker', 'kd_satker');
     }
