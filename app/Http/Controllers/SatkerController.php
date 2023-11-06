@@ -7,7 +7,7 @@ use App\Models\PaketPenyediaTerumumkan;
 use App\Models\PaketSwakelolaTerumumkan;
 use Illuminate\Http\Request;
 
-class ISBsirupController extends Controller
+class SatkerController extends Controller
 {
     public function show($kd_satker) {
         $rupMasterSatker = RupMasterSatker::with([
@@ -21,6 +21,6 @@ class ISBsirupController extends Controller
         // Calculate the total sum of 'pagu_program'
         $totalPaguProgram = $rupMasterSatker->programMasters->sum('pagu_program');
 
-        return view('sirup.index', compact('rupMasterSatker', 'totalPaguProgram'));
+        return view('satker.index', compact('rupMasterSatker', 'totalPaguProgram'));
     }
 }

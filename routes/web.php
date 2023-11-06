@@ -4,6 +4,7 @@ use App\Http\Controllers\ISBsirupController;
 use App\Http\Controllers\DataFetchController;
 use App\Http\Controllers\ISBlpseController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\SatkerController;
 use App\Http\Controllers\ProgramController;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Artisan;
@@ -36,6 +37,7 @@ Route::get('/fetch-data-sirup', [DataFetchController::class, 'fetchDataSirup']);
 
 Route::get('/sirup/{kd_satker}', [ISBsirupController::class, 'show']);
 Route::get('/lpse/{kd_satker}', [ISBlpseController::class, 'show']);
+Route::get('/satker/{kd_satker}', [SatkerController::class, 'show']);
 
 
 Route::get('/dashboard', function () {
