@@ -41,11 +41,16 @@ class PaketSwakelolaTerumumkan extends Model
 
     public function rupMasterSatker()
     {
-        return $this->belongsTo(RupMasterSatker::class, 'kd_satker', 'kd_satker');
+        return $this->belongsTo(RupMasterSatker::class, 'kd_satker_str', 'kd_satker_str');
     }
 
     
     public function swakelolaLokasis() {
         return $this->hasMany(PaketSwakelolaLokasi::class, 'kd_rup', 'kd_rup');
+    }
+
+    public function anggaranSwakelolas()
+    {
+        return $this->hasOne(PaketAnggaranSwakelola::class, 'kd_rup', 'kd_rup');
     }
 }

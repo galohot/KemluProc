@@ -29,7 +29,7 @@ class RupMasterSatker extends Model
 
     public function strukturAnggaran()
     {
-        return $this->hasOne(RupStrukturAnggaranKl::class, 'kd_satker', 'kd_satker');
+        return $this->hasOne(RupStrukturAnggaranKl::class, 'kd_satker_str', 'kd_satker_str');
     }
 
     public function programMasters()
@@ -39,21 +39,21 @@ class RupMasterSatker extends Model
 
     public function tenderPengumumans()
     {
-        return $this->hasMany(SpseTenderPengumuman::class, 'kd_satker', 'kd_satker');
+        return $this->hasMany(SpseTenderPengumuman::class, 'kd_satker_str', 'kd_satker_str');
     }
 
     public function nonTenderPengumumans()
     {
-        return $this->hasMany(SpseNontenderPengumuman::class, 'kd_satker', 'kd_satker');
+        return $this->hasMany(SpseNontenderPengumuman::class, 'kd_satker_str', 'kd_satker_str');
     }
 
     public function paketPenyediaTerumumkans()
     {
-        return $this->hasMany(PaketPenyediaTerumumkan::class, 'kd_satker', 'kd_satker');
+        return $this->hasMany(PaketPenyediaTerumumkan::class, 'kd_satker_str', 'kd_satker_str');
     }
     public function paketSwakelolaTerumumkans()
     {
-        return $this->hasMany(PaketSwakelolaTerumumkan::class, 'kd_satker', 'kd_satker');
+        return $this->hasMany(PaketSwakelolaTerumumkan::class, 'kd_satker_str', 'kd_satker_str');
     }
 
 }

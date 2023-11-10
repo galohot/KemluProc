@@ -35,6 +35,6 @@ class RupStrukturAnggaranKl extends Model
 
     public function masterSatker()
     {
-        return $this->belongsTo(RupMasterSatker::class, 'kd_satker', 'kd_satker');
+        return $this->belongsTo(RupMasterSatker::class, 'kd_satker_str', 'kd_satker_str');
     }
 }

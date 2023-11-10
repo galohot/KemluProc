@@ -37,6 +37,11 @@ class PaketAnggaranPenyedia extends Model
 
     public function rupMasterSatker()
     {
-        return $this->belongsTo(RupMasterSatker::class, 'kd_satker', 'kd_satker');
+        return $this->belongsTo(RupMasterSatker::class, 'kd_satker_str', 'kd_satker_str');
+    }
+
+    public function anggaranPenyedia()
+    {
+        return $this->belongsTo(PaketPenyediaTerumumkan::class, 'kd_rup', 'kd_rup');
     }
 }
