@@ -69,6 +69,10 @@ class PaketPenyediaTerumumkan extends Model
     {
         return $this->hasMany(SpseNontenderPengumuman::class, 'kd_rup', 'kd_rup');
     }
+    public function pencatatanNonTender()
+    {
+        return $this->hasOne(SpsePencatatanNonTender::class, 'kd_rup', 'kd_rup');
+    }
     public function anggaranPenyedias()
     {
         return $this->hasOne(PaketAnggaranPenyedia::class, 'kd_rup', 'kd_rup');

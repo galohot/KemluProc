@@ -1,125 +1,95 @@
-@if($rupMasterSatker)
-    <h1>Data for kd_satker: {{ $rupMasterSatker->kd_satker }}</h1>
-    <h2>Nama Satker: {{ $rupMasterSatker->nama_satker }}</h2>
-    <h3>Total Pagu Program:Rp. {{ number_format($totalPaguProgram) }}</h3>
-    
-    <table>
-        <thead>
-            <tr>
-                <td>Kode RUP{</td>
-                <th>Kode Tender</th>
-                <th>Nama Paket</th>
-                <th>Tahapan Tender</th>
-                <th>Nama Penyedia</th>
-            </tr>
-        </thead>
-        <tbody>
-            @php
-                $prevKdTender = null;
-                $prevNamaPaket = null;
-            @endphp
-            @foreach($rupMasterSatker->paketPenyediaTerumumkans as $paketPenyediaTerumumkan)
-                @foreach($paketPenyediaTerumumkan->tenderPengumumans as $tenderPengumuman)
-                    @foreach($tenderPengumuman->pesertaTender as $pesertaTender)
-                        <tr>
-                            <td>
-                                {{$paketPenyediaTerumumkan->kd_rup}}
-                            </td>
-                            <td>
-                                @if($prevKdTender !== $pesertaTender->kd_tender)
-                                    {{ $pesertaTender->kd_tender }}
-                                    @php $prevKdTender = $pesertaTender->kd_tender; @endphp
-                                @endif
-                            </td>
-                            <td>
-                                @if($prevNamaPaket !== $tenderPengumuman->nama_paket)
-                                    {{ $tenderPengumuman->nama_paket }}
-                                    @php $prevNamaPaket = $tenderPengumuman->nama_paket; @endphp
-                                @endif
-                            </td>
-                            <td>{{ $tenderPengumuman->status_tender }}</td>
-                            <td>
-                                @foreach($tenderPengumuman->jadwalTahapan as $jadwal)
-                                    {{ $jadwal->nama_tahapan }} {{-- Assuming there is a field 'nama_tahapan' in your model --}}
-                                    <br>
+<!-- resources/views/satker/index.blade.php -->
+
+<h1>RupMasterSatker Information</h1>
+
+@if ($rupMasterSatker)
+    {{-- <p>RupMasterSatker Information:</p>
+    <pre>{{ print_r($rupMasterSatker->toArray(), true) }}</pre>
+
+    <p>Total Pagu Program: {{ $totalPaguProgram }}</p> --}}
+
+{{-- @if ($rupMasterSatker->programMasters->isNotEmpty())
+    <h2>Program Masters Information</h2>
+    <ul>
+        @foreach ($rupMasterSatker->programMasters as $programMaster)
+            <li>{{ $programMaster->nama_program }}</li>
+            <ul>
+                @foreach ($programMaster->kegiatans as $kegiatan)
+                    <li>{{ $kegiatan->nama_kegiatan }}</li>
+                    <ul>
+                        @foreach ($kegiatan->rupKros as $rupKro)
+                            <li>{{ $rupKro->nama_kro }}</li>
+                            <ul>
+                                @foreach ($rupKro->rupRos as $rupRo)
+                                    <li>{{ $rupRo->nama_ro }}</li>
+                                    <ul>
+                                        @foreach ($rupRo->komponens as $komponen)
+                                            <li>{{ $komponen->nama_komponen }}</li>
+                                            <ul>
+                                                @foreach ($komponen->subkomponens as $subkomponen)
+                                                    <li>{{ $subkomponen->nama_subkomponen }}</li>
+                                                @endforeach
+                                            </ul>
+                                        @endforeach
+                                    </ul>
                                 @endforeach
-                            </td>
-                            <td>{{ $pesertaTender->nama_penyedia }}</td>
-                        </tr>
-                    @endforeach
-                @endforeach
-            @endforeach
-        </tbody>
-    </table>
-    
-    
-    
-
-
-
-    <table>
-        <thead>
-            <tr>
-                <th>Program</th>
-                <th>Kegiatan</th>
-                <th>Rup Kro</th>
-                <th>Rup Ro</th>
-                <th>Komponen</th>
-                <th>Subkomponen</th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach($rupMasterSatker->programMasters as $programMaster)
-                @foreach($programMaster->kegiatans as $kegiatanMaster)
-                    @foreach($kegiatanMaster->rupKros as $rupKroMaster)
-                        @foreach($rupKroMaster->rupRos as $rupRoMaster)
-                            @foreach($rupRoMaster->komponens as $komponenMaster)
-                                @foreach($komponenMaster->subkomponens as $subkomponenMaster)
-                                    <tr>
-                                        <td>{{ $programMaster->nama_program }}</td>
-                                        <td>{{ $kegiatanMaster->nama_kegiatan }}</td>
-                                        <td>{{ $rupKroMaster->nama_kro }}</td>
-                                        <td>{{ $rupRoMaster->nama_ro }}</td>
-                                        <td>{{ $komponenMaster->nama_komponen }}</td>
-                                        <td>{{ $subkomponenMaster->nama_subkomponen }}</td>
-                                    </tr>
-                                @endforeach
-                            @endforeach
+                            </ul>
                         @endforeach
-                    @endforeach
+                    </ul>
                 @endforeach
-            @endforeach
-        </tbody>
-    </table>
-@endif
-
-@if($rupMasterSatker)
-    <h1>Data for kd_satker: {{ $rupMasterSatker->kd_satker }}</h1>
-    <h2>Nama Satker: {{ $rupMasterSatker->nama_satker }}</h2>
-    <h3>Total Pagu Program: Rp. {{ number_format($totalPaguProgram) }}</h3>
-
-    <!-- Display data from PaketPenyediaTerumumkan relationship -->
-    @foreach($rupMasterSatker->paketPenyediaTerumumkans as $paket)
-        <h4>Paket Penyedia Terumumkan</h4>
-        <p>Nama Paket: {{ $paket->nama_paket }}</p>
-        <p>Pagu: {{ $paket->pagu }}</p>
-        <!-- Add more fields as needed -->
-        @foreach ($paket->penyediaLokasis as $lokasi)
-            <p>lokasi: {{ $lokasi->detail_lokasi }}</p>
-            <p>lokasi: {{ $lokasi->provinsi }}</p>
-            <p>lokasi: {{ $lokasi->kab_kota }}</p>
-            
+            </ul>
         @endforeach
-    @endforeach
+    </ul>
+@else
+    <p>No Program Masters found.</p>
+@endif --}}
 
-    <!-- Display data from PaketSwakelolaTerumumkan relationship -->
-    @foreach($rupMasterSatker->paketSwakelolaTerumumkans as $paket)
-        <h4>Paket Swakelola Terumumkan</h4>
-        <p>Nama Paket: {{ $paket->nama_paket }}</p>
-        <p>Pagu: {{ $paket->pagu }}</p>
-        <!-- Add more fields as needed -->
-    @endforeach
-
-
+    @if ($rupMasterSatker->paketPenyediaTerumumkans->isNotEmpty())
+        <h2>PaketPenyediaTerumumkan Information</h2>
+        <p>Count of PaketPenyediaTerumumkans where metode_pengadaan is 'tender': {{ $countTender }}</p>
+        <p>Count of PaketPenyediaTerumumkans where metode_pengadaan is not 'tender': {{ $countNotTender }}</p>
+        <table border="1">
+            <thead>
+                <tr>
+                    <th>Nama Satker</th>
+                    <th>Kode RUP</th>
+                    <th>Nama Paket</th>
+                    <th>Metode Pemilihan</th>
+                    <th>Kode LPSE</th>
+                    <th>Kode Non-Tender PCT</th>
+                    <th>Kode PKT DCE</th>
+                    <th>Pagu</th>
+                    <th>Total Realisasi</th>
+                    <th>Nilai PDN PCT</th>
+                    <th>Nilai UMK PCT</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach ($rupMasterSatker->paketPenyediaTerumumkans as $paket)
+                    <tr>
+                        <td>{{ $paket->nama_satker }}</td>
+                        <td>{{ $paket->kd_rup }}</td>
+                        <td>{{ $paket->nama_paket }}</td>
+                        <td>{{ $paket->metode_pengadaan }}</td>
+                        @if ($paket->pencatatanNonTender)
+                            <td>{{ $paket->pencatatanNonTender->kd_lpse }}</td>
+                            <td>{{ $paket->pencatatanNonTender->kd_nontender_pct }}</td>
+                            <td>{{ $paket->pencatatanNonTender->kd_pkt_dce }}</td>
+                            <td>{{ $paket->pencatatanNonTender->pagu }}</td>
+                            <td>{{ $paket->pencatatanNonTender->total_realisasi }}</td>
+                            <td>{{ $paket->pencatatanNonTender->nilai_pdn_pct }}</td>
+                            <td>{{ $paket->pencatatanNonTender->nilai_umk_pct }}</td>
+                        @else
+                            <td colspan="6">No PencatatanNonTender found for this Paket.</td>
+                            <td colspan="4"></td>
+                        @endif
+                    </tr>
+                @endforeach
+            </tbody>
+        </table>
+    @else
+        <p>No PaketPenyediaTerumumkan found.</p>
+    @endif
+@else
+    <p>RupMasterSatker not found.</p>
 @endif
-

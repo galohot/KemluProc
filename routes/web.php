@@ -37,7 +37,7 @@ Route::get('/fetch-data-sirup', [DataFetchController::class, 'fetchDataSirup']);
 
 Route::get('/sirup/{kd_satker}', [ISBsirupController::class, 'show']);
 Route::get('/lpse/{kd_satker}', [ISBlpseController::class, 'show']);
-Route::get('/satker/{kd_satker}', [SatkerController::class, 'show']);
+Route::get('/satker/{kd_satker_str}', [SatkerController::class, 'show']);
 
 
 Route::get('/dashboard', function () {

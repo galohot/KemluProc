@@ -55,5 +55,11 @@ class RupMasterSatker extends Model
     {
         return $this->hasMany(PaketSwakelolaTerumumkan::class, 'kd_satker_str', 'kd_satker_str');
     }
+    // public function pencatatanNonTenders()
+    // {
+    //     return $this->hasMany(SpsePencatatanNonTender::class, 'kd_satker_str', 'kd_satker_str');
+    // }
+
+
 
 }

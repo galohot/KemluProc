@@ -53,4 +53,15 @@ class SpsePencatatanNonTender extends Model
     {
         return $this->hasMany(SpsePencatatanNonTenderRealisasi::class, 'kd_nontender_pct');
     }
+
+    // public function rupMasterSatker()
+    // {
+    //     return $this->belongsTo(RupMasterSatker::class, 'kd_satker_str', 'kd_satker_str');
+    // }
+
+    public function penyediaTerumumkan()
+    {
+        return $this->belongsTo(PaketPenyediaTerumumkan::class, 'kd_rup', 'kd_rup');
+    }
+
 }
