@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\RupMasterSatker;
 use App\Models\PaketPenyediaTerumumkan;
 use App\Models\PaketSwakelolaTerumumkan;
+use App\Models\SpsePencatatanNonTender;
 use Illuminate\Http\Request;
 
 class SatkerController extends Controller
@@ -22,8 +23,13 @@ class SatkerController extends Controller
         $countNotTender = $rupMasterSatker->paketPenyediaTerumumkans->whereNotIn('metode_pengadaan', ['Tender'])->count();
     
         $totalPaguProgram = $rupMasterSatker->programMasters->sum('pagu_program');
+
+        $pencatatanNonTender = SpsePencatatanNonTender::where('kd_satker_str', $kd_satker_str)->get();
+        $countPencatatanNonTender = count($pencatatanNonTender);
+
+        dd($pencatatanNonTender);
     
-        return view('satker.index', compact('rupMasterSatker', 'totalPaguProgram', 'countTender', 'countNotTender'));
+        return view('satker.index', compact('rupMasterSatker', 'totalPaguProgram', 'countTender', 'countNotTender','countPencatatanNonTender'));
     }
     
 }

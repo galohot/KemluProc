@@ -48,6 +48,7 @@
         <h2>PaketPenyediaTerumumkan Information</h2>
         <p>Paket Tender: {{ $countTender }}</p>
         <p>Paket Non Tender: {{ $countNotTender }}</p>
+        <p>pencatatan: {{ $countPencatatanNonTender }}</p>
         <p>Total Paket: {{ $countTender + $countNotTender }}</p>
         <table border="1">
             <thead>
