@@ -46,8 +46,9 @@
 
     @if ($rupMasterSatker->paketPenyediaTerumumkans->isNotEmpty())
         <h2>PaketPenyediaTerumumkan Information</h2>
-        <p>Count of PaketPenyediaTerumumkans where metode_pengadaan is 'tender': {{ $countTender }}</p>
-        <p>Count of PaketPenyediaTerumumkans where metode_pengadaan is not 'tender': {{ $countNotTender }}</p>
+        <p>Paket Tender: {{ $countTender }}</p>
+        <p>Paket Non Tender: {{ $countNotTender }}</p>
+        <p>Total Paket: {{ $countTender + $countNotTender }}</p>
         <table border="1">
             <thead>
                 <tr>
