@@ -105,6 +105,28 @@
     @else
         <p>No PaketPenyediaTerumumkan found.</p>
     @endif
+
+    @if ($rupMasterSatker->paketSwakelolaTerumumkans->isNotEmpty()) 
+    <h1>Swakelola</h1>
+    <table border="1">
+        <thead>
+            <tr>
+                <th>Nama Satker</th>
+                <th>Kode RUP</th>
+                <th>Nama Paket</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach ($rupMasterSatker->paketSwakelolaTerumumkans as $paket)
+                <tr>
+                    <td>{{ $paket->nama_satker }}</td>
+                    <td>{{ $paket->kd_rup }}</td>
+                    <td>{{ $paket->nama_paket }}</td>
+                </tr>
+            @endforeach
+        </tbody>
+    </table>
+    @endif
 @else
     <p>RupMasterSatker not found.</p>
 @endif

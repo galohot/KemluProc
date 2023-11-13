@@ -15,6 +15,7 @@ class SatkerController extends Controller
         $rupMasterSatker = RupMasterSatker::with([
             'programMasters.kegiatans.rupKros.rupRos.komponens.subkomponens',
             'paketPenyediaTerumumkans.pencatatanNonTender',
+            'paketSwakelolaTerumumkans',
         ])->where('kd_satker_str', $kd_satker_str)->first();
 
         // Count paketPenyediaTerumumkans where metode_pengadaan is 'tender'
