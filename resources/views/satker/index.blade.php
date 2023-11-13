@@ -1,8 +1,8 @@
 <!-- resources/views/satker/index.blade.php -->
 
-<h1>RupMasterSatker Information</h1>
 
 @if ($rupMasterSatker)
+<h1>{{ $rupMasterSatker->nama_satker }}</h1>
     {{-- <p>RupMasterSatker Information:</p>
     <pre>{{ print_r($rupMasterSatker->toArray(), true) }}</pre>
 
@@ -48,8 +48,17 @@
         <h2>PaketPenyediaTerumumkan Information</h2>
         <p>Paket Tender: {{ $countTender }}</p>
         <p>Paket Non Tender: {{ $countNotTender }}</p>
-        <p>pencatatan: {{ $countPencatatanNonTender }}</p>
+        <p>pencatatan: {{ $countKdRupTercatat }}</p>
+        <p>Belum Tercatat: {{ $countNotTender - $countKdRupTercatat }}</p>
         <p>Total Paket: {{ $countTender + $countNotTender }}</p>
+
+        <p>Sum of Pagu: {{ number_format($sumPagu) }}</p>
+        <p>Sum of Total Realisasi: {{ number_format($sumTotalRealisasi) }}</p>
+        <p>Sum of Nilai PDN Pct: {{ number_format($sumNilaiPdnPct) }}</p>
+        <p>Sum of Nilai UMK Pct: {{ number_format($sumNilaiUmkPct) }}</p>
+        <p>Persentase Realisasi Nontender Tercatat: {{ number_format($sumTotalRealisasi / $sumPagu * 100, 2) }}%</p>
+        <p>Persentase Realisasi PDN Nontender Tercatat: {{ number_format($sumNilaiPdnPct / $sumPagu * 100, 2) }}%</p>
+        <p>Persentase Realisasi UMK Nontender Tercatat: {{ number_format($sumNilaiUmkPct / $sumPagu * 100, 2) }}%</p>
         <table border="1">
             <thead>
                 <tr>
@@ -64,6 +73,7 @@
                     <th>Total Realisasi</th>
                     <th>Nilai PDN PCT</th>
                     <th>Nilai UMK PCT</th>
+                    <th>Status PencatatanNonTender</th> <!-- Added column -->
                 </tr>
             </thead>
             <tbody>
@@ -74,6 +84,7 @@
                         <td>{{ $paket->nama_paket }}</td>
                         <td>{{ $paket->metode_pengadaan }}</td>
                         @if ($paket->pencatatanNonTender)
+                            <td>{{ $paket->pencatatanNonTender->kd_rup }}</td>
                             <td>{{ $paket->pencatatanNonTender->kd_lpse }}</td>
                             <td>{{ $paket->pencatatanNonTender->kd_nontender_pct }}</td>
                             <td>{{ $paket->pencatatanNonTender->kd_pkt_dce }}</td>
@@ -81,14 +92,16 @@
                             <td>{{ $paket->pencatatanNonTender->total_realisasi }}</td>
                             <td>{{ $paket->pencatatanNonTender->nilai_pdn_pct }}</td>
                             <td>{{ $paket->pencatatanNonTender->nilai_umk_pct }}</td>
+                            <td>Sudah Tercatat</td>
                         @else
                             <td colspan="6">No PencatatanNonTender found for this Paket.</td>
-                            <td colspan="4"></td>
+                            <td colspan="4">Belum Tercatat</td> <!-- New column cell -->
                         @endif
                     </tr>
                 @endforeach
             </tbody>
         </table>
+        
     @else
         <p>No PaketPenyediaTerumumkan found.</p>
     @endif
