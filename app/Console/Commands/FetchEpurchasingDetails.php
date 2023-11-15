@@ -17,10 +17,18 @@ class FetchEpurchasingDetails extends Command
         // Truncate the EpurchasingProducts table
         EpurchasingProducts::truncate();
 
+        // Track fetched kd_produk values
+        $fetchedKdProduk = [];
+
         // Retrieve data from the API
         $kdProdukValues = EcatPaketEpurchasing::pluck('kd_produk')->toArray();
-        
+
         foreach ($kdProdukValues as $kdProduk) {
+            // Check if kd_produk has already been fetched
+            if (in_array($kdProduk, $fetchedKdProduk)) {
+                continue; // Skip fetching if already processed
+            }
+
             $url = "https://isb.lkpp.go.id/isb-2/api/fc90ab23-dea5-44d3-999e-18097e9162cc/json/5282/Ecat-ProdukDetail/tipe/4/parameter/{$kdProduk}";
             $response = Http::get($url);
 
@@ -87,10 +95,11 @@ class FetchEpurchasingDetails extends Command
                     'nie' => $data[0]['nie'],
                     // Add more fields as needed
                 ]);
-                
-
                 // Save the data to the database
                 $epurchasingProduct->save();
+
+                // Track fetched kd_produk
+                $fetchedKdProduk[] = $kdProduk;
             }
         }
 
