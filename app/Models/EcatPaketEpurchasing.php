@@ -47,4 +47,9 @@ class EcatPaketEpurchasing extends Model
         'paket_status_str',
         'catatan_produk'
     ];
+
+    public function penyediaTerumumkan()
+    {
+        return $this->belongsTo(PaketPenyediaTerumumkan::class, 'kd_rup', 'kd_rup');
+    }
 }

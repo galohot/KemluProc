@@ -77,6 +77,14 @@ class PaketPenyediaTerumumkan extends Model
     {
         return $this->hasOne(PaketAnggaranPenyedia::class, 'kd_rup', 'kd_rup');
     }
+    public function tenderSelesai()
+    {
+        return $this->hasOne(SpseTenderSelesai::class, 'kd_rup', 'kd_rup');
+    }
+    public function paketEcats()
+    {
+        return $this->hasMany(EcatPaketEpurchasing::class, 'kd_rup', 'kd_rup');
+    }
 
 
 }

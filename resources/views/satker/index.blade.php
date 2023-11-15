@@ -3,6 +3,14 @@
 
 @if ($rupMasterSatker)
 <h1>{{ $rupMasterSatker->nama_satker }}</h1>
+
+@foreach ($rupMasterSatker->paketPenyediaTerumumkans as $paketPenyediaTerumumkan)
+    @foreach ($paketPenyediaTerumumkan->paketEcats as $paketEcats)
+        Paket Ekatalog
+        {{ $paketEcats->kd_rup }}
+    @endforeach
+@endforeach
+
     {{-- <p>RupMasterSatker Information:</p>
     <pre>{{ print_r($rupMasterSatker->toArray(), true) }}</pre>
 
@@ -65,7 +73,8 @@
                     <th>Nama Satker</th>
                     <th>Kode RUP</th>
                     <th>Nama Paket</th>
-                    <th>Metode Pemilihan</th>
+                    <th>Metode Pengadaan</th>
+                    <td>Kode RUP</td>
                     <th>Kode LPSE</th>
                     <th>Kode Non-Tender PCT</th>
                     <th>Kode PKT DCE</th>
@@ -73,7 +82,10 @@
                     <th>Total Realisasi</th>
                     <th>Nilai PDN PCT</th>
                     <th>Nilai UMK PCT</th>
-                    <th>Status PencatatanNonTender</th> <!-- Added column -->
+                    <th>Status PencatatanNonTender</th> <!-- Existing column -->
+                    <th>RealisasiNonTender PCT</th> <!-- Updated column for realisasiNonTender -->
+                    <th>nilaiTender</th> <!-- Updated column for realisasiNonTender -->
+                    <th>Ekatalog</th> <!-- Updated column for realisasiNonTender -->
                 </tr>
             </thead>
             <tbody>
@@ -83,6 +95,7 @@
                         <td>{{ $paket->kd_rup }}</td>
                         <td>{{ $paket->nama_paket }}</td>
                         <td>{{ $paket->metode_pengadaan }}</td>
+
                         @if ($paket->pencatatanNonTender)
                             <td>{{ $paket->pencatatanNonTender->kd_rup }}</td>
                             <td>{{ $paket->pencatatanNonTender->kd_lpse }}</td>
@@ -93,14 +106,58 @@
                             <td>{{ $paket->pencatatanNonTender->nilai_pdn_pct }}</td>
                             <td>{{ $paket->pencatatanNonTender->nilai_umk_pct }}</td>
                             <td>Sudah Tercatat</td>
+                            
+                            @if ($paket->pencatatanNonTender->realisasiNonTenders->isNotEmpty())
+                                <td>
+                                    <ul>
+                                        @foreach ($paket->pencatatanNonTender->realisasiNonTenders as $realisasi)
+                                            <li>{{ $realisasi->kd_nontender_pct }}</li>
+                                            <!-- Display other fields as needed -->
+                                        @endforeach
+                                    </ul>
+                                </td>
+                            @else
+                                <td colspan="4">No kd nontender found</td>
+                            @endif
+
+
                         @else
                             <td colspan="6">No PencatatanNonTender found for this Paket.</td>
-                            <td colspan="4">Belum Tercatat</td> <!-- New column cell -->
+                            <td colspan="7">Belum Tercatat</td> <!-- Updated colspan to include the new column -->
                         @endif
+
+                        @if ($paket->tenderSelesai && $paket->tenderSelesai->tenderSelesaiNilais->isNotEmpty())
+                            <td>
+                                <ul>
+                                    @foreach ($paket->tenderSelesai->tenderSelesaiNilais as $nilaiTender)
+                                        <li>{{ $nilaiTender->pagu }}</li>
+                                        <!-- Display other fields as needed -->
+                                    @endforeach
+                                </ul>
+                            </td>
+                        @else
+                            <td colspan="4">No tender selesai found</td>
+                        @endif
+
+                        @if ($paket->paketEcats->isNotEmpty())
+                            <td>
+                                <ul>
+                                    @foreach ($paket->paketEcats as $paketEcat)
+                                        <li>{{ $paketEcat->kd_rup }}</li>
+                                        <!-- Display other fields as needed -->
+                                    @endforeach
+                                </ul>
+                            </td>
+                        @else
+                            <td colspan="4">No ekatalog</td>
+                        @endif
+
                     </tr>
                 @endforeach
             </tbody>
         </table>
+        
+        
         
     @else
         <p>No PaketPenyediaTerumumkan found.</p>
@@ -108,24 +165,99 @@
 
     @if ($rupMasterSatker->paketSwakelolaTerumumkans->isNotEmpty()) 
     <h1>Swakelola</h1>
+
     <table border="1">
         <thead>
             <tr>
                 <th>Nama Satker</th>
                 <th>Kode RUP</th>
                 <th>Nama Paket</th>
+                <th>Metode Pengadaan</th>
+                <th>Kode RUP</th>
+                <th>Kode LPSE</th>
+                <th>Kode Non-Tender PCT</th>
+                <th>Kode PKT DCE</th>
+                <th>Pagu</th>
+                <th>Total Realisasi</th>
+                <th>Nilai PDN PCT</th>
+                <th>Nilai UMK PCT</th>
+                <th>Status PencatatanNonTender</th> <!-- Existing column -->
+                <th>RealisasiNonTender PCT</th> <!-- Updated column for realisasiNonTender -->
+                <th>nilaiTender</th> <!-- Updated column for realisasiNonTender -->
+                <th>Ekatalog</th> <!-- Updated column for realisasiNonTender -->
             </tr>
         </thead>
         <tbody>
-            @foreach ($rupMasterSatker->paketSwakelolaTerumumkans as $paket)
-                <tr>
-                    <td>{{ $paket->nama_satker }}</td>
-                    <td>{{ $paket->kd_rup }}</td>
-                    <td>{{ $paket->nama_paket }}</td>
-                </tr>
+            @foreach ($rupMasterSatker->paketPenyediaTerumumkans as $paket)
+            <tr>
+                <td>{{ $paket->nama_satker }}</td>
+                <td>{{ $paket->kd_rup }}</td>
+                <td>{{ $paket->nama_paket }}</td>
+                <td>{{ $paket->metode_pengadaan }}</td>
+    
+                @if ($paket->pencatatanNonTender)
+                <td>{{ $paket->pencatatanNonTender->kd_rup }}</td>
+                <td>{{ $paket->pencatatanNonTender->kd_lpse }}</td>
+                <td>{{ $paket->pencatatanNonTender->kd_nontender_pct }}</td>
+                <td>{{ $paket->pencatatanNonTender->kd_pkt_dce }}</td>
+                <td>{{ $paket->pencatatanNonTender->pagu }}</td>
+                <td>{{ $paket->pencatatanNonTender->total_realisasi }}</td>
+                <td>{{ $paket->pencatatanNonTender->nilai_pdn_pct }}</td>
+                <td>{{ $paket->pencatatanNonTender->nilai_umk_pct }}</td>
+                <td>Sudah Tercatat</td>
+    
+                @if ($paket->pencatatanNonTender->realisasiNonTenders->isNotEmpty())
+                <td>
+                    <ul>
+                        @foreach ($paket->pencatatanNonTender->realisasiNonTenders as $realisasi)
+                        <li>{{ $realisasi->kd_nontender_pct }}</li>
+                        <!-- Display other fields as needed -->
+                        @endforeach
+                    </ul>
+                </td>
+                @else
+                <td colspan="4">No kd nontender found</td>
+                @endif
+    
+                @else
+                <td colspan="9">No PencatatanNonTender found for this Paket.</td>
+                <td colspan="4">Belum Tercatat</td> <!-- Updated colspan to include the new column -->
+                <td colspan="4"></td> <!-- Added empty columns to match the header structure -->
+                @endif
+    
+                @if ($paket->tenderSelesai && $paket->tenderSelesai->tenderSelesaiNilais->isNotEmpty())
+                <td>
+                    <ul>
+                        @foreach ($paket->tenderSelesai->tenderSelesaiNilais as $nilaiTender)
+                        <li>{{ $nilaiTender->pagu }}</li>
+                        <!-- Display other fields as needed -->
+                        @endforeach
+                    </ul>
+                </td>
+                @else
+                <td colspan="4">No tender selesai found</td>
+                <td colspan="4"></td> <!-- Added empty columns to match the header structure -->
+                @endif
+    
+                @if ($paket->paketEcats->isNotEmpty())
+                <td>
+                    <ul>
+                        @foreach ($paket->paketEcats as $paketEcat)
+                        <li>{{ $paketEcat->kd_rup }}</li>
+                        <!-- Display other fields as needed -->
+                        @endforeach
+                    </ul>
+                </td>
+                @else
+                <td colspan="4">No ekatalog</td>
+                <td colspan="4"></td> <!-- Added empty columns to match the header structure -->
+                @endif
+    
+            </tr>
             @endforeach
         </tbody>
     </table>
+
     @endif
 @else
     <p>RupMasterSatker not found.</p>

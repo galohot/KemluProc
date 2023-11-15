@@ -49,9 +49,9 @@ class SpsePencatatanNonTender extends Model
         return $this->belongsTo(SpseNontenderPengumuman::class, 'kd_nontender_pct');
     }
 
-    public function realisasiNonTender()
+    public function realisasiNonTenders()
     {
-        return $this->hasMany(SpsePencatatanNonTenderRealisasi::class, 'kd_nontender_pct');
+        return $this->hasMany(SpsePencatatanNonTenderRealisasi::class, 'kd_nontender_pct', 'kd_nontender_pct');
     }
 
     // public function rupMasterSatker()

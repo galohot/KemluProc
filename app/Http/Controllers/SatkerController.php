@@ -14,7 +14,9 @@ class SatkerController extends Controller
     {
         $rupMasterSatker = RupMasterSatker::with([
             'programMasters.kegiatans.rupKros.rupRos.komponens.subkomponens',
-            'paketPenyediaTerumumkans.pencatatanNonTender',
+            'paketPenyediaTerumumkans.pencatatanNonTender.realisasiNonTenders',
+            'paketPenyediaTerumumkans.tenderSelesai.tenderSelesaiNilais',
+            'paketPenyediaTerumumkans.paketEcats',
             'paketSwakelolaTerumumkans',
         ])->where('kd_satker_str', $kd_satker_str)->first();
 
@@ -41,6 +43,8 @@ class SatkerController extends Controller
         $sumTotalRealisasi = SpsePencatatanNonTender::whereIn('kd_rup', $kdRupTercatat)->sum('total_realisasi');
         $sumNilaiPdnPct = SpsePencatatanNonTender::whereIn('kd_rup', $kdRupTercatat)->sum('nilai_pdn_pct');
         $sumNilaiUmkPct = SpsePencatatanNonTender::whereIn('kd_rup', $kdRupTercatat)->sum('nilai_umk_pct');
+
+        
 
         return view('satker.index', compact('rupMasterSatker', 'totalPaguProgram', 'countTender', 'countNotTender', 'countKdRupTercatat', 'sumPagu', 'sumTotalRealisasi', 'sumNilaiPdnPct', 'sumNilaiUmkPct'));
     }

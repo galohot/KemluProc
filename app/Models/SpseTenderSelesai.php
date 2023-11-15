@@ -45,4 +45,16 @@ class SpseTenderSelesai extends Model
     {
         return $this->belongsTo(SpseTenderPengumuman::class, 'kd_tender');
     }
+    
+    public function penyediaTerumumkan()
+    {
+        return $this->belongsTo(PaketPenyediaTerumumkan::class, 'kd_rup', 'kd_rup');
+    }
+
+    public function tenderSelesaiNilais()
+    {
+        return $this->hasMany(SpseTenderSelesaiNilai::class, 'kd_rup_paket', 'kd_rup');
+    }
+
+    
 }

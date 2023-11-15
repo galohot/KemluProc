@@ -39,6 +39,6 @@ class SpseTenderSelesaiNilai extends Model
 
     public function tenderSelesai()
     {
-        return $this->belongsTo(SpseTenderSelesai::class, 'kd_tender');
+        return $this->belongsTo(SpseTenderSelesai::class, 'kd_rup', 'kd_rup_paket');
     }
 }

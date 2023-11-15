@@ -33,6 +33,6 @@ class SpsePencatatanNonTenderRealisasi extends Model
 
     public function pencatatanNonTender()
     {
-        return $this->belongsTo(SpsePencatatanNonTender::class, 'kd_nontender_pct');
+        return $this->belongsTo(SpsePencatatanNonTender::class, 'kd_nontender_pct', 'kd_nontender_pct');
     }
 }
