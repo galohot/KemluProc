@@ -56,8 +56,38 @@ class FetchEpurchasingDetails extends Command
                     'masa_berlaku_kontrak' => $data[0]['masa_berlaku_kontrak'],
                     'tglkontrak_mulai' => $data[0]['tglkontrak_mulai'],
                     'tglkontrak_selesai' => $data[0]['tglkontrak_selesai'],
+                    'nie_id' => $data[0]['nie_id'],
+                    'nie_nib' => $data[0]['nie_nib'],
+                    'nie_nama_usaha' => $data[0]['nie_nama_usaha'],
+                    'nie_npwp' => $data[0]['nie_npwp'],
+                    'nie_klasifikasi_izin' => $data[0]['nie_klasifikasi_izin'],
+                    'nie_tgl_terbit' => $data[0]['nie_tgl_terbit'],
+                    'nie_tgl_expire' => $data[0]['nie_tgl_expire'],
+                    'nie_nama_produk' => $data[0]['nie_nama_produk'],
+                    'nie_kategori' => $data[0]['nie_kategori'],
+                    'nie_sub_kategori' => $data[0]['nie_sub_kategori'],
+                    'nie_jenis_produk' => $data[0]['nie_jenis_produk'],
+                    'nie_hscode' => $data[0]['nie_hscode'],
+                    'nie_kelas' => $data[0]['nie_kelas'],
+                    'nie_kelas_resiko' => $data[0]['nie_kelas_resiko'],
+                    'nie_ukuran' => $data[0]['nie_ukuran'],
+                    'nie_kemasan' => $data[0]['nie_kemasan'],
+                    'nie_nama_pabrik' => $data[0]['nie_nama_pabrik'],
+                    'nie_negara_pabrik' => $data[0]['nie_negara_pabrik'],
+                    'nie_alamat_pabrik' => $data[0]['nie_alamat_pabrik'],
+                    'nie_last_update' => $data[0]['nie_last_update'],
+                    'no_suket_alkes' => $data[0]['no_suket_alkes'],
+                    'kd_produk_kategori' => $data[0]['kd_produk_kategori'],
+                    'active' => $data[0]['active'],
+                    'created_date' => $data[0]['created_date'],
+                    'modified_date' => $data[0]['modified_date'],
+                    'status' => $data[0]['status'],
+                    'status_tayang' => $data[0]['status_tayang'],
+                    'apakah_dapat_dibeli' => $data[0]['apakah_dapat_dibeli'],
+                    'nie' => $data[0]['nie'],
                     // Add more fields as needed
                 ]);
+                
 
                 // Save the data to the database
                 $epurchasingProduct->save();
