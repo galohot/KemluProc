@@ -24,8 +24,24 @@ class SatkerController extends Controller
             'paketSwakelolaTerumumkans',
         ])->where('kd_satker_str', $kd_satker_str)->first();
 
+        // Retrieve the RupMasterSatker instance using kd_satker_str
+        $rupMasterSatker = RupMasterSatker::where('kd_satker_str', $kd_satker_str)->first();
+
+        // Check if the instance exists
+        if (!$rupMasterSatker) {
+            // Handle the case where the instance is not found, for example, redirect to an error page.
+            return redirect()->route('error.page');
+        }
+
+        // Get the kd_satker value from the RupMasterSatker instance
+        $kdSatker = $rupMasterSatker->kd_satker;
+
         // Count paketPenyediaTerumumkans where metode_pengadaan is 'tender'
         $countTender = $rupMasterSatker->paketPenyediaTerumumkans->where('metode_pengadaan', 'Tender')->count();
+        $countEpurchasing = $rupMasterSatker->paketPenyediaTerumumkans->where('metode_pengadaan', 'e-Purchasing')->count();
+        $countPaketPenyedia = $rupMasterSatker->paketPenyediaTerumumkans->count();
+        $countPaketSwakelola = $rupMasterSatker->paketSwakelolaTerumumkans->count();
+
 
         // Count paketPenyediaTerumumkans where metode_pengadaan is not 'tender'
         $countNotTender = $rupMasterSatker->paketPenyediaTerumumkans->whereNotIn('metode_pengadaan', ['Tender'])->count();
@@ -40,14 +56,15 @@ class SatkerController extends Controller
             ->pluck('paket_penyedia_terumumkan.kd_rup')
             ->toArray();
             
-        // $kdRupEpurchasing = PaketPenyediaTerumumkan::join('ecat_paket_epurchasing', 'paket_penyedia_terumumkan.kd_rup', '=', 'ecat_paket_epurchasing.kd_rup')
-        //     ->where('paket_penyedia_terumumkan.kd_satker_str', $kd_satker_str)
-        //     ->where('spse_pencatatan_nontender.kd_satker_str', $kd_satker_str)
-        //     ->distinct()
-        //     ->pluck('paket_penyedia_terumumkan.kd_rup')
-        //     ->toArray();
+        $kdRupEpurchasing = PaketPenyediaTerumumkan::join('ecat_paket_epurchasing', 'paket_penyedia_terumumkan.kd_rup', '=', 'ecat_paket_epurchasing.kd_rup')
+            ->where('paket_penyedia_terumumkan.kd_satker', $kdSatker)
+            ->where('ecat_paket_epurchasing.satker_id', $kdSatker)
+            ->distinct()
+            ->pluck('paket_penyedia_terumumkan.kd_rup')
+            ->toArray();
 
         $countKdRupTercatat = count($kdRupTercatat);
+        $countKdRupEpurchasing = count($kdRupEpurchasing);
 
         // Sum of 'pagu', 'total_realisasi', 'nilai_pdn_pct', 'nilai_umk_pct' from SpsePencatatanNonTender
         $sumPagu = SpsePencatatanNonTender::whereIn('kd_rup', $kdRupTercatat)->sum('pagu');
@@ -57,6 +74,6 @@ class SatkerController extends Controller
 
         
 
-        return view('satker.home', compact('rupMasterSatker', 'totalPaguProgram', 'countTender', 'countNotTender', 'countKdRupTercatat', 'sumPagu', 'sumTotalRealisasi', 'sumNilaiPdnPct', 'sumNilaiUmkPct'));
+        return view('satker.home', compact('rupMasterSatker', 'totalPaguProgram','countPaketPenyedia','countPaketSwakelola', 'countTender','countEpurchasing','countNotTender','countKdRupEpurchasing', 'countKdRupTercatat', 'sumPagu', 'sumTotalRealisasi', 'sumNilaiPdnPct', 'sumNilaiUmkPct'));
     }
 }
