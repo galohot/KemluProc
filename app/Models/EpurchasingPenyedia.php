@@ -8,6 +8,8 @@ use Illuminate\Database\Eloquent\Model;
 class EpurchasingPenyedia extends Model
 {
     use HasFactory;
+
+    protected $table = 'epurchasing_penyedias';
     
     protected $fillable = [
         'kd_penyedia',
@@ -19,4 +21,10 @@ class EpurchasingPenyedia extends Model
         'npwp_penyedia',
         'kbli2020_penyedia',
     ];
+
+    public function paketEpurchasing()
+    {
+        return $this->belongsTo(EcatPaketEpurchasing::class, 'kd_penyedia', 'kd_penyedia');
+    }
+    
 }

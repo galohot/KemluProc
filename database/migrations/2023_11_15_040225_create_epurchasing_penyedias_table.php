@@ -10,14 +10,14 @@ class CreateEpurchasingPenyediasTable extends Migration
     {
         Schema::create('epurchasing_penyedias', function (Blueprint $table) {
             $table->id();
-            $table->integer('kd_penyedia');
-            $table->string('nama_penyedia');
-            $table->string('penyedia_ukm');
-            $table->text('alamat_penyedia');
-            $table->string('email_penyedia');
-            $table->string('no_telp_penyedia');
-            $table->string('npwp_penyedia');
-            $table->string('kbli2020_penyedia');
+            $table->integer('kd_penyedia')->nullable();
+            $table->string('nama_penyedia')->nullable();
+            $table->string('penyedia_ukm')->nullable();
+            $table->text('alamat_penyedia')->nullable();
+            $table->string('email_penyedia')->nullable();
+            $table->string('no_telp_penyedia')->nullable();
+            $table->string('npwp_penyedia')->nullable();
+            $table->text('kbli2020_penyedia')->nullable();
             $table->timestamps();
         });
     }

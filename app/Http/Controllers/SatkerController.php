@@ -17,6 +17,10 @@ class SatkerController extends Controller
             'paketPenyediaTerumumkans.pencatatanNonTender.realisasiNonTenders',
             'paketPenyediaTerumumkans.tenderSelesai.tenderSelesaiNilais',
             'paketPenyediaTerumumkans.paketEcats',
+            'paketPenyediaTerumumkans.paketEcats.epurchasingProduct',
+            'paketPenyediaTerumumkans.paketEcats.epurchasingPenyedia',
+            'paketPenyediaTerumumkans.paketEcats.epurchasingKomoditas',
+            'paketPenyediaTerumumkans.paketEcats.epurchasingDistributor',
             'paketSwakelolaTerumumkans',
         ])->where('kd_satker_str', $kd_satker_str)->first();
 

@@ -75,5 +75,8 @@ class EpurchasingProducts extends Model
         'harga' => 'json', // Assuming 'harga' field contains JSON data
     ];
 
-    // You can add relationships, custom methods, or other model configurations here
+    public function paketEpurchasing()
+    {
+        return $this->belongsTo(EcatPaketEpurchasing::class, 'kd_produk', 'kd_produk');
+    }
 }

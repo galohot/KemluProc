@@ -52,4 +52,20 @@ class EcatPaketEpurchasing extends Model
     {
         return $this->belongsTo(PaketPenyediaTerumumkan::class, 'kd_rup', 'kd_rup');
     }
+    public function epurchasingProduct()
+    {
+        return $this->hasMany(EpurchasingProducts::class, 'kd_produk', 'kd_produk');
+    }
+    public function epurchasingPenyedia()
+    {
+        return $this->hasMany(EpurchasingPenyedia::class, 'kd_penyedia', 'kd_penyedia');
+    }
+    public function epurchasingKomoditas()
+    {
+        return $this->hasMany(EpurchasingKomoditas::class, 'kd_komoditas', 'kd_komoditas');
+    }
+    public function epurchasingDistributor()
+    {
+        return $this->hasMany(EpurchasingDistributor::class, 'kd_penyedia_distributor', 'kd_penyedia_distributor');
+    }
 }

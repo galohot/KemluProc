@@ -4,12 +4,65 @@
 @if ($rupMasterSatker)
 <h1>{{ $rupMasterSatker->nama_satker }}</h1>
 
-@foreach ($rupMasterSatker->paketPenyediaTerumumkans as $paketPenyediaTerumumkan)
-    @foreach ($paketPenyediaTerumumkan->paketEcats as $paketEcats)
-        Paket Ekatalog
-        {{ $paketEcats->kd_rup }}
+<table>
+    <tr>
+        <th>Nama Satker</th>
+        <th>Nama Paket</th>
+        <th>Produk</th>
+        <th>Komoditas</th>
+        <th>Penyedia</th>
+        <th>Penyedia Distributor</th>
+    </tr>
+    @foreach ($rupMasterSatker->paketPenyediaTerumumkans as $paketPenyediaTerumumkan)
+        @foreach ($paketPenyediaTerumumkan->paketEcats as $paketEcats)
+            <tr>
+                <td>{{ $rupMasterSatker->nama_satker }}</td>
+                <td>{{ $paketEcats->nama_paket }}</td>
+
+                {{-- Check if epurchasingProduct relationship exists --}}
+                @if ($paketEcats->epurchasingProduct)
+                    {{-- Loop through epurchasingProduct --}}
+                    @foreach ($paketEcats->epurchasingProduct as $product)
+                        <td>{{ $product->nama_produk }}</td>
+                    @endforeach
+                @else
+                    <td>No Products</td>
+                @endif
+
+                {{-- Check if epurchasingKomoditas relationship exists --}}
+                @if ($paketEcats->epurchasingKomoditas)
+                    {{-- Loop through epurchasingKomoditas --}}
+                    @foreach ($paketEcats->epurchasingKomoditas as $komoditas)
+                        <td>{{ $komoditas->nama_komoditas }}</td>
+                    @endforeach
+                @else
+                    <td>No Komoditas</td>
+                @endif
+
+                {{-- Check if epurchasingPenyedia relationship exists --}}
+                @if ($paketEcats->epurchasingPenyedia)
+                    {{-- Loop through epurchasingPenyedia --}}
+                    @foreach ($paketEcats->epurchasingPenyedia as $penyedia)
+                        <td>{{ $penyedia->nama_penyedia }}</td>
+                    @endforeach
+                @else
+                    <td>No Penyedia</td>
+                @endif
+
+                {{-- Check if epurchasingDistributor relationship exists --}}
+                @if ($paketEcats->epurchasingDistributor)
+                    {{-- Loop through epurchasingDistributor --}}
+                    @foreach ($paketEcats->epurchasingDistributor as $distributor)
+                        <td>{{ $distributor->nama_distributor }}</td>
+                    @endforeach
+                @else
+                    <td>No Distributor</td>
+                @endif
+
+            </tr>
+        @endforeach
     @endforeach
-@endforeach
+</table>
 
     {{-- <p>RupMasterSatker Information:</p>
     <pre>{{ print_r($rupMasterSatker->toArray(), true) }}</pre>
@@ -53,6 +106,8 @@
 @endif --}}
 
     @if ($rupMasterSatker->paketPenyediaTerumumkans->isNotEmpty())
+
+
         <h2>PaketPenyediaTerumumkan Information</h2>
         <p>Paket Tender: {{ $countTender }}</p>
         <p>Paket Non Tender: {{ $countNotTender }}</p>

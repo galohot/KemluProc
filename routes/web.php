@@ -23,6 +23,9 @@ use Illuminate\Support\Facades\Artisan;
 Route::get('/', function () {
     return view('welcome');
 });
+Route::get('/main', function () {
+    return view('dashboard-layout');
+});
 
 Route::get('/clear-cache', function() {
     $exitCode = Artisan::call('cache:clear');
@@ -41,7 +44,7 @@ Route::get('/satker/{kd_satker_str}', [SatkerController::class, 'show']);
 
 
 Route::get('/dashboard', function () {
-    return view('dashboard-layout');
+    return view('dashboard');
 })->middleware(['auth', 'verified'])->name('dashboard');
 
 Route::middleware('auth')->group(function () {
