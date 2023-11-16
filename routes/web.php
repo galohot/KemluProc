@@ -24,8 +24,9 @@ Route::get('/', function () {
     return view('welcome');
 });
 Route::get('/main', function () {
-    return view('dashboard-layout');
+    return view('index');
 });
+
 
 Route::get('/clear-cache', function() {
     $exitCode = Artisan::call('cache:clear');

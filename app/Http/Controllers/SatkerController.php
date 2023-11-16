@@ -39,6 +39,13 @@ class SatkerController extends Controller
             ->distinct()
             ->pluck('paket_penyedia_terumumkan.kd_rup')
             ->toArray();
+            
+        // $kdRupEpurchasing = PaketPenyediaTerumumkan::join('ecat_paket_epurchasing', 'paket_penyedia_terumumkan.kd_rup', '=', 'ecat_paket_epurchasing.kd_rup')
+        //     ->where('paket_penyedia_terumumkan.kd_satker_str', $kd_satker_str)
+        //     ->where('spse_pencatatan_nontender.kd_satker_str', $kd_satker_str)
+        //     ->distinct()
+        //     ->pluck('paket_penyedia_terumumkan.kd_rup')
+        //     ->toArray();
 
         $countKdRupTercatat = count($kdRupTercatat);
 
@@ -50,6 +57,6 @@ class SatkerController extends Controller
 
         
 
-        return view('satker.index', compact('rupMasterSatker', 'totalPaguProgram', 'countTender', 'countNotTender', 'countKdRupTercatat', 'sumPagu', 'sumTotalRealisasi', 'sumNilaiPdnPct', 'sumNilaiUmkPct'));
+        return view('satker.home', compact('rupMasterSatker', 'totalPaguProgram', 'countTender', 'countNotTender', 'countKdRupTercatat', 'sumPagu', 'sumTotalRealisasi', 'sumNilaiPdnPct', 'sumNilaiUmkPct'));
     }
 }
