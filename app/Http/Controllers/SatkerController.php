@@ -90,13 +90,13 @@ class SatkerController extends Controller
             ->whereNotNull('spse_pencatatan_nontender.nilai_pdn_pct') // Add this line to filter non-null values
             ->distinct()
             ->count('spse_pencatatan_nontender.nilai_pdn_pct');
-
-        $countEpurchasingSelesai = PaketPenyediaTerumumkan::join('ecat_paket_epurchasing', 'paket_penyedia_terumumkan.kd_rup', '=', 'ecat_paket_epurchasing.kd_rup')
-            ->where('paket_penyedia_terumumkan.kd_satker', $kdSatker)
-            ->where('ecat_paket_epurchasing.satker_id', $kdSatker)
+            
+        $countUkmTercatat = PaketPenyediaTerumumkan::join('spse_pencatatan_nontender', 'paket_penyedia_terumumkan.kd_rup', '=', 'spse_pencatatan_nontender.kd_rup')
+            ->where('paket_penyedia_terumumkan.kd_satker_str', $kd_satker_str)
+            ->where('spse_pencatatan_nontender.kd_satker_str', $kd_satker_str)
+            ->whereNotNull('spse_pencatatan_nontender.nilai_umk_pct') // Add this line to filter non-null values
             ->distinct()
-            ->pluck('paket_penyedia_terumumkan.kd_rup')
-            ->toArray();
+            ->count('spse_pencatatan_nontender.nilai_umk_pct');
         
         // $kdRupTercatat now holds the count of non-null values in the 'nilai_pdn_pct' field
 
