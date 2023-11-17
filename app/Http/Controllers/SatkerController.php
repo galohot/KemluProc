@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\EcatPaketEpurchasing;
 use App\Models\RupMasterSatker;
 use App\Models\PaketPenyediaTerumumkan;
 use App\Models\PaketSwakelolaTerumumkan;
@@ -37,14 +38,34 @@ class SatkerController extends Controller
         $kdSatker = $rupMasterSatker->kd_satker;
 
         // Count paketPenyediaTerumumkans where metode_pengadaan is 'tender'
-        $countTender = $rupMasterSatker->paketPenyediaTerumumkans->where('metode_pengadaan', 'Tender')->count();
+        $countTenderSeleksi = $rupMasterSatker->paketPenyediaTerumumkans
+        ->whereIn('metode_pengadaan', ['Tender', 'Seleksi'])
+        ->count();
+        
+        $sumPaguTenderSeleksi = $rupMasterSatker->paketPenyediaTerumumkans
+        ->whereIn('metode_pengadaan', ['Tender', 'Seleksi'])
+        ->sum('pagu');
+        
+        
         $countEpurchasing = $rupMasterSatker->paketPenyediaTerumumkans->where('metode_pengadaan', 'e-Purchasing')->count();
+
+        
+        $sumPaguEpurchasing = $rupMasterSatker->paketPenyediaTerumumkans->where('metode_pengadaan', 'e-Purchasing')->sum('pagu');
+
+        $countPdn = $rupMasterSatker->paketPenyediaTerumumkans->where('status_pdn', 'PDN')->count();
+        $sumPaguPdn = $rupMasterSatker->paketPenyediaTerumumkans->where('status_pdn', 'PDN')->sum('pagu');
+        
+        $countUkm = $rupMasterSatker->paketPenyediaTerumumkans->where('status_ukm', 'UKM')->count();
+        $sumPaguUkm = $rupMasterSatker->paketPenyediaTerumumkans->where('status_ukm', 'UKM')->sum('pagu');
+        
         $countPaketPenyedia = $rupMasterSatker->paketPenyediaTerumumkans->count();
         $countPaketSwakelola = $rupMasterSatker->paketSwakelolaTerumumkans->count();
+        $sumPaguPenyediaTerumumkan = $rupMasterSatker->paketPenyediaTerumumkans->sum('pagu');
+        $sumPaguSwakelolaTerumumkan = $rupMasterSatker->paketSwakelolaTerumumkans->sum('pagu');
 
 
         // Count paketPenyediaTerumumkans where metode_pengadaan is not 'tender'
-        $countNotTender = $rupMasterSatker->paketPenyediaTerumumkans->whereNotIn('metode_pengadaan', ['Tender'])->count();
+        $sumPaguNonTender = $rupMasterSatker->paketPenyediaTerumumkans->whereNotIn('metode_pengadaan', ['Tender','Seleksi','e-Purchasing'])->sum('pagu');
 
         $totalPaguProgram = $rupMasterSatker->programMasters->sum('pagu_program');
 
@@ -63,17 +84,82 @@ class SatkerController extends Controller
             ->pluck('paket_penyedia_terumumkan.kd_rup')
             ->toArray();
 
+        $countPdnTercatat = PaketPenyediaTerumumkan::join('spse_pencatatan_nontender', 'paket_penyedia_terumumkan.kd_rup', '=', 'spse_pencatatan_nontender.kd_rup')
+            ->where('paket_penyedia_terumumkan.kd_satker_str', $kd_satker_str)
+            ->where('spse_pencatatan_nontender.kd_satker_str', $kd_satker_str)
+            ->whereNotNull('spse_pencatatan_nontender.nilai_pdn_pct') // Add this line to filter non-null values
+            ->distinct()
+            ->count('spse_pencatatan_nontender.nilai_pdn_pct');
+
+        $countEpurchasingSelesai = PaketPenyediaTerumumkan::join('ecat_paket_epurchasing', 'paket_penyedia_terumumkan.kd_rup', '=', 'ecat_paket_epurchasing.kd_rup')
+            ->where('paket_penyedia_terumumkan.kd_satker', $kdSatker)
+            ->where('ecat_paket_epurchasing.satker_id', $kdSatker)
+            ->distinct()
+            ->pluck('paket_penyedia_terumumkan.kd_rup')
+            ->toArray();
+        
+        // $kdRupTercatat now holds the count of non-null values in the 'nilai_pdn_pct' field
+
         $countKdRupTercatat = count($kdRupTercatat);
         $countKdRupEpurchasing = count($kdRupEpurchasing);
 
         // Sum of 'pagu', 'total_realisasi', 'nilai_pdn_pct', 'nilai_umk_pct' from SpsePencatatanNonTender
-        $sumPagu = SpsePencatatanNonTender::whereIn('kd_rup', $kdRupTercatat)->sum('pagu');
+        $sumPaguPencatatanNonTender = SpsePencatatanNonTender::whereIn('kd_rup', $kdRupTercatat)->sum('pagu');
+        $sumPaguPdnNonTender = SpsePencatatanNonTender::whereIn('kd_rup', $kdRupTercatat)->sum('nilai_pdn_pct');
+        $sumPaguUkmNonTender = SpsePencatatanNonTender::whereIn('kd_rup', $kdRupTercatat)->sum('nilai_umk_pct');
+        $sumPaguEpurchasingProses = EcatPaketEpurchasing::whereIn('kd_rup', $kdRupEpurchasing)->sum('total_harga');
         $sumTotalRealisasi = SpsePencatatanNonTender::whereIn('kd_rup', $kdRupTercatat)->sum('total_realisasi');
         $sumNilaiPdnPct = SpsePencatatanNonTender::whereIn('kd_rup', $kdRupTercatat)->sum('nilai_pdn_pct');
         $sumNilaiUmkPct = SpsePencatatanNonTender::whereIn('kd_rup', $kdRupTercatat)->sum('nilai_umk_pct');
+        $nonTenderUpdatedAt = SpsePencatatanNonTender::whereIn('kd_rup', $kdRupTercatat)->first('updated_at');
 
+        // Access the formatted updated_at value
+        if ($nonTenderUpdatedAt) {
+            $formattedUpdatedAt = optional($nonTenderUpdatedAt->updated_at)->format('M d, Y h:i A');
+            // Now $formattedUpdatedAt contains the formatted value of updated_at
+        } else {
+            $formattedUpdatedAt = null;
+        }
+        $ePurchasingUpdatedAt = EcatPaketEpurchasing::whereIn('kd_rup', $kdRupEpurchasing)->first('updated_at');
+
+        // Access the formatted updated_at value
+        if ($ePurchasingUpdatedAt) {
+            $formattedEpurchasingUpdatedAt = optional($ePurchasingUpdatedAt->updated_at)->format('M d, Y h:i A');
+            // Now $formattedUpdatedAt contains the formatted value of updated_at
+        } else {
+            $formattedEpurchasingUpdatedAt = null;
+        }
+
+        return view('satker.home', compact(
+            'rupMasterSatker', 
+            'totalPaguProgram',
+            'countPaketPenyedia',
+            'countPaketSwakelola',
+            'countTenderSeleksi',
+            'countEpurchasing',
+            'sumPaguNonTender',
+            'countKdRupEpurchasing',
+            'countKdRupTercatat',
+            'sumPaguPencatatanNonTender',
+            'sumPaguPenyediaTerumumkan',
+            'sumPaguSwakelolaTerumumkan',
+            'sumPaguTenderSeleksi',
+            'sumPaguEpurchasing',
+            'sumTotalRealisasi',
+            'sumNilaiPdnPct',
+            'sumNilaiUmkPct',
+            'formattedUpdatedAt',
+            'sumPaguEpurchasingProses',
+            'formattedEpurchasingUpdatedAt',
+            'sumPaguPdnNonTender',
+            'countPdn',
+            'sumPaguPdn',
+            'countPdnTercatat',
+            'countUkm',
+            'sumPaguUkm',
+            'sumPaguUkmNonTender',
+            'countUkmTercatat'
+        ));
         
-
-        return view('satker.home', compact('rupMasterSatker', 'totalPaguProgram','countPaketPenyedia','countPaketSwakelola', 'countTender','countEpurchasing','countNotTender','countKdRupEpurchasing', 'countKdRupTercatat', 'sumPagu', 'sumTotalRealisasi', 'sumNilaiPdnPct', 'sumNilaiUmkPct'));
     }
 }

@@ -194,6 +194,147 @@
     <script src="{{ asset('./dist/libs/jsvectormap/dist/maps/world-merc.js?1685973381') }}" defer></script>
     <script src="{{ asset('./dist/js/tabler.min.js?1685973381') }}" defer></script>
     <script src="{{ asset('./dist/js/demo.min.js?1685973381') }}" defer></script>
+
+
+	<!-- chart we use -->
+
+	<script>
+		// @formatter:off
+		document.addEventListener("DOMContentLoaded", function () {
+			window.ApexCharts && (new ApexCharts(document.getElementById('chart-paket-penyedia'), {
+				chart: {
+					type: "pie",
+					fontFamily: 'inherit',
+					height: 300,
+					sparkline: {
+						enabled: true
+					},
+					animations: {
+						enabled: true
+					},
+				},
+
+				title: {
+				text: "Paket Penyedia Terumumkan",
+				align: 'center',
+				margin: 10,
+				offsetX: 0,
+				offsetY: 0,
+				floating: false,
+				style: {
+					fontSize: '14px',
+					color: '#666'
+				},
+			},
+				fill: {
+					opacity: 1,
+				},
+				series: [{{ $countTenderSeleksi }}, {{ $countPaketPenyedia - $countTenderSeleksi - $countEpurchasing}}, {{ $countEpurchasing }}],
+				labels: ["Tender/Seleksi", "Non Tender", "E-Purchasing"],
+				tooltip: {
+					theme: 'dark'
+				},
+				grid: {
+					strokeDashArray: 4,
+				},
+				colors: [tabler.getColor("blue"), tabler.getColor("red"), tabler.getColor("teal")],
+				legend: {
+					show: true,
+					position: 'bottom',
+					offsetY: 12,
+					markers: {
+						width: 10,
+						height: 10,
+						radius: 100,
+					},
+					itemMargin: {
+						horizontal: 8,
+						vertical: 8
+					},
+				},
+				tooltip: {
+					fillSeriesColor: false
+				},
+			})).render();
+		});
+		// @formatter:on
+	</script>
+
+	<script>
+		// @formatter:off
+		document.addEventListener("DOMContentLoaded", function () {
+			window.ApexCharts && (new ApexCharts(document.getElementById('chart-pagu-penyedia'), {
+				chart: {
+					type: "pie",
+					fontFamily: 'inherit',
+					height: 300,
+					sparkline: {
+						enabled: true
+					},
+					animations: {
+						enabled: true
+					},
+				},
+				title: {
+					text: "Pagu Penyedia Terumumkan",
+					align: 'center',
+					margin: 10,
+					offsetX: 0,
+					offsetY: 0,
+					floating: false,
+					style: {
+						fontSize: '14px',
+						color: '#666'
+					},
+				},
+				fill: {
+					opacity: 1,
+				},
+				series: [{{ $sumPaguTenderSeleksi }}, {{ $sumPaguNonTender}}, {{ $sumPaguEpurchasing }}],
+				labels: ["Tender/Seleksi", "Non Tender", "E-Purchasing"],
+				tooltip: {
+					theme: 'dark',
+					y: {
+						formatter: function (value, { series, seriesIndex, dataPointIndex, w }) {
+							// Use your preferred number formatting logic here
+							const formattedValue = new Intl.NumberFormat('en-US').format(value);
+							return `Rp. ${formattedValue} ,-`;
+						}
+					}
+				},
+				grid: {
+					strokeDashArray: 4,
+				},
+				colors: [tabler.getColor("blue"), tabler.getColor("red"), tabler.getColor("teal")],
+				legend: {
+					show: true,
+					position: 'bottom',
+					offsetY: 12,
+					markers: {
+						width: 10,
+						height: 10,
+						radius: 100,
+					},
+					itemMargin: {
+						horizontal: 8,
+						vertical: 8
+					},
+				},
+				tooltip: {
+					fillSeriesColor: false,
+					y: {
+						formatter: function (value) {
+							const formattedValue = new Intl.NumberFormat('en-US').format(value);
+							return `Rp. ${formattedValue} ,-`;
+						}
+					}
+				},
+			})).render();
+		});
+		// @formatter:on
+	</script>
+
+	<!-- chart we use -->
     <script>
       // @formatter:off
       document.addEventListener("DOMContentLoaded", function () {
