@@ -14,7 +14,7 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge"/>
     <title>Dashboard - Tabler - Premium and Open Source dashboard template with responsive and high quality UI.</title>
     <!-- CSS files -->
-    <link href="{{ asset('./dist/css/tabler.min.css?1685973381') }}" rel="stylesheet" />
+    <link href="{{ asset('./dist/css/tabler.css?1685973381') }}" rel="stylesheet" />
     <link href="{{ asset('./dist/css/tabler-flags.min.css?1685973381') }}" rel="stylesheet" />
     <link href="{{ asset('./dist/css/tabler-payments.min.css?1685973381') }}" rel="stylesheet" />
     <link href="{{ asset('./dist/css/tabler-vendors.min.css?1685973381') }}" rel="stylesheet" />
@@ -237,7 +237,7 @@
 				grid: {
 					strokeDashArray: 4,
 				},
-				colors: [tabler.getColor("blue"), tabler.getColor("red"), tabler.getColor("teal")],
+				colors: [tabler.getColor("linkedin"), tabler.getColor("dribbble"), tabler.getColor("rss")],
 				legend: {
 					show: true,
 					position: 'bottom',
@@ -305,7 +305,7 @@
 				grid: {
 					strokeDashArray: 4,
 				},
-				colors: [tabler.getColor("blue"), tabler.getColor("red"), tabler.getColor("teal")],
+				colors: [tabler.getColor("linkedin"), tabler.getColor("dribbble"), tabler.getColor("rss")],
 				legend: {
 					show: true,
 					position: 'bottom',

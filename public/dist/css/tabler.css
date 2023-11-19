@@ -25811,3 +25811,103 @@ Antialiasing
   -webkit-font-smoothing: auto;
   -moz-osx-font-smoothing: auto;
 }
+
+/* Custom Styles for Laravel Project */
+
+/* Align card content */
+.card-body {
+  padding: 15px;
+}
+
+/* Style the avatar */
+.avatar {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-right: 15px;
+}
+
+/* Style the card titles */
+.font-weight-medium {
+  font-weight: 500;
+  font-size: 16px;
+}
+
+/* Style the secondary text */
+.text-secondary {
+  font-size: 14px;
+  color: #6c757d; /* Adjust color as needed */
+}
+
+/* Style the row-cards container */
+.row-cards {
+  margin-bottom: 30px;
+}
+
+/* Style each card */
+.card-sm {
+  border: 1px solid #ebedf2; /* Adjust border color as needed */
+  border-radius: 8px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); /* Adjust shadow as needed */
+}
+
+/* Ensure consistent spacing between cards */
+.col {
+  margin-bottom: 15px;
+}
+
+/* Add hover effect to cards */
+.card-sm:hover {
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.2); /* Adjust hover shadow as needed */
+  transition: box-shadow 0.3s ease;
+}
+
+/* Customize the background and text color of each card */
+.bg-red {
+  background-color: #f03f3f; /* Adjust background color as needed */
+  color: #fff; /* Adjust text color as needed */
+}
+
+.bg-indigo {
+  background-color: #5e72e4; /* Adjust background color as needed */
+  color: #fff; /* Adjust text color as needed */
+}
+
+.bg-transparent {
+  background-color: transparent; /* Adjust background color as needed */
+  color: #000; /* Adjust text color as needed */
+}
+
+/* Additional Styles for Chart Containers */
+
+/* Style the chart containers */
+.card {
+  border: 1px solid #ebedf2; /* Adjust border color as needed */
+  border-radius: 8px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); /* Adjust shadow as needed */
+}
+
+/* Ensure consistent spacing between chart containers */
+.my-3 {
+  margin-bottom: 15px;
+}
+
+/* Customize the background color of each chart container */
+#chart-paket-penyedia {
+  background-color: #fff; /* Adjust background color as needed */
+}
+
+#chart-pagu-penyedia {
+  background-color: #fff; /* Adjust background color as needed */
+}
+
+/* Add hover effect to chart containers */
+.card:hover {
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.2); /* Adjust hover shadow as needed */
+  transition: box-shadow 0.3s ease;
+}
+
+

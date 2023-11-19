@@ -1,24 +1,25 @@
 @extends('dashboard-layout')
 @section('content')
 
+
     @if ($rupMasterSatker)
         <div class="page-header d-print-none">
             <div class="container-xl">
                 <div class="row g-2 align-items-center">
                     <div class="col">
-                        <h2 class="page-title">
+                        <h2 class="card-title text-primary text-center">
                             {{ $rupMasterSatker->nama_satker }}
                         </h2>
                     </div>
                 </div>
             </div>
         </div>
-
+        
         <div class="page-body">
             <div class="container-xl">
 
                 @if ($rupMasterSatker->paketPenyediaTerumumkans->isNotEmpty())
-                    <div class="hr-text"></div>
+            
                     <div class="col-12">
                         <div class="row row-cards">
                             <div class="col-sm-6 col-lg-6">
@@ -176,7 +177,7 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="col-sm-6 col-lg-4">
+                            <div class="col-sm-12 col-md-12 col-lg-4">
                                 <div class="card card-sm">
                                     <div class="card-body">
                                         <div class="row align-items-center">
@@ -231,256 +232,114 @@
                     <div class="hr-text"></div>
 
                     <div class="row">
+                        <!-- Pencatatan Non Tender (Pagu) -->
                         <div class="col-lg-6 mt-3">
                             <div class="card">
                                 <div class="card-body">
-                                    <div class="row align-items-center">
-                                        <div class="col">
-                                            <h3 class="card-title mb-1">
-                                                <a href="#" class="text-reset">Pencatatan Non Tender (Pagu)</a>
-                                            </h3>
-                                            <div class="text-secondary">
-                                                {{ $countKdRupTercatat }} dari
-                                                {{ $countPaketPenyedia - $countTenderSeleksi - $countEpurchasing }} paket
-                                                Non Tender Tercatat
+                                    <h3 class="card-title mb-4 text-primary text-center">
+                                        PENCATATAN NON TENDER
+                                    </h3>
+                                    <h3 class="card-title mb-4">
+                                        <a href="#" class="text-reset">Pencatatan Non Tender (Pagu)</a>
+                                    </h3>
+                                    <div class="row">
+                                        <div class="col-md-12">
+                                            <p class="text-secondary"><span style="color: #0054a6"><b>{{ $countKdRupTercatat }}</b></span> dari <span style="color: #bd081c"><b>{{ $countPaketPenyedia - $countTenderSeleksi - $countEpurchasing }}</b></span> paket Non Tender Tercatat</p>
+                                            <p class="text-secondary">Dengan nilai <span style="color: #0054a6"><b>Rp. {{ number_format($sumPaguPencatatanNonTender) }} ,-</b></span> dari <span style="color: #bd081c"><b>Rp. {{ number_format($sumPaguNonTender) }} ,-</b></span></p>
+                                            @if ($formattedUpdatedAt)
+                                                <p class="text-secondary">Updated at <b>{{ $formattedUpdatedAt }}</b></p>
+                                            @endif
+                                        </div>
+                                        <div class="col-md-12">
+                                            <div class="progress mt-3">
+                                                <div class="progress-bar" style="width: {{ number_format(($sumPaguPencatatanNonTender / $sumPaguNonTender) * 100, 2) }}%"></div>
                                             </div>
-                                            <div class="text-secondary">
-                                                Dengan nilai Rp. {{ number_format($sumPaguPencatatanNonTender) }} ,- dari
-                                                Rp. {{ number_format($sumPaguNonTender) }} ,-
+                                            <p class="text-secondary mt-2">Persentase Pagu: <span style="color: #0054a6"><b>{{ number_format(($sumPaguPencatatanNonTender / $sumPaguNonTender) * 100, 2) }}%</b></span></p>
+                                        </div>
+                                    </div>
+                    
+                                    <hr class="hr-text mt-4 mb-4">
+                    
+                                    <!-- Pagu PDN Non Tender Tercatat -->
+                                    <h3 class="card-title mb-4">
+                                        <a href="#" class="text-reset">Pagu PDN Non Tender Tercatat</a>
+                                    </h3>
+                                    <div class="row">
+                                        <div class="col-md-12">
+                                            <p class="text-secondary"><span style="color: #0054a6"><b>{{ $countPdnTercatat }}</b></span> dari <span style="color: #bd081c"><b>{{ $countPdn }}</b></span> paket Non Tender berstatus PDN sudah tercatat</p>
+                                            <p class="text-secondary">Pagu PDN tercatat = <span style="color: #0054a6"><b>Rp. {{ number_format($sumPaguPdnNonTender) }} ,-</b></span> dari <span style="color: #bd081c"><b>Rp. {{ number_format($sumPaguPdn) }} ,-</b></span></p>
+                                            @if ($formattedUpdatedAt)
+                                                <p class="text-secondary">Updated at <b>{{ $formattedUpdatedAt }}</b></p>
+                                            @endif
+                                        </div>
+                                        <div class="col-md-12">
+                                            <div class="progress mt-3">
+                                                <div class="progress-bar" style="width: {{ number_format(($sumPaguPdnNonTender / $sumPaguPdn) * 100, 2) }}%"></div>
                                             </div>
-                                            <div class="text-secondary">
-                                                @if ($formattedUpdatedAt)
-                                                    Updated at {{ $formattedUpdatedAt }}
-                                                @endif
-
+                                            <p class="text-secondary mt-2">Persentase Pagu: <span style="color: #0054a6"><b>{{ number_format(($sumPaguPdnNonTender / $sumPaguPdn) * 100, 2) }}%</b></span></p>
+                                        </div>
+                                    </div>
+                    
+                                    <hr class="hr-text mt-4 mb-4">
+                    
+                                    <!-- Pagu UKM Non Tender Tercatat -->
+                                    <h3 class="card-title mb-4">
+                                        <a href="#" class="text-reset">Pagu UKM Non Tender Tercatat</a>
+                                    </h3>
+                                    <div class="row">
+                                        <div class="col-md-12">
+                                            <p class="text-secondary"><span style="color: #0054a6"><b>{{ $countUkmTercatat }}</b></span> dari <span style="color: #bd081c"><b>{{ $countUkm }}</b></span> paket Non Tender berstatus UKM sudah tercatat</p>
+                                            <p class="text-secondary">Pagu UKM tercatat = <span style="color: #0054a6"><b>Rp. {{ number_format($sumPaguUkmNonTender) }} ,-</b></span> dari <span style="color: #bd081c"><b>Rp. {{ number_format($sumPaguUkm) }} ,-</b></span></p>
+                                            @if ($formattedUpdatedAt)
+                                                <p class="text-secondary">Updated at <b>{{ $formattedUpdatedAt }}</b></p>
+                                            @endif
+                                        </div>
+                                        <div class="col-md-12">
+                                            <div class="progress mt-3">
+                                                <div class="progress-bar" style="width: {{ number_format(($sumPaguUkmNonTender / $sumPaguUkm) * 100, 2) }}%"></div>
                                             </div>
-                                            <div class="mt-3">
-                                                <div class="row g-2 align-items-center">
-                                                    <div class="text-secondary">Persentase Pagu</div>
-                                                    <div class="col-auto">
-                                                        {{ number_format(($sumPaguPencatatanNonTender / $sumPaguNonTender) * 100, 2) }}%
-                                                    </div>
-                                                    <div class="col">
-                                                        <div class="progress progress-sm">
-                                                            <div class="progress-bar"
-                                                                style="width: {{ number_format(($sumPaguPencatatanNonTender / $sumPaguNonTender) * 100, 2) }}%"
-                                                                role="progressbar" aria-valuenow="25" aria-valuemin="0"
-                                                                aria-valuemax="100" aria-label="25% Complete">
-                                                                <span
-                                                                    class="visually-hidden">{{ number_format(($sumPaguPencatatanNonTender / $sumPaguNonTender) * 100, 2) }}%
-                                                                    Complete</span>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-
-                                            <div class="hr-text"></div>
-
-                                            <h3 class="card-title mb-1">
-                                                <a href="#" class="text-reset">Pagu PDN Non Tender Tercatat</a>
-                                            </h3>
-                                            <div class="text-secondary">
-                                                {{ $countPdnTercatat }} dari {{ $countPdn }} paket Non Tender
-                                                berstatus PDN sudah tercatat
-                                            </div>
-                                            <div class="text-secondary">
-                                                Pagu PDN tercatat = Rp. {{ number_format($sumPaguPdnNonTender) }} ,- dari
-                                                Rp. {{ number_format($sumPaguPdn) }} ,-
-                                            </div>
-                                            <div class="text-secondary">
-                                                @if ($formattedUpdatedAt)
-                                                    Updated at {{ $formattedUpdatedAt }}
-                                                @endif
-                                            </div>
-                                            <div class="mt-3">
-                                                <div class="row g-2 align-items-center">
-                                                    <div class="text-secondary">Persentase Pagu</div>
-                                                    <div class="col-auto">
-                                                        {{ number_format(($sumPaguPdnNonTender / $sumPaguPdn) * 100, 2) }}%
-                                                    </div>
-                                                    <div class="col">
-                                                        <div class="progress progress-sm">
-                                                            <div class="progress-bar"
-                                                                style="width: {{ number_format(($sumPaguPdnNonTender / $sumPaguPdn) * 100, 2) }}%"
-                                                                role="progressbar" aria-valuenow="25" aria-valuemin="0"
-                                                                aria-valuemax="100" aria-label="25% Complete">
-                                                                <span
-                                                                    class="visually-hidden">{{ number_format(($sumPaguPdnNonTender / $sumPaguPdn) * 100, 2) }}%
-                                                                    Complete</span>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="hr-text"></div>
-
-                                            <h3 class="card-title mb-1">
-                                                <a href="#" class="text-reset">Pagu UKM Non Tender Tercatat</a>
-                                            </h3>
-                                            <div class="text-secondary">
-                                                {{ $countUkmTercatat }} dari {{ $countUkm }} paket Non Tender
-                                                berstatus UKM sudah tercatat
-                                            </div>
-                                            <div class="text-secondary">
-                                                Pagu UKM tercatat = Rp. {{ number_format($sumPaguUkmNonTender) }} ,- dari
-                                                Rp. {{ number_format($sumPaguUkm) }} ,-
-                                            </div>
-                                            <div class="text-secondary">
-                                                @if ($formattedUpdatedAt)
-                                                    Updated at {{ $formattedUpdatedAt }}
-                                                @endif
-                                            </div>
-                                            <div class="mt-3">
-                                                <div class="row g-2 align-items-center">
-                                                    <div class="text-secondary">Persentase Pagu</div>
-                                                    <div class="col-auto">
-                                                        {{ number_format(($sumPaguUkmNonTender / $sumPaguUkm) * 100, 2) }}%
-                                                    </div>
-                                                    <div class="col">
-                                                        <div class="progress progress-sm">
-                                                            <div class="progress-bar"
-                                                                style="width: {{ number_format(($sumPaguUkmNonTender / $sumPaguUkm) * 100, 2) }}%"
-                                                                role="progressbar" aria-valuenow="25" aria-valuemin="0"
-                                                                aria-valuemax="100" aria-label="25% Complete">
-                                                                <span
-                                                                    class="visually-hidden">{{ number_format(($sumPaguUkmNonTender / $sumPaguUkm) * 100, 2) }}%
-                                                                    Complete</span>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
+                                            <p class="text-secondary mt-2">Persentase Pagu: <span style="color: #0054a6"><b>{{ number_format(($sumPaguUkmNonTender / $sumPaguUkm) * 100, 2) }}%</b></span></p>
                                         </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
+                    
+                        <!-- E-Purchasing Terproses -->
                         <div class="col-lg-6 mt-3">
                             <div class="card">
                                 <div class="card-body">
-                                    <div class="row align-items-center">
-                                        <div class="col">
-                                            <h3 class="card-title mb-1">
-                                                <a href="#" class="text-reset">E-Purchasing Terproses</a>
-                                            </h3>
-                                            <div class="text-secondary">
-                                                {{ $countKdRupEpurchasing }} dari {{ $countEpurchasing }} paket
-                                                E-Purchasing terproses
+                                    <h3 class="card-title mb-4 text-primary text-center">
+                                        E-PURCHASING
+                                    </h3>
+                                    <h3 class="card-title mb-4">
+                                        <a href="#" class="text-reset">E-Purchasing Terproses</a>
+                                    </h3>
+                                    <div class="row">
+                                        <div class="col-md-12">
+                                            <p class="text-secondary"><span style="color: #0054a6"><b>{{ $countKdRupEpurchasing }}</b></span> dari <span style="color: #bd081c"><b>{{ $countEpurchasing }}</b></span> paket E-Purchasing terproses</p>
+                                            <p class="text-secondary">Dengan nilai <span style="color: #0054a6"><b>Rp. {{ number_format($sumPaguEpurchasingProses) }} ,-</b></span> dari <span style="color: #bd081c"><b>Rp. {{ number_format($sumPaguEpurchasing) }} ,-</b></span></p>
+                                            @if ($formattedEpurchasingUpdatedAt)
+                                                <p class="text-secondary">Updated at <b>{{ $formattedEpurchasingUpdatedAt }}</b></p>
+                                            @endif
+                                        </div>
+                                        <div class="col-md-12">
+                                            <div class="progress mt-3">
+                                                <div class="progress-bar" style="width: {{ number_format(($sumPaguEpurchasingProses / $sumPaguEpurchasing) * 100, 2) }}%"></div>
                                             </div>
-                                            <div class="text-secondary">
-                                                Dengan nilai Rp. {{ number_format($sumPaguEpurchasingProses) }} ,- dari Rp.
-                                                {{ number_format($sumPaguEpurchasing) }} ,-
-                                            </div>
-                                            <div class="text-secondary">
-                                                @if ($formattedEpurchasingUpdatedAt)
-                                                    Updated at {{ $formattedEpurchasingUpdatedAt }}
-                                                @endif
-
-                                            </div>
-                                            <div class="mt-3">
-                                                <div class="row g-2 align-items-center">
-                                                    <div class="text-secondary">Persentase Pagu</div>
-                                                    <div class="col-auto">
-                                                        {{ number_format(($sumPaguEpurchasingProses / $sumPaguEpurchasing) * 100, 2) }}%
-                                                    </div>
-                                                    <div class="col">
-                                                        <div class="progress progress-sm">
-                                                            <div class="progress-bar"
-                                                                style="width: {{ number_format(($sumPaguEpurchasingProses / $sumPaguEpurchasing) * 100, 2) }}%"
-                                                                role="progressbar" aria-valuenow="25" aria-valuemin="0"
-                                                                aria-valuemax="100" aria-label="25% Complete">
-                                                                <span
-                                                                    class="visually-hidden">{{ number_format(($sumPaguEpurchasingProses / $sumPaguEpurchasing) * 100, 2) }}%
-                                                                    Complete</span>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-
-                                            <div class="hr-text"></div>
-                                            <h3 class="card-title mb-1">
-                                                <a href="#" class="text-reset">E-Purchasing Terproses</a>
-                                            </h3>
-                                            <div class="text-secondary">
-                                                {{ $countKdRupEpurchasing }} dari {{ $countEpurchasing }} paket
-                                                E-Purchasing terproses
-                                            </div>
-                                            <div class="text-secondary">
-                                                Dengan nilai Rp. {{ number_format($sumPaguEpurchasingProses) }} ,- dari Rp.
-                                                {{ number_format($sumPaguEpurchasing) }} ,-
-                                            </div>
-                                            <div class="text-secondary">
-                                                @if ($formattedEpurchasingUpdatedAt)
-                                                    Updated at {{ $formattedEpurchasingUpdatedAt }}
-                                                @endif
-
-                                            </div>
-                                            <div class="mt-3">
-                                                <div class="row g-2 align-items-center">
-                                                    <div class="text-secondary">Persentase Pagu</div>
-                                                    <div class="col-auto">
-                                                        {{ number_format(($sumPaguEpurchasingProses / $sumPaguEpurchasing) * 100, 2) }}%
-                                                    </div>
-                                                    <div class="col">
-                                                        <div class="progress progress-sm">
-                                                            <div class="progress-bar"
-                                                                style="width: {{ number_format(($sumPaguEpurchasingProses / $sumPaguEpurchasing) * 100, 2) }}%"
-                                                                role="progressbar" aria-valuenow="25" aria-valuemin="0"
-                                                                aria-valuemax="100" aria-label="25% Complete">
-                                                                <span
-                                                                    class="visually-hidden">{{ number_format(($sumPaguEpurchasingProses / $sumPaguEpurchasing) * 100, 2) }}%
-                                                                    Complete</span>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="hr-text"></div>
-                                            <h3 class="card-title mb-1">
-                                                <a href="#" class="text-reset">E-Purchasing Terproses</a>
-                                            </h3>
-                                            <div class="text-secondary">
-                                                {{ $countKdRupEpurchasing }} dari {{ $countEpurchasing }} paket
-                                                E-Purchasing terproses
-                                            </div>
-                                            <div class="text-secondary">
-                                                Dengan nilai Rp. {{ number_format($sumPaguEpurchasingProses) }} ,- dari Rp.
-                                                {{ number_format($sumPaguEpurchasing) }} ,-
-                                            </div>
-                                            <div class="text-secondary">
-                                                @if ($formattedEpurchasingUpdatedAt)
-                                                    Updated at {{ $formattedEpurchasingUpdatedAt }}
-                                                @endif
-
-                                            </div>
-                                            <div class="mt-3">
-                                                <div class="row g-2 align-items-center">
-                                                    <div class="text-secondary">Persentase Pagu</div>
-                                                    <div class="col-auto">
-                                                        {{ number_format(($sumPaguEpurchasingProses / $sumPaguEpurchasing) * 100, 2) }}%
-                                                    </div>
-                                                    <div class="col">
-                                                        <div class="progress progress-sm">
-                                                            <div class="progress-bar"
-                                                                style="width: {{ number_format(($sumPaguEpurchasingProses / $sumPaguEpurchasing) * 100, 2) }}%"
-                                                                role="progressbar" aria-valuenow="25" aria-valuemin="0"
-                                                                aria-valuemax="100" aria-label="25% Complete">
-                                                                <span
-                                                                    class="visually-hidden">{{ number_format(($sumPaguEpurchasingProses / $sumPaguEpurchasing) * 100, 2) }}%
-                                                                    Complete</span>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
+                                            <p class="text-secondary mt-2">Persentase Pagu: <span style="color: #0054a6"><b>{{ number_format(($sumPaguEpurchasingProses / $sumPaguEpurchasing) * 100, 2) }}%</b></span></p>
                                         </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
+                    
+                        <!-- Additional E-Purchasing Cards -->
+                        <!-- Repeat the above structure for additional E-Purchasing cards -->
+                    
                     </div>
+                    
+                    
                 @endif
 
             </div>
