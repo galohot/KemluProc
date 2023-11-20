@@ -20,54 +20,73 @@ use App\Models\RupStrukturAnggaranKl;
 use App\Models\SubkomponenMaster;
 use Exception;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Schema;
 
 class FetchSiRUPisb extends Command
 {
-    protected $signature = 'fetch:data_sirup';
+    protected $signature = 'fetch:data_sirup {year}';
     protected $description = 'Fetch data from the API and store it in the database';
 
-    private function fetchDataFromApi($url, $model, $retryCount = 3)
+    private function fetchDataFromApi($url, $model, $year, $retryCount = 3)
     {
         for ($attempt = 1; $attempt <= $retryCount; $attempt++) {
             try {
                 $data = Http::get($url)->json();
-                $model::truncate();
+                
+                $modelInstance = new $model(); // Create an instance to check if 'tahun_anggaran' exists in the model
+                $hasTahunAnggaran = in_array('tahun_anggaran', $modelInstance->getFillable());
+    
+                // Check if the 'tahun_anggaran' column exists in the database table
+                $table = $modelInstance->getTable();
+                $hasTahunAnggaranColumn = Schema::hasColumn($table, 'tahun_anggaran');
+    
+                if ($hasTahunAnggaranColumn) {
+                    $model::where('tahun_anggaran', $year)->delete(); // Use delete instead of truncate for better performance
+                }
+    
                 foreach ($data as $item) {
+                    if ($hasTahunAnggaran) {
+                        $item['tahun_anggaran'] = $year; // Add the year to the data only if 'tahun_anggaran' exists in the model
+                    }
                     $model::create($item);
                 }
+    
                 break; // Success, exit loop
             } catch (Exception $e) {
                 if ($attempt < $retryCount) {
                     sleep(5); // Wait before retrying
                 } else {
-                    $this->error('Error fetching data from ' . $model . ' API after ' . $retryCount . ' attempts: ' . $e->getMessage());
+                    $this->error("Error fetching data from {$model} API after {$retryCount} attempts for year {$year}: " . $e->getMessage());
                     Log::error('Error occurred: ' . $e->getMessage());
                 }
             }
         }
     }
+    
+    
 
     public function handle()
     {
+        $year = $this->argument('year');
+
         try {
-            $this->fetchDataFromApi('https://dce.lkpp.go.id/isb-2/api/ac8ff6a2-1131-4b70-b473-07c8fbeddcf2/json/5264/RUP-KROMaster/tipe/4:12/parameter/2023:K17', RupKroMaster::class);
-            $this->fetchDataFromApi('https://dce.lkpp.go.id/isb-2/api/72b866ae-f309-46df-a6a8-6c7b7113b83b/json/5274/RUP-PaketPenyedia-Terumumkan/tipe/4:12/parameter/2023:K17', PaketPenyediaTerumumkan::class, 2);
-            $this->fetchDataFromApi('https://dce.lkpp.go.id/isb-2/api/e4f166f8-34af-479b-a344-105b5c8d793d/json/5275/RUP-PaketSwakelola-Terumumkan/tipe/4:12/parameter/2023:K17', PaketSwakelolaTerumumkan::class);
-            $this->fetchDataFromApi('https://dce.lkpp.go.id/isb-2/api/c16810f6-2ba2-4558-933c-d2fef877a62b/json/5281/RUP-PaketSwakelolaLokasi/tipe/4:12/parameter/2023:K17', PaketSwakelolaLokasi::class);
-            $this->fetchDataFromApi('https://dce.lkpp.go.id/isb-2/api/ea05b533-1509-4b82-b63c-29c4b27f5950/json/5280/RUP-PaketPenyediaLokasi/tipe/4:12/parameter/2023:K17', PaketPenyediaLokasi::class);
-            $this->fetchDataFromApi('https://dce.lkpp.go.id/isb-2/api/16794a0b-fd46-4238-8571-c60ba94ee700/json/5279/RUP-ROMaster/tipe/4:12/parameter/2023:K17', RupRoMaster::class);
-            $this->fetchDataFromApi('https://dce.lkpp.go.id/isb-2/api/ff8eef3b-6327-4862-a2f8-f8dfb5c90816/json/5267/RUP-KomponenMaster/tipe/4:12/parameter/2023:K17', KomponenMaster::class);
-            $this->fetchDataFromApi('https://dce.lkpp.go.id/isb-2/api/2f3222d4-5236-4f42-9f48-a155cb29e54b/json/5277/RUP-PaketAnggaranPenyedia/tipe/4:12/parameter/2023:K17', PaketAnggaranPenyedia::class);
-            $this->fetchDataFromApi('https://dce.lkpp.go.id/isb-2/api/9a6d41c3-6e4e-4fdf-9642-bef6f43c14a3/json/5295/RUP-PaketAnggaranSwakelola/tipe/4:12/parameter/2023:K17', PaketAnggaranSwakelola::class);
-            $this->fetchDataFromApi('https://dce.lkpp.go.id/isb-2/api/3e71eeb0-c01e-4e6f-85dc-df363e6b9b7b/json/5294/RUP-SubKomponenMaster/tipe/4:12/parameter/2023:K17', SubkomponenMaster::class);
-            $this->fetchDataFromApi('https://dce.lkpp.go.id/isb-2/api/f666de37-1894-40e6-8cd5-ddd17705da35/json/5266/RUP-KegiatanMaster/tipe/4:12/parameter/2023:K17', KegiatanMaster::class);
-            $this->fetchDataFromApi('https://dce.lkpp.go.id/isb-2/api/9a89c31f-e6d3-4769-ae76-e3fe660ef780/json/5276/RUP-ProgramMaster/tipe/4:12/parameter/2023:K17', ProgramMaster::class);
-            $this->fetchDataFromApi('https://isb.lkpp.go.id/isb-2/api/507de4f3-366e-4900-929a-19c9aea8b855/json/5278/RUP-MasterSatker/tipe/12:12/parameter/K17:2023', RupMasterSatker::class);
-            $this->fetchDataFromApi('https://isb.lkpp.go.id/isb-2/api/cd2a5289-92a8-4b4e-9748-b13e0d663417/json/5291/RUP-StrukturAnggaranKL/tipe/4:12/parameter/2023:K17', RupStrukturAnggaranKl::class);
+            $this->fetchDataFromApi('https://isb.lkpp.go.id/isb-2/api/ac8ff6a2-1131-4b70-b473-07c8fbeddcf2/json/5264/RUP-KROMaster/tipe/4:12/parameter/' . $year . ':K17', RupKroMaster::class, $year);
+            $this->fetchDataFromApi('https://isb.lkpp.go.id/isb-2/api/72b866ae-f309-46df-a6a8-6c7b7113b83b/json/5274/RUP-PaketPenyedia-Terumumkan/tipe/4:12/parameter/' . $year . ':K17', PaketPenyediaTerumumkan::class, 2, $year);
+            $this->fetchDataFromApi('https://isb.lkpp.go.id/isb-2/api/e4f166f8-34af-479b-a344-105b5c8d793d/json/5275/RUP-PaketSwakelola-Terumumkan/tipe/4:12/parameter/' . $year . ':K17', PaketSwakelolaTerumumkan::class, $year);
+            $this->fetchDataFromApi('https://isb.lkpp.go.id/isb-2/api/c16810f6-2ba2-4558-933c-d2fef877a62b/json/5281/RUP-PaketSwakelolaLokasi/tipe/4:12/parameter/' . $year . ':K17', PaketSwakelolaLokasi::class, $year);
+            $this->fetchDataFromApi('https://isb.lkpp.go.id/isb-2/api/ea05b533-1509-4b82-b63c-29c4b27f5950/json/5280/RUP-PaketPenyediaLokasi/tipe/4:12/parameter/' . $year . ':K17', PaketPenyediaLokasi::class, $year);
+            $this->fetchDataFromApi('https://isb.lkpp.go.id/isb-2/api/16794a0b-fd46-4238-8571-c60ba94ee700/json/5279/RUP-ROMaster/tipe/4:12/parameter/' . $year . ':K17', RupRoMaster::class, $year);
+            $this->fetchDataFromApi('https://isb.lkpp.go.id/isb-2/api/ff8eef3b-6327-4862-a2f8-f8dfb5c90816/json/5267/RUP-KomponenMaster/tipe/4:12/parameter/' . $year . ':K17', KomponenMaster::class, $year);
+            $this->fetchDataFromApi('https://isb.lkpp.go.id/isb-2/api/2f3222d4-5236-4f42-9f48-a155cb29e54b/json/5277/RUP-PaketAnggaranPenyedia/tipe/4:12/parameter/' . $year . ':K17', PaketAnggaranPenyedia::class, $year);
+            $this->fetchDataFromApi('https://isb.lkpp.go.id/isb-2/api/9a6d41c3-6e4e-4fdf-9642-bef6f43c14a3/json/5295/RUP-PaketAnggaranSwakelola/tipe/4:12/parameter/' . $year . ':K17', PaketAnggaranSwakelola::class, $year);
+            $this->fetchDataFromApi('https://isb.lkpp.go.id/isb-2/api/3e71eeb0-c01e-4e6f-85dc-df363e6b9b7b/json/5294/RUP-SubKomponenMaster/tipe/4:12/parameter/' . $year . ':K17', SubkomponenMaster::class, $year);
+            $this->fetchDataFromApi('https://isb.lkpp.go.id/isb-2/api/f666de37-1894-40e6-8cd5-ddd17705da35/json/5266/RUP-KegiatanMaster/tipe/4:12/parameter/' . $year . ':K17', KegiatanMaster::class, $year);
+            $this->fetchDataFromApi('https://isb.lkpp.go.id/isb-2/api/9a89c31f-e6d3-4769-ae76-e3fe660ef780/json/5276/RUP-ProgramMaster/tipe/4:12/parameter/' . $year . ':K17', ProgramMaster::class, $year);
+            $this->fetchDataFromApi('https://isb.lkpp.go.id/isb-2/api/cd2a5289-92a8-4b4e-9748-b13e0d663417/json/5291/RUP-StrukturAnggaranKL/tipe/4:12/parameter/' . $year . ':K17', RupStrukturAnggaranKl::class, $year);
         } catch (Exception $e) {
-            $this->error('Error occurred: ' . $e->getMessage());
+            $this->error("Error occurred for year {$year}: " . $e->getMessage());
         }
 
-        $this->info('Data fetched and stored successfully.');
+        $this->info('{$year} SIRUP Data fetched and stored successfully.');
     }
 }
