@@ -6,7 +6,8 @@
         <div class="row g-2 align-items-center">
             <div class="col-md-6">
                 <label for="tahun_anggaran">Tahun Anggaran:</label>
-                <select class="form-select" id="tahun_anggaran" name="tahun_anggaran" onchange="updateUrl()">
+                <input type="text" class="form-control" id="search_tahun_anggaran" placeholder="Search Tahun Anggaran" oninput="filterOptions('tahun_anggaran')">
+                <select class="form-select mt-2" id="tahun_anggaran" name="tahun_anggaran" onchange="updateUrl()">
                     <option value="">-- Select Tahun Anggaran --</option>
                     @foreach ($tahunAnggaranList as $tahunAnggaranOption)
                         <option value="{{ $tahunAnggaranOption }}" {{ $tahunAnggaranOption == $selectedTahunAnggaran ? 'selected' : '' }}>
@@ -17,7 +18,8 @@
             </div>
             <div class="col-md-6">
                 <label for="kd_satker_str">Nama Satker:</label>
-                <select class="form-select" id="kd_satker_str" name="kd_satker_str" onchange="updateUrl()">
+                <input type="text" class="form-control" id="search_kd_satker_str" placeholder="Search Nama Satker" oninput="filterOptions('kd_satker_str')">
+                <select class="form-select mt-2" id="kd_satker_str" name="kd_satker_str" onchange="updateUrl()">
                     <option value="">-- Select Nama Satker --</option>
                     @foreach ($kdSatkerStrList as $index => $kdSatkerOption)
                         <option value="{{ $kdSatkerOption }}" {{ $kdSatkerOption == $selectedKdSatkerStr ? 'selected' : '' }}>
@@ -393,6 +395,21 @@
     
                 // Redirect to the constructed URL
                 window.location.href = url;
+            }
+        }
+    
+        function filterOptions(dropdownId) {
+            var input, filter, options, i;
+            input = document.getElementById("search_" + dropdownId);
+            filter = input.value.toUpperCase();
+            options = document.getElementById(dropdownId).getElementsByTagName("option");
+    
+            for (i = 0; i < options.length; i++) {
+                if (options[i].innerHTML.toUpperCase().indexOf(filter) > -1) {
+                    options[i].style.display = "";
+                } else {
+                    options[i].style.display = "none";
+                }
             }
         }
     </script>
