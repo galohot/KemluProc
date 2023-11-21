@@ -2,6 +2,34 @@
 @section('content')
 
 
+    <div class="container-xl mt-3">
+        <div class="row g-2 align-items-center">
+            <div class="col-md-6">
+                <label for="tahun_anggaran">Tahun Anggaran:</label>
+                <select class="form-select" id="tahun_anggaran" name="tahun_anggaran" onchange="updateUrl()">
+                    <option value="">-- Select Tahun Anggaran --</option>
+                    @foreach ($tahunAnggaranList as $tahunAnggaranOption)
+                        <option value="{{ $tahunAnggaranOption }}" {{ $tahunAnggaranOption == $selectedTahunAnggaran ? 'selected' : '' }}>
+                            {{ $tahunAnggaranOption }}
+                        </option>
+                    @endforeach
+                </select>
+            </div>
+            <div class="col-md-6">
+                <label for="kd_satker_str">Nama Satker:</label>
+                <select class="form-select" id="kd_satker_str" name="kd_satker_str" onchange="updateUrl()">
+                    <option value="">-- Select Nama Satker --</option>
+                    @foreach ($kdSatkerStrList as $index => $kdSatkerOption)
+                        <option value="{{ $kdSatkerOption }}" {{ $kdSatkerOption == $selectedKdSatkerStr ? 'selected' : '' }}>
+                            {{ $namaSatkerList[$index] }}
+                        </option>
+                    @endforeach
+                </select>
+            </div>
+        </div>
+    </div>
+
+
     @if ($rupMasterSatker)
         <div class="page-header d-print-none">
             <div class="container-xl">
@@ -10,6 +38,9 @@
                         <h2 class="card-title text-primary text-center">
                             {{ $rupMasterSatker->nama_satker }}
                         </h2>
+                        <h2 class="card-title text-primary text-center">
+                            {{ $tahunAnggaran }}
+                        </h2>
                     </div>
                 </div>
             </div>
@@ -17,6 +48,7 @@
         
         <div class="page-body">
             <div class="container-xl">
+                
 
                 @if ($rupMasterSatker->paketPenyediaTerumumkans->isNotEmpty())
             
@@ -347,6 +379,22 @@
 
     @endif
 
-
+    <script>
+        function updateUrl() {
+            // Get selected values
+            var tahunAnggaran = document.getElementById("tahun_anggaran").value;
+            var kdSatkerStr = document.getElementById("kd_satker_str").value;
+    
+            // Check if both values are selected
+            if (tahunAnggaran && kdSatkerStr) {
+                // Construct the URL
+                var url = '/satker/' + tahunAnggaran + '/' + kdSatkerStr;
+    
+                // Redirect to the constructed URL
+                window.location.href = url;
+            }
+        }
+    </script>
+    
 
 @endsection

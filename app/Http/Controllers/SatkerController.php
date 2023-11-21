@@ -11,19 +11,39 @@ use Illuminate\Http\Request;
 
 class SatkerController extends Controller
 {
-    public function show($kd_satker_str)
+    public function show($tahun_anggaran, $kd_satker_str)
     {
+        
         $rupMasterSatker = RupMasterSatker::with([
+            'programMasters' => function ($query) use ($tahun_anggaran) {
+                $query->where('tahun_anggaran', $tahun_anggaran);
+            },
             'programMasters.kegiatans.rupKros.rupRos.komponens.subkomponens',
-            'paketPenyediaTerumumkans.pencatatanNonTender.realisasiNonTenders',
-            'paketPenyediaTerumumkans.tenderSelesai.tenderSelesaiNilais',
-            'paketPenyediaTerumumkans.paketEcats',
+            'paketPenyediaTerumumkans' => function ($query) use ($tahun_anggaran) {
+                $query->where('tahun_anggaran', $tahun_anggaran);
+            },
+            'paketPenyediaTerumumkans.pencatatanNonTender.realisasiNonTenders'=> function ($query) use ($tahun_anggaran) {
+                $query->where('tahun_anggaran', $tahun_anggaran);
+            },
+            'paketPenyediaTerumumkans.tenderSelesai.tenderSelesaiNilais'=> function ($query) use ($tahun_anggaran) {
+                $query->where('tahun_anggaran', $tahun_anggaran);
+            },
+            'paketPenyediaTerumumkans.paketEcats'=> function ($query) use ($tahun_anggaran) {
+                $query->where('tahun_anggaran', $tahun_anggaran);
+            },
             'paketPenyediaTerumumkans.paketEcats.epurchasingProduct',
             'paketPenyediaTerumumkans.paketEcats.epurchasingPenyedia',
             'paketPenyediaTerumumkans.paketEcats.epurchasingKomoditas',
             'paketPenyediaTerumumkans.paketEcats.epurchasingDistributor',
-            'paketSwakelolaTerumumkans',
-        ])->where('kd_satker_str', $kd_satker_str)->first();
+            'paketSwakelolaTerumumkans' => function ($query) use ($tahun_anggaran) {
+                $query->where('tahun_anggaran', $tahun_anggaran);
+            },
+        ])
+        ->where('kd_satker_str', $kd_satker_str)
+        ->first();
+        
+        $tahunAnggaran = PaketPenyediaTerumumkan::where('tahun_anggaran', $tahun_anggaran)->value('tahun_anggaran');
+
 
         // Retrieve the RupMasterSatker instance using kd_satker_str
         $rupMasterSatker = RupMasterSatker::where('kd_satker_str', $kd_satker_str)->first();
@@ -40,32 +60,34 @@ class SatkerController extends Controller
         // Count paketPenyediaTerumumkans where metode_pengadaan is 'tender'
         $countTenderSeleksi = $rupMasterSatker->paketPenyediaTerumumkans
         ->whereIn('metode_pengadaan', ['Tender', 'Seleksi'])
+        ->where('tahun_anggaran', $tahun_anggaran)
         ->count();
         
         $sumPaguTenderSeleksi = $rupMasterSatker->paketPenyediaTerumumkans
         ->whereIn('metode_pengadaan', ['Tender', 'Seleksi'])
+        ->where('tahun_anggaran', $tahun_anggaran)
         ->sum('pagu');
         
         
-        $countEpurchasing = $rupMasterSatker->paketPenyediaTerumumkans->where('metode_pengadaan', 'e-Purchasing')->count();
+        $countEpurchasing = $rupMasterSatker->paketPenyediaTerumumkans->where('metode_pengadaan', 'e-Purchasing')->where('tahun_anggaran', $tahun_anggaran)->count();
 
         
-        $sumPaguEpurchasing = $rupMasterSatker->paketPenyediaTerumumkans->where('metode_pengadaan', 'e-Purchasing')->sum('pagu');
+        $sumPaguEpurchasing = $rupMasterSatker->paketPenyediaTerumumkans->where('metode_pengadaan', 'e-Purchasing')->where('tahun_anggaran', $tahun_anggaran)->sum('pagu');
 
-        $countPdn = $rupMasterSatker->paketPenyediaTerumumkans->where('status_pdn', 'PDN')->count();
-        $sumPaguPdn = $rupMasterSatker->paketPenyediaTerumumkans->where('status_pdn', 'PDN')->sum('pagu');
+        $countPdn = $rupMasterSatker->paketPenyediaTerumumkans->where('status_pdn', 'PDN')->where('tahun_anggaran', $tahun_anggaran)->count();
+        $sumPaguPdn = $rupMasterSatker->paketPenyediaTerumumkans->where('status_pdn', 'PDN')->where('tahun_anggaran', $tahun_anggaran)->sum('pagu');
         
-        $countUkm = $rupMasterSatker->paketPenyediaTerumumkans->where('status_ukm', 'UKM')->count();
-        $sumPaguUkm = $rupMasterSatker->paketPenyediaTerumumkans->where('status_ukm', 'UKM')->sum('pagu');
+        $countUkm = $rupMasterSatker->paketPenyediaTerumumkans->where('status_ukm', 'UKM')->where('tahun_anggaran', $tahun_anggaran)->count();
+        $sumPaguUkm = $rupMasterSatker->paketPenyediaTerumumkans->where('status_ukm', 'UKM')->where('tahun_anggaran', $tahun_anggaran)->sum('pagu');
         
-        $countPaketPenyedia = $rupMasterSatker->paketPenyediaTerumumkans->count();
-        $countPaketSwakelola = $rupMasterSatker->paketSwakelolaTerumumkans->count();
-        $sumPaguPenyediaTerumumkan = $rupMasterSatker->paketPenyediaTerumumkans->sum('pagu');
-        $sumPaguSwakelolaTerumumkan = $rupMasterSatker->paketSwakelolaTerumumkans->sum('pagu');
+        $countPaketPenyedia = $rupMasterSatker->paketPenyediaTerumumkans->where('tahun_anggaran', $tahun_anggaran)->count();
+        $countPaketSwakelola = $rupMasterSatker->paketSwakelolaTerumumkans->where('tahun_anggaran', $tahun_anggaran)->count();
+        $sumPaguPenyediaTerumumkan = $rupMasterSatker->paketPenyediaTerumumkans->where('tahun_anggaran', $tahun_anggaran)->sum('pagu');
+        $sumPaguSwakelolaTerumumkan = $rupMasterSatker->paketSwakelolaTerumumkans->where('tahun_anggaran', $tahun_anggaran)->sum('pagu');
 
 
         // Count paketPenyediaTerumumkans where metode_pengadaan is not 'tender'
-        $sumPaguNonTender = $rupMasterSatker->paketPenyediaTerumumkans->whereNotIn('metode_pengadaan', ['Tender','Seleksi','e-Purchasing'])->sum('pagu');
+        $sumPaguNonTender = $rupMasterSatker->paketPenyediaTerumumkans->whereNotIn('metode_pengadaan', ['Tender','Seleksi','e-Purchasing'])->where('tahun_anggaran', $tahun_anggaran)->sum('pagu');
 
         $totalPaguProgram = $rupMasterSatker->programMasters->sum('pagu_program');
 
@@ -73,6 +95,8 @@ class SatkerController extends Controller
         $kdRupTercatat = PaketPenyediaTerumumkan::join('spse_pencatatan_nontender', 'paket_penyedia_terumumkan.kd_rup', '=', 'spse_pencatatan_nontender.kd_rup')
             ->where('paket_penyedia_terumumkan.kd_satker_str', $kd_satker_str)
             ->where('spse_pencatatan_nontender.kd_satker_str', $kd_satker_str)
+            ->where('paket_penyedia_terumumkan.tahun_anggaran', $tahun_anggaran)
+            ->where('spse_pencatatan_nontender.tahun_anggaran', $tahun_anggaran)
             ->distinct()
             ->pluck('paket_penyedia_terumumkan.kd_rup')
             ->toArray();
@@ -80,6 +104,8 @@ class SatkerController extends Controller
         $kdRupEpurchasing = PaketPenyediaTerumumkan::join('ecat_paket_epurchasing', 'paket_penyedia_terumumkan.kd_rup', '=', 'ecat_paket_epurchasing.kd_rup')
             ->where('paket_penyedia_terumumkan.kd_satker', $kdSatker)
             ->where('ecat_paket_epurchasing.satker_id', $kdSatker)
+            ->where('paket_penyedia_terumumkan.tahun_anggaran', $tahun_anggaran)
+            ->where('ecat_paket_epurchasing.tahun_anggaran', $tahun_anggaran)
             ->distinct()
             ->pluck('paket_penyedia_terumumkan.kd_rup')
             ->toArray();
@@ -87,6 +113,8 @@ class SatkerController extends Controller
         $countPdnTercatat = PaketPenyediaTerumumkan::join('spse_pencatatan_nontender', 'paket_penyedia_terumumkan.kd_rup', '=', 'spse_pencatatan_nontender.kd_rup')
             ->where('paket_penyedia_terumumkan.kd_satker_str', $kd_satker_str)
             ->where('spse_pencatatan_nontender.kd_satker_str', $kd_satker_str)
+            ->where('paket_penyedia_terumumkan.tahun_anggaran', $tahun_anggaran)
+            ->where('spse_pencatatan_nontender.tahun_anggaran', $tahun_anggaran)
             ->whereNotNull('spse_pencatatan_nontender.nilai_pdn_pct') // Add this line to filter non-null values
             ->distinct()
             ->count('spse_pencatatan_nontender.nilai_pdn_pct');
@@ -94,6 +122,8 @@ class SatkerController extends Controller
         $countUkmTercatat = PaketPenyediaTerumumkan::join('spse_pencatatan_nontender', 'paket_penyedia_terumumkan.kd_rup', '=', 'spse_pencatatan_nontender.kd_rup')
             ->where('paket_penyedia_terumumkan.kd_satker_str', $kd_satker_str)
             ->where('spse_pencatatan_nontender.kd_satker_str', $kd_satker_str)
+            ->where('paket_penyedia_terumumkan.tahun_anggaran', $tahun_anggaran)
+            ->where('spse_pencatatan_nontender.tahun_anggaran', $tahun_anggaran)
             ->whereNotNull('spse_pencatatan_nontender.nilai_umk_pct') // Add this line to filter non-null values
             ->distinct()
             ->count('spse_pencatatan_nontender.nilai_umk_pct');
@@ -112,6 +142,20 @@ class SatkerController extends Controller
         $sumNilaiPdnPct = SpsePencatatanNonTender::whereIn('kd_rup', $kdRupTercatat)->sum('nilai_pdn_pct');
         $sumNilaiUmkPct = SpsePencatatanNonTender::whereIn('kd_rup', $kdRupTercatat)->sum('nilai_umk_pct');
         $nonTenderUpdatedAt = SpsePencatatanNonTender::whereIn('kd_rup', $kdRupTercatat)->first('updated_at');
+
+        // Retrieve unique tahun_anggaran values from your database
+        $tahunAnggaranList = PaketPenyediaTerumumkan::distinct('tahun_anggaran')->pluck('tahun_anggaran')->toArray();
+
+        // Retrieve unique kd_satker_str values along with the corresponding nama_satker values from your database
+        $kdSatkerList = RupMasterSatker::select('kd_satker_str', 'nama_satker')->distinct('kd_satker_str')->get();
+
+        // Separate kd_satker_str and nama_satker into two arrays
+        $kdSatkerStrList = $kdSatkerList->pluck('kd_satker_str')->toArray();
+        $namaSatkerList = $kdSatkerList->pluck('nama_satker')->toArray();
+
+        // Determine the selected values for dropdowns based on the parameters
+        $selectedTahunAnggaran = $tahun_anggaran;
+        $selectedKdSatkerStr = $kd_satker_str;
 
         // Access the formatted updated_at value
         if ($nonTenderUpdatedAt) {
@@ -158,7 +202,13 @@ class SatkerController extends Controller
             'countUkm',
             'sumPaguUkm',
             'sumPaguUkmNonTender',
-            'countUkmTercatat'
+            'countUkmTercatat',
+            'tahunAnggaran',
+            'tahunAnggaranList',
+            'kdSatkerStrList',
+            'namaSatkerList',
+            'selectedTahunAnggaran', // Pass the selected tahun_anggaran to the view
+            'selectedKdSatkerStr' // Pass the selected kd_satker_str to the view
         ));
         
     }
