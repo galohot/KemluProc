@@ -125,7 +125,7 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="col-sm-6 col-lg-4">
+                            <div class="col-sm-6 col-lg-4" data-bs-toggle="modal" data-bs-target="#modal-tender">
                                 <div class="card card-sm">
                                     <div class="card-body">
                                         <div class="row align-items-center">
@@ -170,7 +170,40 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="col-sm-6 col-lg-4">
+                            <div class="modal modal-blur fade" id="modal-tender" tabindex="-1" role="dialog" aria-hidden="true">
+                                <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
+                                  <div class="modal-content">
+                                    <div class="modal-header">
+                                      <h5 class="modal-title">Tender Details</h5>
+                                      <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                    </div>
+                                    <div class="modal-body">
+                                        <div class="table-responsive">
+                                            <table class="table">
+                                                <thead>
+                                                    <tr>
+                                                        <th style="min-width: 300px;" class="text-nowrap">Metode Pengadaan</th>
+                                                        <th class="text-nowrap">Paket</th>
+                                                        <th class="text-nowrap">Pagu</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    @foreach ($countPaketTenderDetails as $result)
+                                                        <tr>
+                                                            <td>{{ $result->metode_pengadaan }}</td>
+                                                            <td>{{ $result->count }}</td>
+                                                            <td>Rp. {{ number_format($result->sum_pagu) }} ,-</td>
+                                                        </tr>
+                                                    @endforeach
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                        
+                                    </div>
+                                  </div>
+                                </div>
+                            </div>    
+                            <div class="col-sm-6 col-lg-4" data-bs-toggle="modal" data-bs-target="#modal-nontender">
                                 <div class="card card-sm">
                                     <div class="card-body">
                                         <div class="row align-items-center">
@@ -210,7 +243,39 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="col-sm-12 col-md-12 col-lg-4">
+                            <div class="modal modal-blur fade" id="modal-nontender" tabindex="-1" role="dialog" aria-hidden="true">
+                                <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
+                                  <div class="modal-content">
+                                    <div class="modal-header">
+                                      <h5 class="modal-title">Non Tender Details</h5>
+                                      <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                    </div>
+                                    <div class="modal-body">
+                                        <div class="table-responsive">
+                                            <table class="table">
+                                                <thead>
+                                                    <tr>
+                                                        <th class="text-nowrap">Metode Pengadaan</th>
+                                                        <th class="text-nowrap">Paket</th>
+                                                        <th class="text-nowrap">Pagu</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    @foreach ($countPaketNontenderDetails as $result)
+                                                        <tr>
+                                                            <td>{{ $result->metode_pengadaan }}</td>
+                                                            <td>{{ $result->count }}</td>
+                                                            <td>Rp. {{ number_format($result->sum_pagu) }} ,-</td>
+                                                        </tr>
+                                                    @endforeach
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                  </div>
+                                </div>
+                            </div>
+                            <div class="col-sm-12 col-md-12 col-lg-4" data-bs-toggle="modal" data-bs-target="#modal-epurchasing">
                                 <div class="card card-sm">
                                     <div class="card-body">
                                         <div class="row align-items-center">
@@ -241,6 +306,39 @@
                                     </div>
                                 </div>
                             </div>
+                            <div class="modal modal-blur fade" id="modal-epurchasing" tabindex="-1" role="dialog" aria-hidden="true">
+                                <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
+                                  <div class="modal-content">
+                                    <div class="modal-header">
+                                      <h5 class="modal-title">E-Purchasing Details</h5>
+                                      <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                    </div>
+                                    <div class="modal-body">
+                                        <div class="table-responsive">
+                                            <table class="table">
+                                                <thead>
+                                                    <tr>
+                                                        <th style="min-width: 300px;" class="text-nowrap">Metode Pengadaan</th>
+                                                        <th class="text-nowrap">Paket</th>
+                                                        <th class="text-nowrap">Pagu</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    @foreach ($countPaketEpurchasingDetails as $result)
+                                                        <tr>
+                                                            <td>{{ $result->metode_pengadaan }}</td>
+                                                            <td>{{ $result->count }}</td>
+                                                            <td>Rp. {{ number_format($result->sum_pagu) }} ,-</td>
+                                                        </tr>
+                                                    @endforeach
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                        
+                                    </div>
+                                  </div>
+                                </div>
+                            </div> 
                         </div>
 
                     </div>
@@ -302,8 +400,8 @@
                                     <hr class="hr-text mt-4 mb-4">
                     
                                     <!-- Pagu PDN Non Tender Tercatat -->
-                                    <h3 class="card-title mb-4">
-                                        <a href="#" class="text-reset">Pagu PDN Non Tender Tercatat</a>
+                                    <h3 class="card-title mb-4" data-bs-toggle="modal" data-bs-target="#modal-nontenderpdn">
+                                        <a href="#modal-nontenderpdn" class="text-reset">Pagu PDN Non Tender Tercatat</a>
                                     </h3>
                                     <div class="row">
                                         <div class="col-md-12">
@@ -329,7 +427,40 @@
                                             @endif
                                         </div>
                                     </div>
-                    
+                                    <div class="modal modal-blur fade" id="modal-nontenderpdn" tabindex="-1" role="dialog" aria-hidden="true">
+                                        <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
+                                          <div class="modal-content">
+                                            <div class="modal-header">
+                                              <h5 class="modal-title">Non-Tender PDN Details</h5>
+                                              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                            </div>
+                                            <div class="modal-body">
+                                                <div class="table-responsive">
+                                                    <table class="table">
+                                                        <thead>
+                                                            <tr>
+                                                                <th style="min-width: 300px;" class="text-nowrap">Metode Pengadaan</th>
+                                                                <th class="text-nowrap">Paket</th>
+                                                                <th class="text-nowrap">Pagu</th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody>
+                                                            @foreach ($countPaketNontenderDetailsPdn as $result)
+                                                                <tr>
+                                                                    <td>{{ $result->metode_pengadaan }}</td>
+                                                                    <td>{{ $result->count }}</td>
+                                                                    <td>Rp. {{ number_format($result->sum_pagu) }} ,-</td>
+                                                                </tr>
+                                                            @endforeach
+                                                        </tbody>
+                                                    </table>
+                                                </div>
+                                                
+                                            </div>
+                                          </div>
+                                        </div>
+                                    </div> 
+
                                     <hr class="hr-text mt-4 mb-4">
                     
                                     <!-- Pagu UKM Non Tender Tercatat -->
