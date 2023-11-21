@@ -6,7 +6,7 @@
         <div class="row g-2 align-items-center">
             <div class="col-md-6">
                 <label for="tahun_anggaran">Tahun Anggaran:</label>
-                <input type="text" class="form-control" id="search_tahun_anggaran" placeholder="Search Tahun Anggaran" oninput="filterOptions('tahun_anggaran')">
+                <input type="text" class="form-control" id="search_tahun_anggaran" placeholder="Type Tahun Anggaran to filter" oninput="filterOptions('tahun_anggaran')">
                 <select class="form-select mt-2" id="tahun_anggaran" name="tahun_anggaran" onchange="updateUrl()">
                     <option value="">-- Select Tahun Anggaran --</option>
                     @foreach ($tahunAnggaranList as $tahunAnggaranOption)
@@ -18,7 +18,7 @@
             </div>
             <div class="col-md-6">
                 <label for="kd_satker_str">Nama Satker:</label>
-                <input type="text" class="form-control" id="search_kd_satker_str" placeholder="Search Nama Satker" oninput="filterOptions('kd_satker_str')">
+                <input type="text" class="form-control" id="search_kd_satker_str" placeholder="Type Nama Satker to filter" oninput="filterOptions('kd_satker_str')">
                 <select class="form-select mt-2" id="kd_satker_str" name="kd_satker_str" onchange="updateUrl()">
                     <option value="">-- Select Nama Satker --</option>
                     @foreach ($kdSatkerStrList as $index => $kdSatkerOption)
@@ -307,9 +307,18 @@
                                         </div>
                                         <div class="col-md-12">
                                             <div class="progress mt-3">
-                                                <div class="progress-bar" style="width: {{ number_format(($sumPaguPdnNonTender / $sumPaguPdn) * 100, 2) }}%"></div>
+                                                @if($sumPaguPdn != 0)
+                                                    <div class="progress-bar" style="width: {{ number_format(($sumPaguPdnNonTender / $sumPaguPdn) * 100, 2) }}%"></div>
+                                                @else
+                                                    <div>Error: Pagu PDN is 0</div>
+                                                @endif
+                                            
                                             </div>
-                                            <p class="text-secondary mt-2">Persentase Pagu: <span style="color: #0054a6"><b>{{ number_format(($sumPaguPdnNonTender / $sumPaguPdn) * 100, 2) }}%</b></span></p>
+                                            @if($sumPaguPdn != 0)
+                                                <p class="text-secondary mt-2">Persentase Pagu: <span style="color: #0054a6"><b>{{ number_format(($sumPaguPdnNonTender / $sumPaguPdn) * 100, 2) }}%</b></span></p>
+                                            @else
+                                                <p class="text-secondary mt-2">Error: Persentase Pagu tidak dapat dihitung karena Pagu PDN adalah 0</p>
+                                            @endif
                                         </div>
                                     </div>
                     
@@ -329,9 +338,17 @@
                                         </div>
                                         <div class="col-md-12">
                                             <div class="progress mt-3">
-                                                <div class="progress-bar" style="width: {{ number_format(($sumPaguUkmNonTender / $sumPaguUkm) * 100, 2) }}%"></div>
+                                                @if($sumPaguUkm != 0)
+                                                    <div class="progress-bar" style="width: {{ number_format(($sumPaguUkmNonTender / $sumPaguUkm) * 100, 2) }}%"></div>
+                                                @else
+                                                    <div>Error: Pagu UKM is 0</div>
+                                                @endif
                                             </div>
-                                            <p class="text-secondary mt-2">Persentase Pagu: <span style="color: #0054a6"><b>{{ number_format(($sumPaguUkmNonTender / $sumPaguUkm) * 100, 2) }}%</b></span></p>
+                                            @if($sumPaguUkm != 0)
+                                                <p class="text-secondary mt-2">Persentase Pagu: <span style="color: #0054a6"><b>{{ number_format(($sumPaguUkmNonTender / $sumPaguUkm) * 100, 2) }}%</b></span></p>
+                                            @else
+                                                <p class="text-secondary mt-2">Error: Persentase Pagu tidak dapat dihitung karena Pagu UKM adalah 0</p>
+                                            @endif
                                         </div>
                                     </div>
                                 </div>
@@ -358,9 +375,17 @@
                                         </div>
                                         <div class="col-md-12">
                                             <div class="progress mt-3">
-                                                <div class="progress-bar" style="width: {{ number_format(($sumPaguEpurchasingProses / $sumPaguEpurchasing) * 100, 2) }}%"></div>
+                                                @if($sumPaguEpurchasing != 0)
+                                                    <div class="progress-bar" style="width: {{ number_format(($sumPaguEpurchasingProses / $sumPaguEpurchasing) * 100, 2) }}%"></div>
+                                                @else
+                                                    <div>Error: Pagu ePurchasing is 0</div>
+                                                @endif
                                             </div>
-                                            <p class="text-secondary mt-2">Persentase Pagu: <span style="color: #0054a6"><b>{{ number_format(($sumPaguEpurchasingProses / $sumPaguEpurchasing) * 100, 2) }}%</b></span></p>
+                                            @if($sumPaguEpurchasing != 0)
+                                                <p class="text-secondary mt-2">Persentase Pagu: <span style="color: #0054a6"><b>{{ number_format(($sumPaguEpurchasingProses / $sumPaguEpurchasing) * 100, 2) }}%</b></span></p>
+                                            @else
+                                                <p class="text-secondary mt-2">Error: Persentase Pagu tidak dapat dihitung karena Pagu ePurchasing adalah 0</p>
+                                            @endif
                                         </div>
                                     </div>
                                 </div>
