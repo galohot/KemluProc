@@ -285,9 +285,17 @@
                                         </div>
                                         <div class="col-md-12">
                                             <div class="progress mt-3">
-                                                <div class="progress-bar" style="width: {{ number_format(($sumPaguPencatatanNonTender / $sumPaguNonTender) * 100, 2) }}%"></div>
+                                                @if($sumPaguNonTender != 0)
+                                                    <div class="progress-bar" style="width: {{ number_format(($sumPaguPencatatanNonTender / $sumPaguNonTender) * 100, 2) }}%"></div>
+                                                @else
+                                                    <div>Error: Pagu Non-Tender is 0</div>
+                                                @endif
                                             </div>
-                                            <p class="text-secondary mt-2">Persentase Pagu: <span style="color: #0054a6"><b>{{ number_format(($sumPaguPencatatanNonTender / $sumPaguNonTender) * 100, 2) }}%</b></span></p>
+                                            @if($sumPaguNonTender != 0)
+                                                <p class="text-secondary mt-2">Persentase Pagu: <span style="color: #0054a6"><b>{{ number_format(($sumPaguPencatatanNonTender / $sumPaguNonTender) * 100, 2) }}%</b></span></p>
+                                            @else
+                                                <p class="text-secondary mt-2">Error: Persentase Pagu tidak dapat dihitung karena Pagu Non-Tender adalah 0</p>
+                                            @endif
                                         </div>
                                     </div>
                     
