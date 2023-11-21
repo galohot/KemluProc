@@ -29,7 +29,6 @@
         </div>
     </div>
 
-
     @if ($rupMasterSatker)
         <div class="page-header d-print-none">
             <div class="container-xl">
@@ -380,6 +379,8 @@
     @endif
 
     <script>
+        const satkerRoute = "{{ route('satker.show', ['tahun_anggaran' => ':tahun_anggaran', 'kd_satker_str' => ':kd_satker_str']) }}";
+    
         function updateUrl() {
             // Get selected values
             var tahunAnggaran = document.getElementById("tahun_anggaran").value;
@@ -387,8 +388,8 @@
     
             // Check if both values are selected
             if (tahunAnggaran && kdSatkerStr) {
-                // Construct the URL
-                var url = '/satker/' + tahunAnggaran + '/' + kdSatkerStr;
+                // Construct the URL using Laravel route
+                var url = satkerRoute.replace(':tahun_anggaran', tahunAnggaran).replace(':kd_satker_str', kdSatkerStr);
     
                 // Redirect to the constructed URL
                 window.location.href = url;
