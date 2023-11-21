@@ -27,49 +27,46 @@ class FetchSiRUPisb extends Command
     protected $signature = 'fetch:data_sirup {year}';
     protected $description = 'Fetch data from the API and store it in the database';
 
-    private function fetchDataFromApi($url, $model, $year, $retryCount = 3)
+    private function fetchDataFromApi($url, $model, $retryCount = 3)
     {
         for ($attempt = 1; $attempt <= $retryCount; $attempt++) {
             try {
                 $data = Http::get($url)->json();
-                
-                $modelInstance = new $model(); // Create an instance to check if 'tahun_anggaran' exists in the model
-                $hasTahunAnggaran = in_array('tahun_anggaran', $modelInstance->getFillable());
-    
-                // Check if the 'tahun_anggaran' column exists in the database table
-                $table = $modelInstance->getTable();
-                $hasTahunAnggaranColumn = Schema::hasColumn($table, 'tahun_anggaran');
-    
-                if ($hasTahunAnggaranColumn) {
-                    $model::where('tahun_anggaran', $year)->delete(); // Use delete instead of truncate for better performance
+                $tahunAnggaranField = isset($data[0]['tahun_anggaran']) ? 'tahun_anggaran' : null;
+
+                if (!$tahunAnggaranField) {
+                    // Log a warning or handle accordingly if tahun_anggaran is not present in the data.
                 }
-    
-                foreach ($data as $item) {
-                    if ($hasTahunAnggaran) {
-                        $item['tahun_anggaran'] = $year; // Add the year to the data only if 'tahun_anggaran' exists in the model
+
+                // Fetch only records where tahun_anggaran matches the specified year.
+                $existingData = $model::where($tahunAnggaranField, $this->argument('year'))->get();
+
+                if ($existingData->isEmpty()) {
+                    foreach ($data as $item) {
+                        // Check if tahun_anggaran matches before creating records.
+                        if (!$tahunAnggaranField || $item[$tahunAnggaranField] == $this->argument('year')) {
+                            $model::create($item);
+                        }
                     }
-                    $model::create($item);
                 }
-    
                 break; // Success, exit loop
             } catch (Exception $e) {
                 if ($attempt < $retryCount) {
                     sleep(5); // Wait before retrying
                 } else {
-                    $this->error("Error fetching data from {$model} API after {$retryCount} attempts for year {$year}: " . $e->getMessage());
+                    $this->error("Error fetching data from {$model} API after {$retryCount} attempts for year {$this->argument('year')}: " . $e->getMessage());
                     Log::error('Error occurred: ' . $e->getMessage());
                 }
             }
         }
     }
-    
-    
 
     public function handle()
     {
-        $year = $this->argument('year');
+        $years = explode(',', $this->argument('year'));
 
-        try {
+        foreach ($years as $year) {
+            try {
             $this->fetchDataFromApi('https://isb.lkpp.go.id/isb-2/api/ac8ff6a2-1131-4b70-b473-07c8fbeddcf2/json/5264/RUP-KROMaster/tipe/4:12/parameter/' . $year . ':K17', RupKroMaster::class, $year);
             $this->fetchDataFromApi('https://isb.lkpp.go.id/isb-2/api/72b866ae-f309-46df-a6a8-6c7b7113b83b/json/5274/RUP-PaketPenyedia-Terumumkan/tipe/4:12/parameter/' . $year . ':K17', PaketPenyediaTerumumkan::class, 2, $year);
             $this->fetchDataFromApi('https://isb.lkpp.go.id/isb-2/api/e4f166f8-34af-479b-a344-105b5c8d793d/json/5275/RUP-PaketSwakelola-Terumumkan/tipe/4:12/parameter/' . $year . ':K17', PaketSwakelolaTerumumkan::class, $year);
@@ -86,7 +83,8 @@ class FetchSiRUPisb extends Command
         } catch (Exception $e) {
             $this->error("Error occurred for year {$year}: " . $e->getMessage());
         }
-
-        $this->info('{$year} SIRUP Data fetched and stored successfully.');
     }
+
+    $this->info($year . 'SiRUP Data fetched and stored successfully.');
+}
 }

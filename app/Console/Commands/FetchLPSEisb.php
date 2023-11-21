@@ -88,6 +88,6 @@ class FetchLPSEisb extends Command
             }
         }
 
-        $this->info('{$year} LPSE Data fetched and stored successfully.');
+        $this->info($year . 'LPSE Data fetched and stored successfully.');
     }
 }
