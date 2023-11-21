@@ -370,8 +370,8 @@
                                     <h3 class="card-title mb-4 text-primary text-center">
                                         PENCATATAN NON TENDER
                                     </h3>
-                                    <h3 class="card-title mb-4">
-                                        <a href="#" class="text-reset">Pencatatan Non Tender (Pagu)</a>
+                                    <h3 class="card-title mb-4" data-bs-toggle="modal" data-bs-target="#modal-nontenderpct">
+                                        <a href="#modal-nontenderpct" class="text-reset">Pencatatan Non Tender (Pagu)</a>
                                     </h3>
                                     <div class="row">
                                         <div class="col-md-12">
@@ -396,6 +396,39 @@
                                             @endif
                                         </div>
                                     </div>
+                                    <div class="modal modal-blur fade" id="modal-nontenderpct" tabindex="-1" role="dialog" aria-hidden="true">
+                                        <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
+                                          <div class="modal-content">
+                                            <div class="modal-header">
+                                              <h5 class="modal-title">Non-Tender Tercatat Details</h5>
+                                              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                            </div>
+                                            <div class="modal-body">
+                                                <div class="table-responsive">
+                                                    <table class="table">
+                                                        <thead>
+                                                            <tr>
+                                                                <th style="min-width: 300px;" class="text-nowrap">Metode Pengadaan</th>
+                                                                <th class="text-nowrap">Paket</th>
+                                                                <th class="text-nowrap">Pagu</th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody>
+                                                            @foreach ($kdRupTercatatNonTender as $result)
+                                                                <tr>
+                                                                    <td>{{ $result->metode_pengadaan }}</td>
+                                                                    <td>{{ $result->count }}</td>
+                                                                    <td>Rp. {{ number_format($result->sum_pagu) }} ,-</td>
+                                                                </tr>
+                                                            @endforeach
+                                                        </tbody>
+                                                    </table>
+                                                </div>
+                                                
+                                            </div>
+                                          </div>
+                                        </div>
+                                    </div> 
                     
                                     <hr class="hr-text mt-4 mb-4">
                     
