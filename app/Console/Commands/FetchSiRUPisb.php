@@ -85,6 +85,6 @@ class FetchSiRUPisb extends Command
         }
     }
 
-    $this->info($year . 'SiRUP Data fetched and stored successfully.');
+    $this->info($year . ' SiRUP Data fetched and stored successfully.');
 }
 }

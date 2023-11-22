@@ -91,23 +91,6 @@ class SatkerController extends Controller
         ->selectRaw('metode_pengadaan, count(*) as count, sum(pagu) as sum_pagu')
         ->get();
         
-        $countPaketNontenderDetailsPdn = DB::table('paket_penyedia_terumumkan')
-        ->where('tahun_anggaran', $tahun_anggaran)
-        ->where('kd_satker_str', $kd_satker_str)
-        ->where('status_pdn', 'PDN')
-        ->whereNotIn('metode_pengadaan', ['Tender', 'Seleksi', 'e-Purchasing'])
-        ->groupBy('metode_pengadaan')
-        ->selectRaw('metode_pengadaan, count(*) as count, sum(pagu) as sum_pagu')
-        ->get();
-        $countPaketNontenderDetailsUkm = DB::table('paket_penyedia_terumumkan')
-        ->where('tahun_anggaran', $tahun_anggaran)
-        ->where('kd_satker_str', $kd_satker_str)
-        ->where('status_ukm', 'UKM')
-        ->whereNotIn('metode_pengadaan', ['Tender', 'Seleksi', 'e-Purchasing'])
-        ->groupBy('metode_pengadaan')
-        ->selectRaw('metode_pengadaan, count(*) as count, sum(pagu) as sum_pagu')
-        ->get();
-    
         
         $countPaketTenderDetails = DB::table('paket_penyedia_terumumkan')
         ->where('tahun_anggaran', $tahun_anggaran)
@@ -133,7 +116,7 @@ class SatkerController extends Controller
 
 
         // Count paketPenyediaTerumumkans where metode_pengadaan is not 'tender'
-        $sumPaguNonTender = $rupMasterSatker->paketPenyediaTerumumkans->whereNotIn('metode_pengadaan', ['Tender','Seleksi','e-Purchasing'])->where('tahun_anggaran', $tahun_anggaran)->sum('pagu');
+        $sumPaguNonTender = $rupMasterSatker->paketPenyediaTerumumkans->whereNotIn('metode_pengadaan', ['Tender','Seleksi','e-Purchasing'])->where('tahun_anggaran', $tahun_anggaran)->where('kd_satker_str', $kd_satker_str)->sum('pagu');
 
         $totalPaguProgram = $rupMasterSatker->programMasters->where('tahun_anggaran', $tahun_anggaran)->sum('pagu_program');
 
@@ -157,8 +140,47 @@ class SatkerController extends Controller
             ->groupBy('metode_pengadaan')
             ->selectRaw('metode_pengadaan, count(*) as count, sum(paket_penyedia_terumumkan.pagu) as sum_pagu') // Specify the table alias for pagu
             ->get();
+
+
+        $pdnTercatat = PaketPenyediaTerumumkan::join('spse_pencatatan_nontender', 'paket_penyedia_terumumkan.kd_rup', '=', 'spse_pencatatan_nontender.kd_rup')
+            ->where('paket_penyedia_terumumkan.kd_satker_str', $kd_satker_str)
+            ->where('spse_pencatatan_nontender.kd_satker_str', $kd_satker_str)
+            ->where('paket_penyedia_terumumkan.tahun_anggaran', $tahun_anggaran)
+            ->where('spse_pencatatan_nontender.tahun_anggaran', $tahun_anggaran)
+            ->whereNotIn('metode_pengadaan', ['Tender', 'Seleksi', 'e-Purchasing'])
+            ->where(function($query) {
+                $query->whereNotNull('spse_pencatatan_nontender.nilai_pdn_pct')
+                      ->where('spse_pencatatan_nontender.nilai_pdn_pct', '!=', 0);
+            })
+            ->groupBy('metode_pengadaan')
+            ->selectRaw('metode_pengadaan, count(*) as count, sum(spse_pencatatan_nontender.nilai_pdn_pct) as sum_pagu')
+            ->get();
         
             
+        $ukmTercatat = PaketPenyediaTerumumkan::join('spse_pencatatan_nontender', 'paket_penyedia_terumumkan.kd_rup', '=', 'spse_pencatatan_nontender.kd_rup')
+            ->where('paket_penyedia_terumumkan.kd_satker_str', $kd_satker_str)
+            ->where('spse_pencatatan_nontender.kd_satker_str', $kd_satker_str)
+            ->where('paket_penyedia_terumumkan.tahun_anggaran', $tahun_anggaran)
+            ->where('spse_pencatatan_nontender.tahun_anggaran', $tahun_anggaran)
+            ->whereNotIn('metode_pengadaan', ['Tender', 'Seleksi', 'e-Purchasing'])
+            ->where(function($query) {
+                $query->whereNotNull('spse_pencatatan_nontender.nilai_umk_pct')
+                      ->where('spse_pencatatan_nontender.nilai_umk_pct', '!=', 0);
+            })
+            ->groupBy('metode_pengadaan')
+            ->selectRaw('metode_pengadaan, count(*) as count, sum(spse_pencatatan_nontender.nilai_umk_pct) as sum_pagu')
+            ->get();
+            
+        $epurchasingProses = PaketPenyediaTerumumkan::join('ecat_paket_epurchasing', 'paket_penyedia_terumumkan.kd_rup', '=', 'ecat_paket_epurchasing.kd_rup')
+            ->where('paket_penyedia_terumumkan.kd_satker', $kdSatker)
+            ->where('ecat_paket_epurchasing.satker_id', $kdSatker)
+            ->where('paket_penyedia_terumumkan.tahun_anggaran', $tahun_anggaran)
+            ->where('ecat_paket_epurchasing.tahun_anggaran', $tahun_anggaran)
+            ->where('metode_pengadaan', 'e-Purchasing')
+            ->groupBy('status_paket')
+            ->selectRaw('status_paket, count(*) as count, sum(ecat_paket_epurchasing.total_harga) as sum_pagu')
+            ->get();
+        
         $kdRupEpurchasing = PaketPenyediaTerumumkan::join('ecat_paket_epurchasing', 'paket_penyedia_terumumkan.kd_rup', '=', 'ecat_paket_epurchasing.kd_rup')
             ->where('paket_penyedia_terumumkan.kd_satker', $kdSatker)
             ->where('ecat_paket_epurchasing.satker_id', $kdSatker)
@@ -270,9 +292,11 @@ class SatkerController extends Controller
             'countPaketNontenderDetails',
             'countPaketTenderDetails',
             'countPaketEpurchasingDetails',
-            'countPaketNontenderDetailsPdn',
-            'countPaketNontenderDetailsUkm',
-            'kdRupTercatatNonTender'
+            'kdRupTercatatNonTender',
+            'pdnTercatat',
+            'ukmTercatat',
+            'epurchasingProses',
+            'kdSatker'
         ));
         
     }

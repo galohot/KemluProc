@@ -1,7 +1,7 @@
 @extends('dashboard-layout')
 @section('content')
 
-
+{{$kdSatker}}
     <div class="container-xl mt-3">
         <div class="row g-2 align-items-center">
             <div class="col-md-6">
@@ -375,8 +375,8 @@
                                     </h3>
                                     <div class="row">
                                         <div class="col-md-12">
-                                            <p class="text-secondary"><span style="color: #0054a6"><b>{{ $countKdRupTercatat }}</b></span> dari <span style="color: #bd081c"><b>{{ $countPaketPenyedia - $countTenderSeleksi - $countEpurchasing }}</b></span> paket Non Tender Tercatat</p>
-                                            <p class="text-secondary">Dengan nilai <span style="color: #0054a6"><b>Rp. {{ number_format($sumPaguPencatatanNonTender) }} ,-</b></span> dari <span style="color: #bd081c"><b>Rp. {{ number_format($sumPaguNonTender) }} ,-</b></span></p>
+                                            <p class="text-secondary"><span style="color: #0054a6"><b>{{ $kdRupTercatatNonTender->sum('count') }}</b></span> dari <span style="color: #bd081c"><b>{{ $countPaketPenyedia - $countTenderSeleksi - $countEpurchasing }}</b></span> paket Non Tender Tercatat</p>
+                                            <p class="text-secondary">Dengan nilai <span style="color: #0054a6"><b>Rp. {{ number_format($kdRupTercatatNonTender->sum('sum_pagu')) }} ,-</b></span> dari <span style="color: #bd081c"><b>Rp. {{ number_format($sumPaguNonTender) }} ,-</b></span></p>
                                             @if ($formattedUpdatedAt)
                                                 <p class="text-secondary">Updated at <b>{{ $formattedUpdatedAt }}</b></p>
                                             @endif
@@ -384,6 +384,7 @@
                                         <div class="col-md-12">
                                             <div class="progress mt-3">
                                                 @if($sumPaguNonTender != 0)
+                                                    
                                                     <div class="progress-bar" style="width: {{ number_format(($sumPaguPencatatanNonTender / $sumPaguNonTender) * 100, 2) }}%"></div>
                                                 @else
                                                     <div>Error: Pagu Non-Tender is 0</div>
@@ -438,8 +439,8 @@
                                     </h3>
                                     <div class="row">
                                         <div class="col-md-12">
-                                            <p class="text-secondary"><span style="color: #0054a6"><b>{{ $countPdnTercatat }}</b></span> dari <span style="color: #bd081c"><b>{{ $countPdn }}</b></span> paket Non Tender berstatus PDN sudah tercatat</p>
-                                            <p class="text-secondary">Pagu PDN tercatat = <span style="color: #0054a6"><b>Rp. {{ number_format($sumPaguPdnNonTender) }} ,-</b></span> dari <span style="color: #bd081c"><b>Rp. {{ number_format($sumPaguPdn) }} ,-</b></span></p>
+                                            <p class="text-secondary"><span style="color: #0054a6"><b>{{ $pdnTercatat->sum('count') }}</b></span> dari <span style="color: #bd081c"><b>{{ $countPdn }}</b></span> paket Non Tender berstatus PDN sudah tercatat</p>
+                                            <p class="text-secondary">Pagu PDN tercatat = <span style="color: #0054a6"><b>Rp. {{ number_format($pdnTercatat->sum('sum_pagu')) }} ,-</b></span> dari <span style="color: #bd081c"><b>Rp. {{ number_format($sumPaguPdn) }} ,-</b></span></p>
                                             @if ($formattedUpdatedAt)
                                                 <p class="text-secondary">Updated at <b>{{ $formattedUpdatedAt }}</b></p>
                                             @endif
@@ -447,14 +448,14 @@
                                         <div class="col-md-12">
                                             <div class="progress mt-3">
                                                 @if($sumPaguPdn != 0)
-                                                    <div class="progress-bar" style="width: {{ number_format(($sumPaguPdnNonTender / $sumPaguPdn) * 100, 2) }}%"></div>
+                                                    <div class="progress-bar" style="width: {{ number_format(($pdnTercatat->sum('sum_pagu') / $sumPaguPdn) * 100, 2) }}%"></div>
                                                 @else
                                                     <div>Error: Pagu PDN is 0</div>
                                                 @endif
                                             
                                             </div>
                                             @if($sumPaguPdn != 0)
-                                                <p class="text-secondary mt-2">Persentase Pagu: <span style="color: #0054a6"><b>{{ number_format(($sumPaguPdnNonTender / $sumPaguPdn) * 100, 2) }}%</b></span></p>
+                                                <p class="text-secondary mt-2">Persentase Pagu: <span style="color: #0054a6"><b>{{ number_format(($pdnTercatat->sum('sum_pagu') / $sumPaguPdn) * 100, 2) }}%</b></span></p>
                                             @else
                                                 <p class="text-secondary mt-2">Error: Persentase Pagu tidak dapat dihitung karena Pagu PDN adalah 0</p>
                                             @endif
@@ -478,7 +479,7 @@
                                                             </tr>
                                                         </thead>
                                                         <tbody>
-                                                            @foreach ($countPaketNontenderDetailsPdn as $result)
+                                                            @foreach ($pdnTercatat as $result)
                                                                 <tr>
                                                                     <td>{{ $result->metode_pengadaan }}</td>
                                                                     <td>{{ $result->count }}</td>
@@ -502,8 +503,8 @@
                                     </h3>
                                     <div class="row">
                                         <div class="col-md-12">
-                                            <p class="text-secondary"><span style="color: #0054a6"><b>{{ $countUkmTercatat }}</b></span> dari <span style="color: #bd081c"><b>{{ $countUkm }}</b></span> paket Non Tender berstatus UKM sudah tercatat</p>
-                                            <p class="text-secondary">Pagu UKM tercatat = <span style="color: #0054a6"><b>Rp. {{ number_format($sumPaguUkmNonTender) }} ,-</b></span> dari <span style="color: #bd081c"><b>Rp. {{ number_format($sumPaguUkm) }} ,-</b></span></p>
+                                            <p class="text-secondary"><span style="color: #0054a6"><b>{{ $ukmTercatat->sum('count') }}</b></span> dari <span style="color: #bd081c"><b>{{ $countUkm }}</b></span> paket Non Tender berstatus UKM sudah tercatat</p>
+                                            <p class="text-secondary">Pagu UKM tercatat = <span style="color: #0054a6"><b>Rp. {{ number_format($ukmTercatat->sum('sum_pagu')) }} ,-</b></span> dari <span style="color: #bd081c"><b>Rp. {{ number_format($sumPaguUkm) }} ,-</b></span></p>
                                             @if ($formattedUpdatedAt)
                                                 <p class="text-secondary">Updated at <b>{{ $formattedUpdatedAt }}</b></p>
                                             @endif
@@ -511,13 +512,13 @@
                                         <div class="col-md-12">
                                             <div class="progress mt-3">
                                                 @if($sumPaguUkm != 0)
-                                                    <div class="progress-bar" style="width: {{ number_format(($sumPaguUkmNonTender / $sumPaguUkm) * 100, 2) }}%"></div>
+                                                    <div class="progress-bar" style="width: {{ number_format(($ukmTercatat->sum('sum_pagu') / $sumPaguUkm) * 100, 2) }}%"></div>
                                                 @else
                                                     <div>Error: Pagu UKM is 0</div>
                                                 @endif
                                             </div>
                                             @if($sumPaguUkm != 0)
-                                                <p class="text-secondary mt-2">Persentase Pagu: <span style="color: #0054a6"><b>{{ number_format(($sumPaguUkmNonTender / $sumPaguUkm) * 100, 2) }}%</b></span></p>
+                                                <p class="text-secondary mt-2">Persentase Pagu: <span style="color: #0054a6"><b>{{ number_format(($ukmTercatat->sum('sum_pagu') / $sumPaguUkm) * 100, 2) }}%</b></span></p>
                                             @else
                                                 <p class="text-secondary mt-2">Error: Persentase Pagu tidak dapat dihitung karena Pagu UKM adalah 0</p>
                                             @endif
@@ -541,7 +542,7 @@
                                                             </tr>
                                                         </thead>
                                                         <tbody>
-                                                            @foreach ($countPaketNontenderDetailsUkm as $result)
+                                                            @foreach ($ukmTercatat as $result)
                                                                 <tr>
                                                                     <td>{{ $result->metode_pengadaan }}</td>
                                                                     <td>{{ $result->count }}</td>
@@ -567,8 +568,8 @@
                                     <h3 class="card-title mb-4 text-primary text-center">
                                         E-PURCHASING
                                     </h3>
-                                    <h3 class="card-title mb-4">
-                                        <a href="#" class="text-reset">E-Purchasing Terproses</a>
+                                    <h3 class="card-title mb-4" data-bs-toggle="modal" data-bs-target="#modal-epurchasingProses">
+                                        <a href="#modal-epurchasingProses" class="text-reset">E-Purchasing Terproses</a>
                                     </h3>
                                     <div class="row">
                                         <div class="col-md-12">
@@ -587,12 +588,45 @@
                                                 @endif
                                             </div>
                                             @if($sumPaguEpurchasing != 0)
-                                                <p class="text-secondary mt-2">Persentase Pagu: <span style="color: #0054a6"><b>{{ number_format(($sumPaguEpurchasingProses / $sumPaguEpurchasing) * 100, 2) }}%</b></span></p>
+                                                <p class="text-secondary mt-2">Persentase Pagu: <span style="color: #0054a6"><b>{{ number_format(($epurchasingProses->sum('sum_pagu') / $sumPaguEpurchasing) * 100, 2) }}%</b></span></p>
                                             @else
                                                 <p class="text-secondary mt-2">Error: Persentase Pagu tidak dapat dihitung karena Pagu ePurchasing adalah 0</p>
                                             @endif
                                         </div>
                                     </div>
+                                    <div class="modal modal-blur fade" id="modal-epurchasingProses" tabindex="-1" role="dialog" aria-hidden="true">
+                                        <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
+                                          <div class="modal-content">
+                                            <div class="modal-header">
+                                              <h5 class="modal-title">Status E-Purchasing Details</h5>
+                                              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                            </div>
+                                            <div class="modal-body">
+                                                <div class="table-responsive">
+                                                    <table class="table">
+                                                        <thead>
+                                                            <tr>
+                                                                <th style="min-width: 300px;" class="text-nowrap">Metode Pengadaan</th>
+                                                                <th class="text-nowrap">Paket</th>
+                                                                <th class="text-nowrap">Pagu</th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody>
+                                                            @foreach ($epurchasingProses as $result)
+                                                                <tr>
+                                                                    <td>{{ $result->status_paket }}</td>
+                                                                    <td>{{ $result->count }}</td>
+                                                                    <td>Rp. {{ number_format($result->sum_pagu) }} ,-</td>
+                                                                </tr>
+                                                            @endforeach
+                                                        </tbody>
+                                                    </table>
+                                                </div>
+                                                
+                                            </div>
+                                          </div>
+                                        </div>
+                                    </div> 
                                 </div>
                             </div>
                         </div>
