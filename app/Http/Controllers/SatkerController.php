@@ -171,15 +171,22 @@ class SatkerController extends Controller
             ->selectRaw('metode_pengadaan, count(*) as count, sum(spse_pencatatan_nontender.nilai_umk_pct) as sum_pagu')
             ->get();
             
-        $epurchasingProses = PaketPenyediaTerumumkan::join('ecat_paket_epurchasing', 'paket_penyedia_terumumkan.kd_rup', '=', 'ecat_paket_epurchasing.kd_rup')
+        $epurchasingProses = PaketPenyediaTerumumkan::join(
+                'ecat_paket_epurchasing',
+                function ($join) {
+                    $join->on('paket_penyedia_terumumkan.kd_rup', '=', 'ecat_paket_epurchasing.kd_rup')
+                        ->whereRaw('ecat_paket_epurchasing.tanggal_edit_paket = (SELECT MAX(tanggal_edit_paket) FROM ecat_paket_epurchasing WHERE kd_rup = paket_penyedia_terumumkan.kd_rup)');
+                }
+            )
             ->where('paket_penyedia_terumumkan.kd_satker', $kdSatker)
             ->where('ecat_paket_epurchasing.satker_id', $kdSatker)
             ->where('paket_penyedia_terumumkan.tahun_anggaran', $tahun_anggaran)
             ->where('ecat_paket_epurchasing.tahun_anggaran', $tahun_anggaran)
             ->where('metode_pengadaan', 'e-Purchasing')
             ->groupBy('status_paket')
-            ->selectRaw('status_paket, count(*) as count, sum(ecat_paket_epurchasing.total_harga) as sum_pagu')
+            ->selectRaw('status_paket, count(DISTINCT paket_penyedia_terumumkan.kd_rup) as count, sum(ecat_paket_epurchasing.total_harga) as sum_pagu')
             ->get();
+            
         
         $kdRupEpurchasing = PaketPenyediaTerumumkan::join('ecat_paket_epurchasing', 'paket_penyedia_terumumkan.kd_rup', '=', 'ecat_paket_epurchasing.kd_rup')
             ->where('paket_penyedia_terumumkan.kd_satker', $kdSatker)
