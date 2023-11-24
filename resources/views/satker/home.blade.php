@@ -665,6 +665,7 @@
                                         <th>Nama Paket</th>
                                         <th>Kuantitas</th>
                                         <th>Total Harga</th>
+                                        <th>Status Paket</th>
                                         <th>Nama Penyedia</th>
                                         <th>Nama Produk</th>
                                         <th>Nilai TKDN</th>
@@ -708,6 +709,13 @@
                                                     @endif
                                                 </td>
                                                 <td>
+                                                    @if ($paketEcat->status_paket)
+                                                        {{ $paketEcat->status_paket }}
+                                                    @else
+                                                        N/A
+                                                    @endif
+                                                </td>
+                                                <td>
                                                     @if ($paketEcat->epurchasingPenyedia && $paketEcat->epurchasingPenyedia->nama_penyedia)
                                                         {{ $paketEcat->epurchasingPenyedia->nama_penyedia }}
                                                     @else
@@ -723,11 +731,12 @@
                                                 </td>
                                                 <td>
                                                     @if ($paketEcat->epurchasingProduct && $paketEcat->epurchasingProduct->tkdn_produk)
-                                                        {{ $paketEcat->epurchasingProduct->tkdn_produk }}
+                                                        {{ number_format($paketEcat->epurchasingProduct->tkdn_produk, 2, ',', '.') }}
                                                     @else
                                                         N/A
                                                     @endif
                                                 </td>
+                                                
                                                 <td>
                                                     @if ($paketEcat->epurchasingProduct && $paketEcat->epurchasingProduct->nama_pemilik_sertifikat_tkdn)
                                                         {{ $paketEcat->epurchasingProduct->nama_pemilik_sertifikat_tkdn }}
@@ -815,29 +824,49 @@
                 "info": false,
                 "lengthChange": true,
                 "lengthMenu": [5, 10, 20],
+                "columnDefs": [
+                    { "type": "numeric", targets: 6 } // Treat 7th column as numeric
+                ],
                 // Add any other DataTables options you need
-            
             });
-    
+
             // Add a select dropdown for the "Tahun Anggaran" column
             table.columns(0).every(function () {
                 var column = this;
-    
+
                 var select = $('<select><option value=""></option></select>')
                     .appendTo($(column.header()))
                     .on('change', function () {
                         var val = $.fn.dataTable.util.escapeRegex(
                             $(this).val()
                         );
-    
+
                         column.search(val ? '^' + val + '$' : '', true, false).draw();
                     });
-    
+
+                column.data().unique().sort().each(function (d, j) {
+                    select.append('<option value="' + d + '">' + d + '</option>')
+                });
+            });
+            table.columns(4).every(function () {
+                var column = this;
+
+                var select = $('<select><option value=""></option></select>')
+                    .appendTo($(column.header()))
+                    .on('change', function () {
+                        var val = $.fn.dataTable.util.escapeRegex(
+                            $(this).val()
+                        );
+
+                        column.search(val ? '^' + val + '$' : '', true, false).draw();
+                    });
+
                 column.data().unique().sort().each(function (d, j) {
                     select.append('<option value="' + d + '">' + d + '</option>')
                 });
             });
         });
+
     </script>
     
 
