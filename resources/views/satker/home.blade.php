@@ -1,7 +1,6 @@
 @extends('dashboard-layout')
 @section('content')
 
-{{$kdSatker}}
     <div class="container-xl mt-3">
         <div class="row g-2 align-items-center">
             <div class="col-md-6">
@@ -642,6 +641,134 @@
             </div>
         </div>
 
+        <div class="page-header d-print-none">
+            <div class="container-xl">
+                <div class="row g-2 align-items-center">
+                    <div class="col">
+                        <h2 class="page-title">
+                            E-PURCHASING {{ $rupMasterSatker->nama_satker }}
+                        </h2>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Page body -->
+        <div class="page-body">
+            <div class="container-xl">
+                <div class="card">
+                    <div class="card-body">
+                        <div id="table-default" class="table-responsive">
+                            <table id="your-table-id" class="table">
+                                <thead>
+                                    <tr>
+                                        <th>Tahun Anggaran</th>
+                                        <th>Nama Paket</th>
+                                        <th>Kuantitas</th>
+                                        <th>Total Harga</th>
+                                        <th>Nama Penyedia</th>
+                                        <th>Nama Produk</th>
+                                        <th>Nilai TKDN</th>
+                                        <th>Nama Pemeliki Seritifkat TKDN</th>
+                                        <th>Nomor TKDN</th>
+                                        <th>Nilai BMP</th>
+                                        <th>Nama Komoditas</th>
+                                        <!-- Add more table headers as needed -->
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach ($rupMasterSatker->paketPenyediaTerumumkans as $paket)
+                                        @foreach ($paket->paketEcats as $paketEcat)
+                                            <tr>
+                                                <td>
+                                                    @if ($paketEcat->tahun_anggaran)
+                                                        {{ $paketEcat->tahun_anggaran }}
+                                                    @else
+                                                        N/A
+                                                    @endif
+                                                </td>
+                                                <td>
+                                                    @if ($paketEcat->nama_paket)
+                                                        {{ $paketEcat->nama_paket }}
+                                                    @else
+                                                        N/A
+                                                    @endif
+                                                </td>
+                                                <td>
+                                                    @if ($paketEcat->kuantitas)
+                                                        {{ $paketEcat->kuantitas }}
+                                                    @else
+                                                        N/A
+                                                    @endif
+                                                </td>
+                                                <td>
+                                                    @if ($paketEcat->total_harga)
+                                                        Rp. {{ number_format($paketEcat->total_harga) }} ,-
+                                                    @else
+                                                        N/A
+                                                    @endif
+                                                </td>
+                                                <td>
+                                                    @if ($paketEcat->epurchasingPenyedia && $paketEcat->epurchasingPenyedia->nama_penyedia)
+                                                        {{ $paketEcat->epurchasingPenyedia->nama_penyedia }}
+                                                    @else
+                                                        N/A
+                                                    @endif
+                                                </td>
+                                                <td>
+                                                    @if ($paketEcat->epurchasingProduct && $paketEcat->epurchasingProduct->nama_produk)
+                                                        {{ $paketEcat->epurchasingProduct->nama_produk }}
+                                                    @else
+                                                        N/A
+                                                    @endif
+                                                </td>
+                                                <td>
+                                                    @if ($paketEcat->epurchasingProduct && $paketEcat->epurchasingProduct->tkdn_produk)
+                                                        {{ $paketEcat->epurchasingProduct->tkdn_produk }}
+                                                    @else
+                                                        N/A
+                                                    @endif
+                                                </td>
+                                                <td>
+                                                    @if ($paketEcat->epurchasingProduct && $paketEcat->epurchasingProduct->nama_pemilik_sertifikat_tkdn)
+                                                        {{ $paketEcat->epurchasingProduct->nama_pemilik_sertifikat_tkdn }}
+                                                    @else
+                                                        N/A
+                                                    @endif
+                                                </td>
+                                                <td>
+                                                    @if ($paketEcat->epurchasingProduct && $paketEcat->epurchasingProduct->nomor_tkdn)
+                                                        {{ $paketEcat->epurchasingProduct->nomor_tkdn }}
+                                                    @else
+                                                        N/A
+                                                    @endif
+                                                </td>
+                                                <td>
+                                                    @if ($paketEcat->epurchasingProduct && $paketEcat->epurchasingProduct->nilai_bmp)
+                                                        {{ $paketEcat->epurchasingProduct->nilai_bmp }}
+                                                    @else
+                                                        N/A
+                                                    @endif
+                                                </td>
+                                                <td>
+                                                    @if ($paketEcat->epurchasingKomoditas && $paketEcat->epurchasingKomoditas->nama_komoditas)
+                                                        {{ $paketEcat->epurchasingKomoditas->nama_komoditas }}
+                                                    @else
+                                                        N/A
+                                                    @endif
+                                                </td>
+                                            </tr>
+                                        @endforeach
+                                    @endforeach
+                                </tbody>
+                            </table>
+                        </div>
+        
+                        <!-- Your other content -->
+                    </div>
+                </div>
+            </div>
+        </div>
+
     @endif
 
     <script>
@@ -678,5 +805,41 @@
         }
     </script>
     
+    <script>
+        $(document).ready(function () {
+            // Initialize DataTable with options
+            var table = $('#your-table-id').DataTable({
+                "paging": true,
+                "searching": true,
+                "ordering": true,
+                "info": false,
+                "lengthChange": true,
+                "lengthMenu": [5, 10, 20],
+                // Add any other DataTables options you need
+            
+            });
+    
+            // Add a select dropdown for the "Tahun Anggaran" column
+            table.columns(0).every(function () {
+                var column = this;
+    
+                var select = $('<select><option value=""></option></select>')
+                    .appendTo($(column.header()))
+                    .on('change', function () {
+                        var val = $.fn.dataTable.util.escapeRegex(
+                            $(this).val()
+                        );
+    
+                        column.search(val ? '^' + val + '$' : '', true, false).draw();
+                    });
+    
+                column.data().unique().sort().each(function (d, j) {
+                    select.append('<option value="' + d + '">' + d + '</option>')
+                });
+            });
+        });
+    </script>
+    
+
 
 @endsection

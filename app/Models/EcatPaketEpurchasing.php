@@ -54,18 +54,18 @@ class EcatPaketEpurchasing extends Model
     }
     public function epurchasingProduct()
     {
-        return $this->hasMany(EpurchasingProducts::class, 'kd_produk', 'kd_produk');
+        return $this->hasOne(EpurchasingProducts::class, 'kd_produk', 'kd_produk');
     }
     public function epurchasingPenyedia()
     {
-        return $this->hasMany(EpurchasingPenyedia::class, 'kd_penyedia', 'kd_penyedia');
+        return $this->hasOne(EpurchasingPenyedia::class, 'kd_penyedia', 'kd_penyedia');
     }
     public function epurchasingKomoditas()
     {
-        return $this->hasMany(EpurchasingKomoditas::class, 'kd_komoditas', 'kd_komoditas');
+        return $this->hasOne(EpurchasingKomoditas::class, 'kd_komoditas', 'kd_komoditas');
     }
     public function epurchasingDistributor()
     {
-        return $this->hasMany(EpurchasingDistributor::class, 'kd_penyedia_distributor', 'kd_penyedia_distributor');
+        return $this->hasOne(EpurchasingDistributor::class, 'kd_penyedia_distributor', 'kd_penyedia_distributor');
     }
 }

@@ -31,6 +31,13 @@
   </head>
   <body >
     <script src="./dist/js/demo-theme.min.js?1692870487"></script>
+
+	<script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+
+    <!-- Include DataTables CSS and JS -->
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.24/css/jquery.dataTables.css">
+    <script type="text/javascript" src="https://cdn.datatables.net/1.10.24/js/jquery.dataTables.js"></script>
+
     <div class="page">
 
     @include('body.sidebar')
