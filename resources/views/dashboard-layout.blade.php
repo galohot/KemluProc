@@ -28,15 +28,26 @@
       	font-feature-settings: "cv03", "cv04", "cv11";
       }
     </style>
-  </head>
-  <body >
+	<!-- DataTables CSS -->
+	<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.11.5/css/jquery.dataTables.css">
+
+	<!-- Buttons CSS -->
+	<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/buttons/2.0.1/css/buttons.dataTables.min.css">
+
+	<!-- jQuery -->
+	<script type="text/javascript" src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+	<!-- DataTables JavaScript -->
+	<script type="text/javascript" src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
+
+	<!-- Buttons JavaScript -->
+	<script type="text/javascript" src="https://cdn.datatables.net/buttons/2.0.1/js/dataTables.buttons.min.js"></script>
+	<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"></script>
+	<script type="text/javascript" src="https://cdn.datatables.net/buttons/2.0.1/js/buttons.html5.min.js"></script>
     <script src="./dist/js/demo-theme.min.js?1692870487"></script>
 
-	<script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
-
-    <!-- Include DataTables CSS and JS -->
-    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.24/css/jquery.dataTables.css">
-    <script type="text/javascript" src="https://cdn.datatables.net/1.10.24/js/jquery.dataTables.js"></script>
+  </head>
+  <body >
 
     <div class="page">
 

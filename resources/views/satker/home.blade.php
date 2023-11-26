@@ -827,6 +827,13 @@
                 "columnDefs": [
                     { "type": "numeric", targets: 6 } // Treat 7th column as numeric
                 ],
+                dom: 'Bfrtip', // Add the Buttons extension to the DataTable
+                buttons: [
+                    'copyHtml5',
+                    'excelHtml5',
+                    'csvHtml5',
+                    'pdfHtml5'
+                ]
                 // Add any other DataTables options you need
             });
 
