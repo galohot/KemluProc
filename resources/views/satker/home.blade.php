@@ -658,7 +658,7 @@
                 <div class="card">
                     <div class="card-body">
                         <div id="table-default" class="table-responsive">
-                            <table id="your-table-id" class="table">
+                            <table id="ecat-table" class="table">
                                 <thead>
                                     <tr>
                                         <th>Tahun Anggaran</th>
@@ -817,7 +817,7 @@
     <script>
         $(document).ready(function () {
             // Initialize DataTable with options
-            var table = $('#your-table-id').DataTable({
+            var table = $('#ecat-table').DataTable({
                 "paging": true,
                 "searching": true,
                 "ordering": true,
