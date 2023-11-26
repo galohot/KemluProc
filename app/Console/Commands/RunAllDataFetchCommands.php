@@ -18,10 +18,7 @@ class RunAllDataFetchCommands extends Command
         $this->call('fetch:data_sirup', ['year' => 2023]);
         $this->call('fetch:data_lpse', ['year' => 2023]);
         $this->call('fetch:data_epurchasing', ['year' => 2023]);
-        $this->call('fetch:epurchasing-details');
-        $this->call('fetch:epurchasing-penyedias');
-        $this->call('fetch:epurchasing-distributors');
-        $this->call('fetch:epurchasing-komoditas');
+        $this->call('fetch:master_satker');
 
         $this->info('All commands executed successfully.');
     }
