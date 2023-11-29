@@ -36,6 +36,8 @@ class SatkerController extends Controller
             'paketPenyediaTerumumkans.paketEcats.epurchasingPenyedia',
             'paketPenyediaTerumumkans.paketEcats.epurchasingKomoditas',
             'paketPenyediaTerumumkans.paketEcats.epurchasingDistributor',
+            'paketPenyediaTerumumkans.paketEcats.epurchasingUserPokja',
+            'paketPenyediaTerumumkans.paketEcats.epurchasingUserPpk',
             'paketSwakelolaTerumumkans' => function ($query) use ($tahun_anggaran) {
                 $query->where('tahun_anggaran', $tahun_anggaran);
             },

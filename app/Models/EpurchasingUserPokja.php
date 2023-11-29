@@ -20,4 +20,9 @@ class EpurchasingUserPokja extends Model
         'jabatan_pegawai',
         // Add any additional columns as needed
     ];
+
+    public function paketEpurchasing()
+    {
+        return $this->belongsTo(EcatPaketEpurchasing::class, 'kd_user_pokja','kd_user_pegawai');
+    }
 }

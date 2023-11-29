@@ -68,4 +68,13 @@ class EcatPaketEpurchasing extends Model
     {
         return $this->hasOne(EpurchasingDistributor::class, 'kd_penyedia_distributor', 'kd_penyedia_distributor');
     }
+    public function epurchasingUserPokja()
+    {
+        return $this->hasOne(EpurchasingUserPokja::class, 'kd_user_pegawai','kd_user_pokja');
+    }
+    public function epurchasingUserPpk()
+    {
+        return $this->hasOne(EpurchasingUserPpk::class, 'kd_user_pegawai','kd_user_ppk');
+    }
+
 }

@@ -363,7 +363,7 @@
 
                     <div class="row">
                         <!-- Pencatatan Non Tender (Pagu) -->
-                        <div class="col-lg-6 mt-3">
+                        <div class="col-lg-12 mt-3">
                             <div class="card">
                                 <div class="card-body">
                                     <h3 class="card-title mb-4 text-primary text-center">
@@ -561,7 +561,7 @@
                         </div>
                     
                         <!-- E-Purchasing Terproses -->
-                        <div class="col-lg-6 mt-3">
+                        <div class="col-lg-12 mt-3">
                             <div class="card">
                                 <div class="card-body">
                                     <h3 class="card-title mb-4 text-primary text-center">
@@ -662,6 +662,8 @@
                                 <thead>
                                     <tr>
                                         <th>Tahun Anggaran</th>
+                                        <th>User Pokja</th>
+                                        <th>User PPK</th>
                                         <th>Nama Paket</th>
                                         <th>Kuantitas</th>
                                         <th>Total Harga</th>
@@ -683,6 +685,20 @@
                                                 <td>
                                                     @if ($paketEcat->tahun_anggaran)
                                                         {{ $paketEcat->tahun_anggaran }}
+                                                    @else
+                                                        N/A
+                                                    @endif
+                                                </td>
+                                                <td>
+                                                    @if ($paketEcat->epurchasingUserPokja && $paketEcat->epurchasingUserPokja->nama_lengkap)
+                                                        {{ $paketEcat->epurchasingUserPokja->nama_lengkap }}
+                                                    @else
+                                                        N/A
+                                                    @endif
+                                                </td>
+                                                <td>
+                                                    @if ($paketEcat->epurchasingUserPpk && $paketEcat->epurchasingUserPpk->nama_lengkap)
+                                                        {{ $paketEcat->epurchasingUserPpk->nama_lengkap }}
                                                     @else
                                                         N/A
                                                     @endif
@@ -825,7 +841,7 @@
                 "lengthChange": true,
                 "lengthMenu": [5, 10, 20],
                 "columnDefs": [
-                    { "type": "numeric", targets: 6 } // Treat 7th column as numeric
+                    { "type": "numeric", targets: 6 }
                 ],
                 dom: 'Bfrtip', // Add the Buttons extension to the DataTable
                 buttons: [
@@ -841,7 +857,7 @@
             table.columns(0).every(function () {
                 var column = this;
 
-                var select = $('<select><option value=""></option></select>')
+                var select = $('<br /><select><option value=""></option></select>')
                     .appendTo($(column.header()))
                     .on('change', function () {
                         var val = $.fn.dataTable.util.escapeRegex(
@@ -855,10 +871,61 @@
                     select.append('<option value="' + d + '">' + d + '</option>')
                 });
             });
-            table.columns(4).every(function () {
+            table.columns(1).every(function () {
                 var column = this;
 
-                var select = $('<select><option value=""></option></select>')
+                var select = $('<br /><select><option value=""></option></select>')
+                    .appendTo($(column.header()))
+                    .on('change', function () {
+                        var val = $.fn.dataTable.util.escapeRegex(
+                            $(this).val()
+                        );
+
+                        column.search(val ? '^' + val + '$' : '', true, false).draw();
+                    });
+
+                column.data().unique().sort().each(function (d, j) {
+                    select.append('<option value="' + d + '">' + d + '</option>')
+                });
+            });
+            table.columns(2).every(function () {
+                var column = this;
+
+                var select = $('<br /><select><option value=""></option></select>')
+                    .appendTo($(column.header()))
+                    .on('change', function () {
+                        var val = $.fn.dataTable.util.escapeRegex(
+                            $(this).val()
+                        );
+
+                        column.search(val ? '^' + val + '$' : '', true, false).draw();
+                    });
+
+                column.data().unique().sort().each(function (d, j) {
+                    select.append('<option value="' + d + '">' + d + '</option>')
+                });
+            });
+            table.columns(13).every(function () {
+                var column = this;
+
+                var select = $('<br /><select><option value=""></option></select>')
+                    .appendTo($(column.header()))
+                    .on('change', function () {
+                        var val = $.fn.dataTable.util.escapeRegex(
+                            $(this).val()
+                        );
+
+                        column.search(val ? '^' + val + '$' : '', true, false).draw();
+                    });
+
+                column.data().unique().sort().each(function (d, j) {
+                    select.append('<option value="' + d + '">' + d + '</option>')
+                });
+            });
+            table.columns(6).every(function () {
+                var column = this;
+
+                var select = $('<br /><select><option value=""></option></select>')
                     .appendTo($(column.header()))
                     .on('change', function () {
                         var val = $.fn.dataTable.util.escapeRegex(
