@@ -646,6 +646,127 @@
                 <div class="row g-2 align-items-center">
                     <div class="col">
                         <h2 class="page-title">
+                            PAKET PENYEDIA TERUMUMKAN {{ $rupMasterSatker->nama_satker }}
+                        </h2>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Page body -->
+        <div class="page-body">
+            <div class="container-xl">
+                <div class="card">
+                    <div class="card-body">
+                        <div id="table-default" class="table-responsive">
+                            <table id="nontender-table" class="table">
+                                <thead>
+                                    <tr>
+                                        <th>Tahun Anggaran</th>
+                                        <th>Kode RUP</th>
+                                        <th>Nama Paket</th>
+                                        <th>Jenis Pengadaan</th>
+                                        <th>Status PraDipa</th>
+                                        <th>Status PDN</th>
+                                        <th>Status UKM</th>
+                                        <th>nama PPK</th>
+                                        <th>Status Paket</th>
+                                        <th>Total Realisasi</th>
+                                        <th>Pencatatan PDN</th>
+                                        <th>Pencatatan UMK</th>
+                                        <th>Metode Pemilihan</th>
+                                        <th>Keterangan Pencatatan</th>
+                                        <th>Nama PPK Pencatatan</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach ($rupMasterSatker->paketPenyediaTerumumkans as $paket)
+                                            <tr>
+                                                <td>
+                                                    @if ($paket->tahun_anggaran)
+                                                        {{ $paket->tahun_anggaran }}
+                                                    @else
+                                                        N/A
+                                                    @endif
+                                                </td>
+                                                <td>
+                                                    @if ($paket->kd_rup)
+                                                        {{ $paket->kd_rup }}
+                                                    @else
+                                                        N/A
+                                                    @endif
+                                                </td>
+                                                <td>
+                                                    @if ($paket->metode_pengadaan)
+                                                        {{ $paket->metode_pengadaan }}
+                                                    @else
+                                                        N/A
+                                                    @endif
+                                                </td>
+                                                <td>
+                                                    @if ($paket->nama_paket)
+                                                        {{ $paket->nama_paket }}
+                                                    @else
+                                                        N/A
+                                                    @endif
+                                                </td>
+                                                <td>
+                                                    @if ($paket->jenis_pengadaan)
+                                                        {{ $paket->jenis_pengadaan }}
+                                                    @else
+                                                        N/A
+                                                    @endif
+                                                </td>
+                                                <td>
+                                                    @if ($paket->status_pradipa)
+                                                        {{ $paket->status_pradipa }}
+                                                    @else
+                                                        N/A
+                                                    @endif
+                                                </td>
+                                                <td>
+                                                    @if ($paket->status_pdn)
+                                                        {{ $paket->status_pdn }}
+                                                    @else
+                                                        N/A
+                                                    @endif
+                                                </td>
+                                                <td>
+                                                    @if ($paket->status_ukm)
+                                                        {{ $paket->status_ukm }}
+                                                    @else
+                                                        N/A
+                                                    @endif
+                                                </td>
+                                                <td>
+                                                    @if ($paket->nama_ppk)
+                                                        {{ $paket->nama_ppk }}
+                                                    @else
+                                                        N/A
+                                                    @endif
+                                                </td>
+                                                <td>
+                                                    @if ($paket->status_umumkan_rup)
+                                                        {{ $paket->status_umumkan_rup }}
+                                                    @else
+                                                        N/A
+                                                    @endif
+                                                </td>
+                                            </tr>
+                                    @endforeach
+                                </tbody>
+                            </table>
+                        </div>
+        
+                        <!-- Your other content -->
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="page-header d-print-none">
+            <div class="container-xl">
+                <div class="row g-2 align-items-center">
+                    <div class="col">
+                        <h2 class="page-title">
                             E-PURCHASING {{ $rupMasterSatker->nama_satker }}
                         </h2>
                     </div>
@@ -830,6 +951,118 @@
         }
     </script>
     
+    <script>
+        $(document).ready(function () {
+            // Initialize DataTable with options
+            var table = $('#nontender-table').DataTable({
+                "paging": true,
+                "searching": true,
+                "ordering": true,
+                "info": false,
+                "lengthChange": true,
+                "lengthMenu": [5, 10, 20],
+                "columnDefs": [
+                    { "type": "numeric", targets: 6 }
+                ],
+                dom: 'Bfrtip', // Add the Buttons extension to the DataTable
+                buttons: [
+                    'copyHtml5',
+                    'excelHtml5',
+                    'csvHtml5',
+                    'pdfHtml5'
+                ]
+                // Add any other DataTables options you need
+            });
+
+            // Add a select dropdown for the "Tahun Anggaran" column
+            table.columns(0).every(function () {
+                var column = this;
+
+                var select = $('<br /><select><option value=""></option></select>')
+                    .appendTo($(column.header()))
+                    .on('change', function () {
+                        var val = $.fn.dataTable.util.escapeRegex(
+                            $(this).val()
+                        );
+
+                        column.search(val ? '^' + val + '$' : '', true, false).draw();
+                    });
+
+                column.data().unique().sort().each(function (d, j) {
+                    select.append('<option value="' + d + '">' + d + '</option>')
+                });
+            });
+            table.columns(1).every(function () {
+                var column = this;
+
+                var select = $('<br /><select><option value=""></option></select>')
+                    .appendTo($(column.header()))
+                    .on('change', function () {
+                        var val = $.fn.dataTable.util.escapeRegex(
+                            $(this).val()
+                        );
+
+                        column.search(val ? '^' + val + '$' : '', true, false).draw();
+                    });
+
+                column.data().unique().sort().each(function (d, j) {
+                    select.append('<option value="' + d + '">' + d + '</option>')
+                });
+            });
+            table.columns(2).every(function () {
+                var column = this;
+
+                var select = $('<br /><select><option value=""></option></select>')
+                    .appendTo($(column.header()))
+                    .on('change', function () {
+                        var val = $.fn.dataTable.util.escapeRegex(
+                            $(this).val()
+                        );
+
+                        column.search(val ? '^' + val + '$' : '', true, false).draw();
+                    });
+
+                column.data().unique().sort().each(function (d, j) {
+                    select.append('<option value="' + d + '">' + d + '</option>')
+                });
+            });
+            table.columns(13).every(function () {
+                var column = this;
+
+                var select = $('<br /><select><option value=""></option></select>')
+                    .appendTo($(column.header()))
+                    .on('change', function () {
+                        var val = $.fn.dataTable.util.escapeRegex(
+                            $(this).val()
+                        );
+
+                        column.search(val ? '^' + val + '$' : '', true, false).draw();
+                    });
+
+                column.data().unique().sort().each(function (d, j) {
+                    select.append('<option value="' + d + '">' + d + '</option>')
+                });
+            });
+            table.columns(6).every(function () {
+                var column = this;
+
+                var select = $('<br /><select><option value=""></option></select>')
+                    .appendTo($(column.header()))
+                    .on('change', function () {
+                        var val = $.fn.dataTable.util.escapeRegex(
+                            $(this).val()
+                        );
+
+                        column.search(val ? '^' + val + '$' : '', true, false).draw();
+                    });
+
+                column.data().unique().sort().each(function (d, j) {
+                    select.append('<option value="' + d + '">' + d + '</option>')
+                });
+            });
+        });
+
+    </script>
     <script>
         $(document).ready(function () {
             // Initialize DataTable with options

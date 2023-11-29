@@ -44,6 +44,8 @@ class SatkerController extends Controller
         ])
         ->where('kd_satker_str', $kd_satker_str)
         ->first();
+    
+    
         
         $tahunAnggaran = PaketPenyediaTerumumkan::where('tahun_anggaran', $tahun_anggaran)->value('tahun_anggaran');
 
@@ -305,7 +307,7 @@ class SatkerController extends Controller
             'pdnTercatat',
             'ukmTercatat',
             'epurchasingProses',
-            'kdSatker'
+            'kdSatker',
         ));
         
     }
