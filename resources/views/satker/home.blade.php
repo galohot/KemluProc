@@ -1,6 +1,32 @@
 @extends('dashboard-layout')
 @section('content')
 
+{{-- <div>
+    @if($rupMasterSatker)
+    <!-- Check if the relationship exists -->
+    @if($rupMasterSatker->paketPenyediaTerumumkans)
+        <h2>Pencatatan Non-Tender Realisasi Non-Tenders</h2>
+        @foreach($rupMasterSatker->paketPenyediaTerumumkans as $paket)
+            @if($paket->pencatatanNonTender)
+                <ul>
+                    <li>KD RUP: {{ $paket->pencatatanNonTender->kd_rup }}</li>
+                    <li>Total Realisasi: {{ $paket->pencatatanNonTender->total_realisasi }}</li>
+                    <!-- Add more attributes as needed -->
+                </ul>
+            @else
+                <p>No Realisasi Non-Tenders available for this package.</p>
+            @endif
+        @endforeach
+    @else
+        <p>No Paket Penyedia Terumumkans available for this Satker.</p>
+    @endif
+    @else
+        <p>No RupMasterSatker found for the given parameters.</p>
+    @endif
+</div> --}}
+
+
+
     <div class="container-xl mt-3">
         <div class="row g-2 align-items-center">
             <div class="col-md-6">
@@ -663,6 +689,7 @@
                                     <tr>
                                         <th>Tahun Anggaran</th>
                                         <th>Kode RUP</th>
+                                        <th>Status Pencatatan</th>
                                         <th>Nama Paket</th>
                                         <th>Jenis Pengadaan</th>
                                         <th>Status PraDipa</th>
@@ -680,80 +707,51 @@
                                 </thead>
                                 <tbody>
                                     @foreach ($rupMasterSatker->paketPenyediaTerumumkans as $paket)
-                                            <tr>
-                                                <td>
-                                                    @if ($paket->tahun_anggaran)
-                                                        {{ $paket->tahun_anggaran }}
-                                                    @else
-                                                        N/A
-                                                    @endif
-                                                </td>
-                                                <td>
-                                                    @if ($paket->kd_rup)
-                                                        {{ $paket->kd_rup }}
-                                                    @else
-                                                        N/A
-                                                    @endif
-                                                </td>
-                                                <td>
-                                                    @if ($paket->metode_pengadaan)
-                                                        {{ $paket->metode_pengadaan }}
-                                                    @else
-                                                        N/A
-                                                    @endif
-                                                </td>
-                                                <td>
-                                                    @if ($paket->nama_paket)
-                                                        {{ $paket->nama_paket }}
-                                                    @else
-                                                        N/A
-                                                    @endif
-                                                </td>
-                                                <td>
-                                                    @if ($paket->jenis_pengadaan)
-                                                        {{ $paket->jenis_pengadaan }}
-                                                    @else
-                                                        N/A
-                                                    @endif
-                                                </td>
-                                                <td>
-                                                    @if ($paket->status_pradipa)
-                                                        {{ $paket->status_pradipa }}
-                                                    @else
-                                                        N/A
-                                                    @endif
-                                                </td>
-                                                <td>
-                                                    @if ($paket->status_pdn)
-                                                        {{ $paket->status_pdn }}
-                                                    @else
-                                                        N/A
-                                                    @endif
-                                                </td>
-                                                <td>
-                                                    @if ($paket->status_ukm)
-                                                        {{ $paket->status_ukm }}
-                                                    @else
-                                                        N/A
-                                                    @endif
-                                                </td>
-                                                <td>
-                                                    @if ($paket->nama_ppk)
-                                                        {{ $paket->nama_ppk }}
-                                                    @else
-                                                        N/A
-                                                    @endif
-                                                </td>
-                                                <td>
-                                                    @if ($paket->status_umumkan_rup)
-                                                        {{ $paket->status_umumkan_rup }}
-                                                    @else
-                                                        N/A
-                                                    @endif
-                                                </td>
-                                            </tr>
+                                        <tr>
+                                            <td>{{ $paket->tahun_anggaran ?? 'N/A' }}</td>
+                                            <td>{{ $paket->kd_rup ?? 'N/A' }}</td>
+                                            <td>
+                                                @if($paket->pencatatanNonTender)
+                                                    Tercatat
+                                                @else
+                                                    Belum Tercatat
+                                                @endif
+                                            </td>
+                                            <td>{{ $paket->nama_paket ?? 'N/A' }}</td>
+                                            <td>{{ $paket->jenis_pengadaan ?? 'N/A' }}</td>
+                                            <td>{{ $paket->status_pradipa ?? 'N/A' }}</td>
+                                            <td>{{ $paket->status_pdn ?? 'N/A' }}</td>
+                                            <td>{{ $paket->status_ukm ?? 'N/A' }}</td>
+                                            <td>{{ $paket->nama_ppk ?? 'N/A' }}</td>
+                                            <td>{{ $paket->status_umumkan_rup ?? 'N/A' }}</td>
+                                            <td>
+                                                @if($paket->pencatatanNonTender)
+                                                    {{ $paket->pencatatanNonTender->total_realisasi ?? 'N/A' }}
+                                                @else
+                                                    N/A
+                                                @endif
+                                            </td>
+                                            <td>
+                                                @if($paket->pencatatanNonTender)
+                                                    {{ $paket->pencatatanNonTender->pencatatan_pdn ?? 'N/A' }}
+                                                @else
+                                                    N/A
+                                                @endif
+                                            </td>
+                                            <td>
+                                                @if($paket->pencatatanNonTender)
+                                                    {{ $paket->pencatatanNonTender->pencatatan_umk ?? 'N/A' }}
+                                                @else
+                                                    N/A
+                                                @endif
+                                            </td>
+                                            <td>{{ $paket->metode_pengadaan ?? 'N/A' }}</td>
+                                            <td>{{ $paket->keterangan_pencatatan ?? 'N/A' }}</td>
+                                            <td>{{ $paket->nama_ppk_pencatatan ?? 'N/A' }}</td>
+                                        </tr>
                                     @endforeach
                                 </tbody>
+                                
                             </table>
                         </div>
         
