@@ -6,7 +6,7 @@ use Illuminate\Console\Command;
 
 class RunAllDataFetchCommands extends Command
 {
-    protected $signature = 'custom:run-all-commands';
+    protected $signature = 'custom:run-all';
     protected $description = 'Run all data fetch commands';
 
     public function handle()

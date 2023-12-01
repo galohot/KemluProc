@@ -672,7 +672,7 @@
                 <div class="row g-2 align-items-center">
                     <div class="col">
                         <h2 class="page-title">
-                            PAKET PENYEDIA TERUMUMKAN {{ $rupMasterSatker->nama_satker }}
+                            PAKET PENYEDIA TERUMUMKAN DAN PENCATATAN NONTENDER <br /> {{ $rupMasterSatker->nama_satker }}
                         </h2>
                     </div>
                 </div>
@@ -695,8 +695,8 @@
                                         <th>Status PraDipa</th>
                                         <th>Status PDN</th>
                                         <th>Status UKM</th>
-                                        <th>nama PPK</th>
                                         <th>Status Paket</th>
+                                        <th>Pagu</th>
                                         <th>Total Realisasi</th>
                                         <th>Pencatatan PDN</th>
                                         <th>Pencatatan UMK</th>
@@ -712,7 +712,7 @@
                                             <td>{{ $paket->kd_rup ?? 'N/A' }}</td>
                                             <td>
                                                 @if($paket->pencatatanNonTender)
-                                                    Tercatat
+                                                    Sudah Tercatat
                                                 @else
                                                     Belum Tercatat
                                                 @endif
@@ -722,32 +722,56 @@
                                             <td>{{ $paket->status_pradipa ?? 'N/A' }}</td>
                                             <td>{{ $paket->status_pdn ?? 'N/A' }}</td>
                                             <td>{{ $paket->status_ukm ?? 'N/A' }}</td>
-                                            <td>{{ $paket->nama_ppk ?? 'N/A' }}</td>
                                             <td>{{ $paket->status_umumkan_rup ?? 'N/A' }}</td>
                                             <td>
                                                 @if($paket->pencatatanNonTender)
-                                                    {{ $paket->pencatatanNonTender->total_realisasi ?? 'N/A' }}
+                                                    {{ number_format($paket->pencatatanNonTender->pagu) ?? 'N/A' }} ,-
                                                 @else
                                                     N/A
                                                 @endif
                                             </td>
                                             <td>
                                                 @if($paket->pencatatanNonTender)
-                                                    {{ $paket->pencatatanNonTender->pencatatan_pdn ?? 'N/A' }}
+                                                    {{ number_format($paket->pencatatanNonTender->total_realisasi) ?? 'N/A' }} ,-
                                                 @else
                                                     N/A
                                                 @endif
                                             </td>
                                             <td>
                                                 @if($paket->pencatatanNonTender)
-                                                    {{ $paket->pencatatanNonTender->pencatatan_umk ?? 'N/A' }}
+                                                    {{ number_format($paket->pencatatanNonTender->nilai_pdn_pct) ?? 'N/A' }}
                                                 @else
                                                     N/A
                                                 @endif
                                             </td>
-                                            <td>{{ $paket->metode_pengadaan ?? 'N/A' }}</td>
-                                            <td>{{ $paket->keterangan_pencatatan ?? 'N/A' }}</td>
-                                            <td>{{ $paket->nama_ppk_pencatatan ?? 'N/A' }}</td>
+                                            <td>
+                                                @if($paket->pencatatanNonTender)
+                                                    {{ number_format($paket->pencatatanNonTender->nilai_umk_pct) ?? 'N/A' }}
+                                                @else
+                                                    N/A
+                                                @endif
+                                            </td>
+                                            <td>
+                                                @if($paket->pencatatanNonTender)
+                                                    {{ $paket->pencatatanNonTender->mtd_pemilihan ?? 'N/A' }}
+                                                @else
+                                                    N/A
+                                                @endif
+                                            </td>
+                                            <td>
+                                                @if($paket->pencatatanNonTender)
+                                                    {{ $paket->pencatatanNonTender->status_nontender_pct_ket ?? 'N/A' }}
+                                                @else
+                                                    N/A
+                                                @endif
+                                            </td>
+                                            <td>
+                                                @if($paket->pencatatanNonTender)
+                                                    {{ $paket->pencatatanNonTender->nama_ppk ?? 'N/A' }}
+                                                @else
+                                                    N/A
+                                                @endif
+                                            </td>
                                         </tr>
                                     @endforeach
                                 </tbody>
@@ -760,12 +784,13 @@
                 </div>
             </div>
         </div>
+        
         <div class="page-header d-print-none">
             <div class="container-xl">
                 <div class="row g-2 align-items-center">
                     <div class="col">
                         <h2 class="page-title">
-                            E-PURCHASING {{ $rupMasterSatker->nama_satker }}
+                            E-PURCHASING <br /> {{ $rupMasterSatker->nama_satker }}
                         </h2>
                     </div>
                 </div>
@@ -781,6 +806,7 @@
                                 <thead>
                                     <tr>
                                         <th>Tahun Anggaran</th>
+                                        <th>Kode RUP</th>
                                         <th>User Pokja</th>
                                         <th>User PPK</th>
                                         <th>Nama Paket</th>
@@ -804,6 +830,13 @@
                                                 <td>
                                                     @if ($paketEcat->tahun_anggaran)
                                                         {{ $paketEcat->tahun_anggaran }}
+                                                    @else
+                                                        N/A
+                                                    @endif
+                                                </td>
+                                                <td>
+                                                    @if ($paketEcat->kd_rup)
+                                                        {{ $paketEcat->kd_rup }}
                                                     @else
                                                         N/A
                                                     @endif
@@ -990,23 +1023,6 @@
                     select.append('<option value="' + d + '">' + d + '</option>')
                 });
             });
-            table.columns(1).every(function () {
-                var column = this;
-
-                var select = $('<br /><select><option value=""></option></select>')
-                    .appendTo($(column.header()))
-                    .on('change', function () {
-                        var val = $.fn.dataTable.util.escapeRegex(
-                            $(this).val()
-                        );
-
-                        column.search(val ? '^' + val + '$' : '', true, false).draw();
-                    });
-
-                column.data().unique().sort().each(function (d, j) {
-                    select.append('<option value="' + d + '">' + d + '</option>')
-                });
-            });
             table.columns(2).every(function () {
                 var column = this;
 
@@ -1041,7 +1057,25 @@
                     select.append('<option value="' + d + '">' + d + '</option>')
                 });
             });
-            table.columns(6).every(function () {
+            table.columns(14).every(function () {
+                var column = this;
+
+                var select = $('<br /><select><option value=""></option></select>')
+                    .appendTo($(column.header()))
+                    .on('change', function () {
+                        var val = $.fn.dataTable.util.escapeRegex(
+                            $(this).val()
+                        );
+
+                        column.search(val ? '^' + val + '$' : '', true, false).draw();
+                    });
+
+                column.data().unique().sort().each(function (d, j) {
+                    select.append('<option value="' + d + '">' + d + '</option>')
+                });
+            });
+            
+            table.columns(15).every(function () {
                 var column = this;
 
                 var select = $('<br /><select><option value=""></option></select>')
@@ -1102,23 +1136,6 @@
                     select.append('<option value="' + d + '">' + d + '</option>')
                 });
             });
-            table.columns(1).every(function () {
-                var column = this;
-
-                var select = $('<br /><select><option value=""></option></select>')
-                    .appendTo($(column.header()))
-                    .on('change', function () {
-                        var val = $.fn.dataTable.util.escapeRegex(
-                            $(this).val()
-                        );
-
-                        column.search(val ? '^' + val + '$' : '', true, false).draw();
-                    });
-
-                column.data().unique().sort().each(function (d, j) {
-                    select.append('<option value="' + d + '">' + d + '</option>')
-                });
-            });
             table.columns(2).every(function () {
                 var column = this;
 
@@ -1136,7 +1153,7 @@
                     select.append('<option value="' + d + '">' + d + '</option>')
                 });
             });
-            table.columns(13).every(function () {
+            table.columns(3).every(function () {
                 var column = this;
 
                 var select = $('<br /><select><option value=""></option></select>')
@@ -1153,7 +1170,24 @@
                     select.append('<option value="' + d + '">' + d + '</option>')
                 });
             });
-            table.columns(6).every(function () {
+            table.columns(14).every(function () {
+                var column = this;
+
+                var select = $('<br /><select><option value=""></option></select>')
+                    .appendTo($(column.header()))
+                    .on('change', function () {
+                        var val = $.fn.dataTable.util.escapeRegex(
+                            $(this).val()
+                        );
+
+                        column.search(val ? '^' + val + '$' : '', true, false).draw();
+                    });
+
+                column.data().unique().sort().each(function (d, j) {
+                    select.append('<option value="' + d + '">' + d + '</option>')
+                });
+            });
+            table.columns(7).every(function () {
                 var column = this;
 
                 var select = $('<br /><select><option value=""></option></select>')
