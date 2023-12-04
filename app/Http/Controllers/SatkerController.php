@@ -64,12 +64,12 @@ class SatkerController extends Controller
 
         // Count paketPenyediaTerumumkans where metode_pengadaan is 'tender'
         $countTenderSeleksi = $rupMasterSatker->paketPenyediaTerumumkans
-        ->whereIn('metode_pengadaan', ['Tender', 'Seleksi'])
+        ->whereIn('metode_pengadaan', ['Tender','Tender Cepat', 'Seleksi'])
         ->where('tahun_anggaran', $tahun_anggaran)
         ->count();
         
         $sumPaguTenderSeleksi = $rupMasterSatker->paketPenyediaTerumumkans
-        ->whereIn('metode_pengadaan', ['Tender', 'Seleksi'])
+        ->whereIn('metode_pengadaan', ['Tender','Tender Cepat', 'Seleksi'])
         ->where('tahun_anggaran', $tahun_anggaran)
         ->sum('pagu');
         
@@ -79,18 +79,18 @@ class SatkerController extends Controller
         
         $sumPaguEpurchasing = $rupMasterSatker->paketPenyediaTerumumkans->where('metode_pengadaan', 'e-Purchasing')->where('tahun_anggaran', $tahun_anggaran)->sum('pagu');
 
-        $countPdn = $rupMasterSatker->paketPenyediaTerumumkans->where('status_pdn', 'PDN')->where('tahun_anggaran', $tahun_anggaran)->whereNotIn('metode_pengadaan', ['Tender', 'Seleksi', 'e-Purchasing'])->count();
-        $sumPaguPdn = $rupMasterSatker->paketPenyediaTerumumkans->where('status_pdn', 'PDN')->where('tahun_anggaran', $tahun_anggaran)->whereNotIn('metode_pengadaan', ['Tender', 'Seleksi', 'e-Purchasing'])->sum('pagu');
+        $countPdn = $rupMasterSatker->paketPenyediaTerumumkans->where('status_pdn', 'PDN')->where('tahun_anggaran', $tahun_anggaran)->whereNotIn('metode_pengadaan', ['Tender','Tender Cepat', 'Seleksi', 'e-Purchasing'])->count();
+        $sumPaguPdn = $rupMasterSatker->paketPenyediaTerumumkans->where('status_pdn', 'PDN')->where('tahun_anggaran', $tahun_anggaran)->whereNotIn('metode_pengadaan', ['Tender','Tender Cepat', 'Seleksi', 'e-Purchasing'])->sum('pagu');
         
-        $countUkm = $rupMasterSatker->paketPenyediaTerumumkans->where('status_ukm', 'UKM')->where('tahun_anggaran', $tahun_anggaran)->whereNotIn('metode_pengadaan', ['Tender', 'Seleksi', 'e-Purchasing'])->count();
-        $sumPaguUkm = $rupMasterSatker->paketPenyediaTerumumkans->where('status_ukm', 'UKM')->where('tahun_anggaran', $tahun_anggaran)->whereNotIn('metode_pengadaan', ['Tender', 'Seleksi', 'e-Purchasing'])->sum('pagu');
+        $countUkm = $rupMasterSatker->paketPenyediaTerumumkans->where('status_ukm', 'UKM')->where('tahun_anggaran', $tahun_anggaran)->whereNotIn('metode_pengadaan', ['Tender','Tender Cepat', 'Seleksi', 'e-Purchasing'])->count();
+        $sumPaguUkm = $rupMasterSatker->paketPenyediaTerumumkans->where('status_ukm', 'UKM')->where('tahun_anggaran', $tahun_anggaran)->whereNotIn('metode_pengadaan', ['Tender','Tender Cepat', 'Seleksi', 'e-Purchasing'])->sum('pagu');
         
         $countPaketPenyedia = $rupMasterSatker->paketPenyediaTerumumkans->where('tahun_anggaran', $tahun_anggaran)->count();
         
         $countPaketNontenderDetails = DB::table('paket_penyedia_terumumkan')
         ->where('tahun_anggaran', $tahun_anggaran)
         ->where('kd_satker_str', $kd_satker_str)
-        ->whereNotIn('metode_pengadaan', ['Tender', 'Seleksi', 'e-Purchasing'])
+        ->whereNotIn('metode_pengadaan', ['Tender','Tender Cepat', 'Seleksi', 'e-Purchasing'])
         ->groupBy('metode_pengadaan')
         ->selectRaw('metode_pengadaan, count(*) as count, sum(pagu) as sum_pagu')
         ->get();
@@ -99,7 +99,7 @@ class SatkerController extends Controller
         $countPaketTenderDetails = DB::table('paket_penyedia_terumumkan')
         ->where('tahun_anggaran', $tahun_anggaran)
         ->where('kd_satker_str', $kd_satker_str)
-        ->whereIn('metode_pengadaan', ['Tender', 'Seleksi'])
+        ->whereIn('metode_pengadaan', ['Tender','Tender Cepat', 'Seleksi'])
         ->groupBy('metode_pengadaan')
         ->selectRaw('metode_pengadaan, count(*) as count, sum(pagu) as sum_pagu')
         ->get();
@@ -130,7 +130,7 @@ class SatkerController extends Controller
             ->where('spse_pencatatan_nontender.kd_satker_str', $kd_satker_str)
             ->where('paket_penyedia_terumumkan.tahun_anggaran', $tahun_anggaran)
             ->where('spse_pencatatan_nontender.tahun_anggaran', $tahun_anggaran)
-            ->whereNotIn('metode_pengadaan', ['Tender', 'Seleksi', 'e-Purchasing'])
+            ->whereNotIn('metode_pengadaan', ['Tender','Tender Cepat', 'Seleksi', 'e-Purchasing'])
             ->distinct()
             ->pluck('paket_penyedia_terumumkan.kd_rup')
             ->toArray();
@@ -140,7 +140,7 @@ class SatkerController extends Controller
             ->where('spse_pencatatan_nontender.kd_satker_str', $kd_satker_str)
             ->where('paket_penyedia_terumumkan.tahun_anggaran', $tahun_anggaran)
             ->where('spse_pencatatan_nontender.tahun_anggaran', $tahun_anggaran)
-            ->whereNotIn('metode_pengadaan', ['Tender', 'Seleksi', 'e-Purchasing'])
+            ->whereNotIn('metode_pengadaan', ['Tender','Tender Cepat', 'Seleksi', 'e-Purchasing'])
             ->groupBy('metode_pengadaan')
             ->selectRaw('metode_pengadaan, count(*) as count, sum(paket_penyedia_terumumkan.pagu) as sum_pagu') // Specify the table alias for pagu
             ->get();
@@ -152,7 +152,7 @@ class SatkerController extends Controller
             ->where('spse_pencatatan_nontender.kd_satker_str', $kd_satker_str)
             ->where('paket_penyedia_terumumkan.tahun_anggaran', $tahun_anggaran)
             ->where('spse_pencatatan_nontender.tahun_anggaran', $tahun_anggaran)
-            ->whereNotIn('metode_pengadaan', ['Tender', 'Seleksi', 'e-Purchasing'])
+            ->whereNotIn('metode_pengadaan', ['Tender','Tender Cepat', 'Seleksi', 'e-Purchasing'])
             ->where(function($query) {
                 $query->whereNotNull('spse_pencatatan_nontender.nilai_pdn_pct')
                       ->where('spse_pencatatan_nontender.nilai_pdn_pct', '!=', 0);
@@ -167,7 +167,7 @@ class SatkerController extends Controller
             ->where('spse_pencatatan_nontender.kd_satker_str', $kd_satker_str)
             ->where('paket_penyedia_terumumkan.tahun_anggaran', $tahun_anggaran)
             ->where('spse_pencatatan_nontender.tahun_anggaran', $tahun_anggaran)
-            ->whereNotIn('metode_pengadaan', ['Tender', 'Seleksi', 'e-Purchasing'])
+            ->whereNotIn('metode_pengadaan', ['Tender','Tender Cepat', 'Seleksi', 'e-Purchasing'])
             ->where(function($query) {
                 $query->whereNotNull('spse_pencatatan_nontender.nilai_umk_pct')
                       ->where('spse_pencatatan_nontender.nilai_umk_pct', '!=', 0);
