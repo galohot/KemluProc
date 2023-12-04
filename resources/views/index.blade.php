@@ -2,6 +2,114 @@
 @section('content')
 
 <div class="page-body">
+  <div class="container-xl">
+      <div class="card">
+          <div class="card-body">
+              <div id="table-default" class="table-responsive">
+                  <table id="nontender-table" class="table">
+                      <thead>
+                          <tr>
+                              <th>Satuan Kerja</th>
+                              <th>Tahun Anggaran</th>
+                              <th>Kode RUP</th>
+                              <th>Status Pencatatan</th>
+                              <th>Nama Paket</th>
+                              <th>Jenis Pengadaan</th>
+                              <th>Status PraDipa</th>
+                              <th>Status PDN</th>
+                              <th>Status UKM</th>
+                              <th>Status Paket</th>
+                              <th>Pagu</th>
+                              <th>Total Realisasi</th>
+                              <th>Pencatatan PDN</th>
+                              <th>Pencatatan UMK</th>
+                              <th>Metode Pemilihan</th>
+                              <th>Keterangan Pencatatan</th>
+                              <th>Nama PPK Pencatatan</th>
+                          </tr>
+                      </thead>
+                      <tbody>
+                          @foreach ($rupMasterSatker->paketPenyediaTerumumkans as $paket)
+                              <tr>
+                                  <td>{{ $paket->nama_satker ?? 'N/A' }}</td>
+                                  <td>{{ $paket->tahun_anggaran ?? 'N/A' }}</td>
+                                  <td>{{ $paket->kd_rup ?? 'N/A' }}</td>
+                                  <td>
+                                      @if($paket->pencatatanNonTender)
+                                          Sudah Tercatat
+                                      @else
+                                          Belum Tercatat
+                                      @endif
+                                  </td>
+                                  <td>{{ $paket->nama_paket ?? 'N/A' }}</td>
+                                  <td>{{ $paket->jenis_pengadaan ?? 'N/A' }}</td>
+                                  <td>{{ $paket->status_pradipa ?? 'N/A' }}</td>
+                                  <td>{{ $paket->status_pdn ?? 'N/A' }}</td>
+                                  <td>{{ $paket->status_ukm ?? 'N/A' }}</td>
+                                  <td>{{ $paket->status_umumkan_rup ?? 'N/A' }}</td>
+                                  <td>
+                                      @if($paket->pencatatanNonTender)
+                                          Rp. {{ number_format($paket->pencatatanNonTender->pagu) ?? 'N/A' }} ,-
+                                      @else
+                                          N/A
+                                      @endif
+                                  </td>
+                                  <td>
+                                      @if($paket->pencatatanNonTender)
+                                          Rp. {{ number_format($paket->pencatatanNonTender->total_realisasi) ?? 'N/A' }} ,-
+                                      @else
+                                          N/A
+                                      @endif
+                                  </td>
+                                  <td>
+                                      @if($paket->pencatatanNonTender)
+                                          Rp. {{ number_format($paket->pencatatanNonTender->nilai_pdn_pct) ?? 'N/A' }} ,-
+                                      @else
+                                          N/A
+                                      @endif
+                                  </td>
+                                  <td>
+                                      @if($paket->pencatatanNonTender)
+                                          Rp. {{ number_format($paket->pencatatanNonTender->nilai_umk_pct) ?? 'N/A' }} ,-
+                                      @else
+                                          N/A
+                                      @endif
+                                  </td>
+                                  <td>
+                                      @if($paket->pencatatanNonTender)
+                                          {{ $paket->pencatatanNonTender->mtd_pemilihan ?? 'N/A' }}
+                                      @else
+                                          N/A
+                                      @endif
+                                  </td>
+                                  <td>
+                                      @if($paket->pencatatanNonTender)
+                                          {{ $paket->pencatatanNonTender->status_nontender_pct_ket ?? 'N/A' }}
+                                      @else
+                                          N/A
+                                      @endif
+                                  </td>
+                                  <td>
+                                      @if($paket->pencatatanNonTender)
+                                          {{ $paket->pencatatanNonTender->nama_ppk ?? 'N/A' }}
+                                      @else
+                                          N/A
+                                      @endif
+                                  </td>
+                              </tr>
+                          @endforeach
+                      </tbody>
+                      
+                  </table>
+              </div>
+
+              <!-- Your other content -->
+          </div>
+      </div>
+  </div>
+</div>
+
+<div class="page-body">
     <div class="container-xl">
       <div class="row row-deck row-cards">
         <div class="col-sm-6 col-lg-3">

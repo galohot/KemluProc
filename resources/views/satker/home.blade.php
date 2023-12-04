@@ -31,7 +31,7 @@
         <div class="row g-2 align-items-center">
             <div class="col-md-6">
                 <label for="tahun_anggaran">Tahun Anggaran:</label>
-                <input type="text" class="form-control" id="search_tahun_anggaran" placeholder="Type Tahun Anggaran to filter" oninput="filterOptions('tahun_anggaran')">
+                <input type="text" class="form-control" id="search_tahun_anggaran" placeholder="(Optional)Type Tahun Anggaran to filter" oninput="filterOptions('tahun_anggaran')">
                 <select class="form-select mt-2" id="tahun_anggaran" name="tahun_anggaran" onchange="updateUrl()">
                     <option value="">-- Select Tahun Anggaran --</option>
                     @foreach ($tahunAnggaranList as $tahunAnggaranOption)
@@ -43,7 +43,7 @@
             </div>
             <div class="col-md-6">
                 <label for="kd_satker_str">Nama Satker:</label>
-                <input type="text" class="form-control" id="search_kd_satker_str" placeholder="Type Nama Satker to filter" oninput="filterOptions('kd_satker_str')">
+                <input type="text" class="form-control" id="search_kd_satker_str" placeholder="(Optional)Type Nama Satker to filter" oninput="filterOptions('kd_satker_str')">
                 <select class="form-select mt-2" id="kd_satker_str" name="kd_satker_str" onchange="updateUrl()">
                     <option value="">-- Select Nama Satker --</option>
                     @foreach ($kdSatkerStrList as $index => $kdSatkerOption)
@@ -702,7 +702,7 @@
                                         <th>Pencatatan UMK</th>
                                         <th>Metode Pemilihan</th>
                                         <th>Keterangan Pencatatan</th>
-                                        <th>Nama PPK Pencatatan</th>
+                                        <th>Nama PPK (SiRUP))</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -766,8 +766,8 @@
                                                 @endif
                                             </td>
                                             <td>
-                                                @if($paket->pencatatanNonTender)
-                                                    {{ $paket->pencatatanNonTender->nama_ppk ?? 'N/A' }}
+                                                @if($paket)
+                                                    {{ $paket->nama_ppk ?? 'N/A' }}
                                                 @else
                                                     N/A
                                                 @endif
@@ -784,6 +784,7 @@
                 </div>
             </div>
         </div>
+        
         <div class="page-header d-print-none">
             <div class="container-xl">
                 <div class="row g-2 align-items-center">
@@ -1006,7 +1007,141 @@
         </div>
 
     @endif
+	<script>
+		// @formatter:off
+		document.addEventListener("DOMContentLoaded", function () {
+			window.ApexCharts && (new ApexCharts(document.getElementById('chart-paket-penyedia'), {
+				chart: {
+					type: "pie",
+					fontFamily: 'inherit',
+					height: 300,
+					sparkline: {
+						enabled: true
+					},
+					animations: {
+						enabled: true
+					},
+				},
 
+				title: {
+				text: "Paket Penyedia Terumumkan",
+				align: 'center',
+				margin: 10,
+				offsetX: 0,
+				offsetY: 0,
+				floating: false,
+				style: {
+					fontSize: '14px',
+					color: '#666'
+				},
+			},
+				fill: {
+					opacity: 1,
+				},
+				series: [{{ $countTenderSeleksi }}, {{ $countPaketPenyedia - $countTenderSeleksi - $countEpurchasing}}, {{ $countEpurchasing }}],
+				labels: ["Tender/Seleksi", "Non Tender", "E-Purchasing"],
+				tooltip: {
+					theme: 'dark'
+				},
+				grid: {
+					strokeDashArray: 4,
+				},
+				colors: [tabler.getColor("linkedin"), tabler.getColor("dribbble"), tabler.getColor("rss")],
+				legend: {
+					show: true,
+					position: 'bottom',
+					offsetY: 12,
+					markers: {
+						width: 10,
+						height: 10,
+						radius: 100,
+					},
+					itemMargin: {
+						horizontal: 8,
+						vertical: 8
+					},
+				},
+				tooltip: {
+					fillSeriesColor: false
+				},
+			})).render();
+		});
+		// @formatter:on
+	</script>
+
+	<script>
+		// @formatter:off
+		document.addEventListener("DOMContentLoaded", function () {
+			window.ApexCharts && (new ApexCharts(document.getElementById('chart-pagu-penyedia'), {
+				chart: {
+					type: "pie",
+					fontFamily: 'inherit',
+					height: 300,
+					sparkline: {
+						enabled: true
+					},
+					animations: {
+						enabled: true
+					},
+				},
+				title: {
+					text: "Pagu Penyedia Terumumkan",
+					align: 'center',
+					margin: 10,
+					offsetX: 0,
+					offsetY: 0,
+					floating: false,
+					style: {
+						fontSize: '14px',
+						color: '#666'
+					},
+				},
+				fill: {
+					opacity: 1,
+				},
+				series: [{{ $sumPaguTenderSeleksi }}, {{ $sumPaguNonTender}}, {{ $sumPaguEpurchasing }}],
+				labels: ["Tender/Seleksi", "Non Tender", "E-Purchasing"],
+				tooltip: {
+					theme: 'dark',
+					y: {
+						formatter: function (value, { series, seriesIndex, dataPointIndex, w }) {
+							// Use your preferred number formatting logic here
+							const formattedValue = new Intl.NumberFormat('en-US').format(value);
+							return `Rp. ${formattedValue} ,-`;
+						}
+					}
+				},
+				grid: {
+					strokeDashArray: 4,
+				},
+				colors: [tabler.getColor("linkedin"), tabler.getColor("dribbble"), tabler.getColor("rss")],
+				legend: {
+					show: true,
+					position: 'bottom',
+					offsetY: 12,
+					markers: {
+						width: 10,
+						height: 10,
+						radius: 100,
+					},
+					itemMargin: {
+						horizontal: 8,
+						vertical: 8
+					},
+				},
+				tooltip: {
+					fillSeriesColor: false,
+					y: {
+						formatter: function (value) {
+							const formattedValue = new Intl.NumberFormat('en-US').format(value);
+							return `Rp. ${formattedValue} ,-`;
+						}
+					}
+				},
+			})).render();
+		});
+		// @formatter:on
+	</script>
     <script>
         const satkerRoute = "{{ route('satker.show', ['tahun_anggaran' => ':tahun_anggaran', 'kd_satker_str' => ':kd_satker_str']) }}";
     
@@ -1065,23 +1200,6 @@
             });
 
             // Add a select dropdown for the "Tahun Anggaran" column
-            table.columns(0).every(function () {
-                var column = this;
-
-                var select = $('<br /><select><option value=""></option></select>')
-                    .appendTo($(column.header()))
-                    .on('change', function () {
-                        var val = $.fn.dataTable.util.escapeRegex(
-                            $(this).val()
-                        );
-
-                        column.search(val ? '^' + val + '$' : '', true, false).draw();
-                    });
-
-                column.data().unique().sort().each(function (d, j) {
-                    select.append('<option value="' + d + '">' + d + '</option>')
-                });
-            });
             table.columns(10).every(function () {
                 var column = this;
 
@@ -1143,23 +1261,6 @@
             });
 
             // Add a select dropdown for the "Tahun Anggaran" column
-            table.columns(0).every(function () {
-                var column = this;
-
-                var select = $('<br /><select><option value=""></option></select>')
-                    .appendTo($(column.header()))
-                    .on('change', function () {
-                        var val = $.fn.dataTable.util.escapeRegex(
-                            $(this).val()
-                        );
-
-                        column.search(val ? '^' + val + '$' : '', true, false).draw();
-                    });
-
-                column.data().unique().sort().each(function (d, j) {
-                    select.append('<option value="' + d + '">' + d + '</option>')
-                });
-            });
             table.columns(2).every(function () {
                 var column = this;
 
@@ -1259,23 +1360,6 @@
             });
 
             // Add a select dropdown for the "Tahun Anggaran" column
-            table.columns(0).every(function () {
-                var column = this;
-
-                var select = $('<br /><select><option value=""></option></select>')
-                    .appendTo($(column.header()))
-                    .on('change', function () {
-                        var val = $.fn.dataTable.util.escapeRegex(
-                            $(this).val()
-                        );
-
-                        column.search(val ? '^' + val + '$' : '', true, false).draw();
-                    });
-
-                column.data().unique().sort().each(function (d, j) {
-                    select.append('<option value="' + d + '">' + d + '</option>')
-                });
-            });
             table.columns(2).every(function () {
                 var column = this;
 

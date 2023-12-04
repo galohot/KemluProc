@@ -3,6 +3,7 @@
 use App\Http\Controllers\ISBsirupController;
 use App\Http\Controllers\DataFetchController;
 use App\Http\Controllers\ErrorController;
+use App\Http\Controllers\HomeController;
 use App\Http\Controllers\ISBlpseController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\SatkerController;
@@ -24,9 +25,8 @@ use Illuminate\Support\Facades\Artisan;
 Route::get('/', function () {
     return view('welcome');
 });
-Route::get('/main', function () {
-    return view('index');
-});
+
+Route::get('/main/{tahun_anggaran}', [HomeController::class, 'show'])->name('main.show');
 
 
 Route::get('/clear-cache', function() {
