@@ -144,7 +144,8 @@ class SatkerController extends Controller
             ->groupBy('metode_pengadaan')
             ->selectRaw('metode_pengadaan, count(*) as count, sum(paket_penyedia_terumumkan.pagu) as sum_pagu') // Specify the table alias for pagu
             ->get();
-
+            
+        
 
         $pdnTercatat = PaketPenyediaTerumumkan::join('spse_pencatatan_nontender', 'paket_penyedia_terumumkan.kd_rup', '=', 'spse_pencatatan_nontender.kd_rup')
             ->where('paket_penyedia_terumumkan.kd_satker_str', $kd_satker_str)
@@ -307,7 +308,7 @@ class SatkerController extends Controller
             'pdnTercatat',
             'ukmTercatat',
             'epurchasingProses',
-            'kdSatker',
+            'kdSatker'
         ));
         
     }

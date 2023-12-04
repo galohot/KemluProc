@@ -702,7 +702,7 @@
                                         <th>Pencatatan UMK</th>
                                         <th>Metode Pemilihan</th>
                                         <th>Keterangan Pencatatan</th>
-                                        <th>Nama PPK (SiRUP))</th>
+                                        <th>Nama PPK (SiRUP)</th>
                                     </tr>
                                 </thead>
                                 <tbody>
