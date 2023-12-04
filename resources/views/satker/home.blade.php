@@ -613,7 +613,7 @@
                                                 @endif
                                             </div>
                                             @if($sumPaguEpurchasing != 0)
-                                                <p class="text-secondary mt-2">Persentase Pagu: <span style="color: #0054a6"><b>{{ number_format(($epurchasingProses->sum('sum_pagu') / $sumPaguEpurchasing) * 100, 2) }}%</b></span></p>
+                                                <p class="text-secondary mt-2">Persentase Pagu: <span style="color: #0054a6"><b>{{ number_format(($sumPaguEpurchasingProses / $sumPaguEpurchasing) * 100, 2) }}%</b></span></p>
                                             @else
                                                 <p class="text-secondary mt-2">Error: Persentase Pagu tidak dapat dihitung karena Pagu ePurchasing adalah 0</p>
                                             @endif
@@ -725,28 +725,28 @@
                                             <td>{{ $paket->status_umumkan_rup ?? 'N/A' }}</td>
                                             <td>
                                                 @if($paket->pencatatanNonTender)
-                                                    {{ number_format($paket->pencatatanNonTender->pagu) ?? 'N/A' }} ,-
+                                                    Rp. {{ number_format($paket->pencatatanNonTender->pagu) ?? 'N/A' }} ,-
                                                 @else
                                                     N/A
                                                 @endif
                                             </td>
                                             <td>
                                                 @if($paket->pencatatanNonTender)
-                                                    {{ number_format($paket->pencatatanNonTender->total_realisasi) ?? 'N/A' }} ,-
+                                                    Rp. {{ number_format($paket->pencatatanNonTender->total_realisasi) ?? 'N/A' }} ,-
                                                 @else
                                                     N/A
                                                 @endif
                                             </td>
                                             <td>
                                                 @if($paket->pencatatanNonTender)
-                                                    {{ number_format($paket->pencatatanNonTender->nilai_pdn_pct) ?? 'N/A' }}
+                                                    Rp. {{ number_format($paket->pencatatanNonTender->nilai_pdn_pct) ?? 'N/A' }} ,-
                                                 @else
                                                     N/A
                                                 @endif
                                             </td>
                                             <td>
                                                 @if($paket->pencatatanNonTender)
-                                                    {{ number_format($paket->pencatatanNonTender->nilai_umk_pct) ?? 'N/A' }}
+                                                    Rp. {{ number_format($paket->pencatatanNonTender->nilai_umk_pct) ?? 'N/A' }} ,-
                                                 @else
                                                     N/A
                                                 @endif
@@ -772,6 +772,65 @@
                                                     N/A
                                                 @endif
                                             </td>
+                                        </tr>
+                                    @endforeach
+                                </tbody>
+                                
+                            </table>
+                        </div>
+        
+                        <!-- Your other content -->
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="page-header d-print-none">
+            <div class="container-xl">
+                <div class="row g-2 align-items-center">
+                    <div class="col">
+                        <h2 class="page-title">
+                            PAKET SWAKELOLA TERUMUMKAN <br /> {{ $rupMasterSatker->nama_satker }}
+                        </h2>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Page body -->
+        <div class="page-body">
+            <div class="container-xl">
+                <div class="card">
+                    <div class="card-body">
+                        <div id="table-default" class="table-responsive">
+                            <table id="swakelola-table" class="table">
+                                <thead>
+                                    <tr>
+                                        <th>Tahun Anggaran</th>
+                                        <th>kd_rup</th>
+                                        <th>Nama Paket</th>
+                                        <th>Pagu</th>
+                                        <th>Tipe Swakelola</th>
+                                        <th>Volume Pekerjaan</th>
+                                        <th>Uraian Pekerjaan</th>
+                                        <th>Awal Pelaksanaan Kontrak</th>
+                                        <th>Akhir Pelaksanaan Kontrak</th>
+                                        <th>Pengumuman Paket</th>
+                                        <th>Nama PPK</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach ($rupMasterSatker->paketSwakelolaTerumumkans as $paket)
+                                        <tr>
+                                            <td>{{ $paket->tahun_anggaran ?? 'N/A' }}</td>
+                                            <td>{{ $paket->kd_rup ?? 'N/A' }}</td>
+                                            <td>{{ $paket->nama_paket ?? 'N/A' }}</td>
+                                            <td>Rp. {{ number_format($paket->pagu) ?? 'N/A' }} ,-</td>
+                                            <td>{{ $paket->tipe_swakelola ?? 'N/A' }}</td>
+                                            <td>{{ $paket->volume_pekerjaan ?? 'N/A' }}</td>
+                                            <td>{{ $paket->uraian_pekerjaan ?? 'N/A' }}</td>
+                                            <td>{{ $paket->tgl_awal_pelaksanaan_kontrak ?? 'N/A' }}</td>
+                                            <td>{{ $paket->tgl_akhir_pelaksanaan_kontrak ?? 'N/A' }}</td>
+                                            <td>{{ $paket->tgl_pengumuman_paket ?? 'N/A' }}</td>
+                                            <td>{{ $paket->nama_ppk ?? 'N/A' }}</td>
                                         </tr>
                                     @endforeach
                                 </tbody>
@@ -985,6 +1044,84 @@
     <script>
         $(document).ready(function () {
             // Initialize DataTable with options
+            var table = $('#swakelola-table').DataTable({
+                "paging": true,
+                "searching": true,
+                "ordering": true,
+                "info": false,
+                "lengthChange": true,
+                "lengthMenu": [5, 10, 20],
+                "columnDefs": [
+                    { "type": "numeric", targets: 6 }
+                ],
+                dom: 'Bfrtip', // Add the Buttons extension to the DataTable
+                buttons: [
+                    'copyHtml5',
+                    'excelHtml5',
+                    'csvHtml5',
+                    'pdfHtml5'
+                ]
+                // Add any other DataTables options you need
+            });
+
+            // Add a select dropdown for the "Tahun Anggaran" column
+            table.columns(0).every(function () {
+                var column = this;
+
+                var select = $('<br /><select><option value=""></option></select>')
+                    .appendTo($(column.header()))
+                    .on('change', function () {
+                        var val = $.fn.dataTable.util.escapeRegex(
+                            $(this).val()
+                        );
+
+                        column.search(val ? '^' + val + '$' : '', true, false).draw();
+                    });
+
+                column.data().unique().sort().each(function (d, j) {
+                    select.append('<option value="' + d + '">' + d + '</option>')
+                });
+            });
+            table.columns(10).every(function () {
+                var column = this;
+
+                var select = $('<br /><select><option value=""></option></select>')
+                    .appendTo($(column.header()))
+                    .on('change', function () {
+                        var val = $.fn.dataTable.util.escapeRegex(
+                            $(this).val()
+                        );
+
+                        column.search(val ? '^' + val + '$' : '', true, false).draw();
+                    });
+
+                column.data().unique().sort().each(function (d, j) {
+                    select.append('<option value="' + d + '">' + d + '</option>')
+                });
+            });
+            table.columns(4).every(function () {
+                var column = this;
+
+                var select = $('<br /><select><option value=""></option></select>')
+                    .appendTo($(column.header()))
+                    .on('change', function () {
+                        var val = $.fn.dataTable.util.escapeRegex(
+                            $(this).val()
+                        );
+
+                        column.search(val ? '^' + val + '$' : '', true, false).draw();
+                    });
+
+                column.data().unique().sort().each(function (d, j) {
+                    select.append('<option value="' + d + '">' + d + '</option>')
+                });
+            });
+        });
+
+    </script>
+    <script>
+        $(document).ready(function () {
+            // Initialize DataTable with options
             var table = $('#nontender-table').DataTable({
                 "paging": true,
                 "searching": true,
@@ -1095,6 +1232,9 @@
         });
 
     </script>
+
+
+
     <script>
         $(document).ready(function () {
             // Initialize DataTable with options
