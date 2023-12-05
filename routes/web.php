@@ -5,6 +5,7 @@ use App\Http\Controllers\DataFetchController;
 use App\Http\Controllers\ErrorController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\ISBlpseController;
+use App\Http\Controllers\Moner2024Controller;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\SatkerController;
 use App\Http\Controllers\ProgramController;
@@ -27,7 +28,6 @@ Route::get('/', function () {
 });
 
 Route::get('/main/{tahun_anggaran}', [HomeController::class, 'show'])->name('main.show');
-
 
 Route::get('/clear-cache', function() {
     $exitCode = Artisan::call('cache:clear');

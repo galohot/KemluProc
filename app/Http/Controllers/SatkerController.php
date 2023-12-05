@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\EcatPaketEpurchasing;
+use App\Models\Moner2023;
 use App\Models\RupMasterSatker;
 use App\Models\PaketPenyediaTerumumkan;
 use App\Models\PaketSwakelolaTerumumkan;
@@ -44,9 +45,28 @@ class SatkerController extends Controller
         ])
         ->where('kd_satker_str', $kd_satker_str)
         ->first();
-    
-    
+            
+
         
+        // Assuming $rupMasterSatker is an instance of some model
+        $namaSatker = $rupMasterSatker->where('kd_satker_str', $kd_satker_str)->value('nama_satker');
+
+        // Now use $namaSatker in the subsequent query
+        $moner2023 = Moner2023::where('nama_satker', $namaSatker)->get();
+
+        $totalPercentageMoner = 0;
+        $count = 0;
+        
+        foreach ($moner2023 as $item) {
+            // Force the value to be treated as numeric (float)
+            $totalPercentageMoner += (float)$item->persentase;
+        
+            // Increment the count
+            $count++;
+        }
+        
+        // Calculate the average
+        $averagePercentageMoner = $count > 0 ? $totalPercentageMoner / $count : 0;
         $tahunAnggaran = PaketPenyediaTerumumkan::where('tahun_anggaran', $tahun_anggaran)->value('tahun_anggaran');
 
 
@@ -308,7 +328,9 @@ class SatkerController extends Controller
             'pdnTercatat',
             'ukmTercatat',
             'epurchasingProses',
-            'kdSatker'
+            'kdSatker',
+            'moner2023',
+            'averagePercentageMoner'
         ));
         
     }

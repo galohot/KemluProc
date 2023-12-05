@@ -1,32 +1,9 @@
 @extends('dashboard-layout')
 @section('content')
 
-{{-- <div>
-    @if($rupMasterSatker)
-    <!-- Check if the relationship exists -->
-    @if($rupMasterSatker->paketPenyediaTerumumkans)
-        <h2>Pencatatan Non-Tender Realisasi Non-Tenders</h2>
-        @foreach($rupMasterSatker->paketPenyediaTerumumkans as $paket)
-            @if($paket->pencatatanNonTender)
-                <ul>
-                    <li>KD RUP: {{ $paket->pencatatanNonTender->kd_rup }}</li>
-                    <li>Total Realisasi: {{ $paket->pencatatanNonTender->total_realisasi }}</li>
-                    <!-- Add more attributes as needed -->
-                </ul>
-            @else
-                <p>No Realisasi Non-Tenders available for this package.</p>
-            @endif
-        @endforeach
-    @else
-        <p>No Paket Penyedia Terumumkans available for this Satker.</p>
-    @endif
-    @else
-        <p>No RupMasterSatker found for the given parameters.</p>
-    @endif
-</div> --}}
+<!-- your_view_name.blade.php -->
 
-
-
+  
     <div class="container-xl mt-3">
         <div class="row g-2 align-items-center">
             <div class="col-md-6">
@@ -368,6 +345,8 @@
 
                     </div>
 
+
+
                     <div class="row">
                         <div class="col-lg-6 col-xl-6 my-3">
                             <div class="card">
@@ -384,6 +363,36 @@
                             </div>
                         </div>
                     </div>
+
+
+                        <div class="card">
+                            <div class="card-header">
+                                <h3 class="card-title">Moner (Latest) <br /> Total: {{ $averagePercentageMoner}}%</h3>
+                            </div>
+                            <div class="card-body">
+                            <div class="datagrid">
+                                @foreach($moner2023 as $item)
+                                <div class="datagrid-item">
+                                    <div class="datagrid-title">Nama Program</div>
+                                    <div class="datagrid-content">{{ $item->nama_program }}</div>
+                                </div>
+                                <div class="datagrid-item">
+                                    <div class="datagrid-title">Pagu Pengadaan</div>
+                                    <div class="datagrid-content">{{ $item->pagu_pengadaan }}</div>
+                                </div>
+                                <div class="datagrid-item">
+                                    <div class="datagrid-title">Pagu Terumumkan</div>
+                                    <div class="datagrid-content">{{ $item->pagu_terumumkan }}</div>
+                                </div>
+                                <div class="datagrid-item">
+                                    <div class="datagrid-title">Persentase</div>
+                                    <div class="datagrid-content">{{ $item->persentase }}</div>
+                                </div>
+                                @endforeach
+                            </div>
+                            </div>
+                        </div>
+
 
                     <div class="hr-text"></div>
 

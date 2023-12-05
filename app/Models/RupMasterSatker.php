@@ -36,6 +36,14 @@ class RupMasterSatker extends Model
     {
         return $this->hasMany(ProgramMaster::class, 'kd_satker', 'kd_satker');
     }
+    public function Moner2023()
+    {
+        return $this->hasMany(ProgramMaster::class, 'nama_satker', 'nama_satker');
+    }
+    public function Moner2024()
+    {
+        return $this->hasMany(ProgramMaster::class, 'nama_satker', 'nama_satker');
+    }
 
     public function tenderPengumumans()
     {
